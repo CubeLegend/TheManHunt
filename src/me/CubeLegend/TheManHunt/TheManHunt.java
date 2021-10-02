@@ -1,13 +1,17 @@
 package me.CubeLegend.TheManHunt;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 
+import java.util.List;
 import java.util.Objects;
 
 public class TheManHunt extends JavaPlugin {
@@ -35,6 +39,7 @@ public class TheManHunt extends JavaPlugin {
         unregisterPluginMessageingChannels();
     }
 
+    private int id1 = 0;
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (label.equalsIgnoreCase("membersof")) {
             if (sender instanceof Player) {
@@ -51,11 +56,86 @@ public class TheManHunt extends JavaPlugin {
                 }
             }
         }
+
         if (label.equalsIgnoreCase("vectorof")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
                 RayCast rc = new RayCast();
-                rc.getVectors(player);
+                //rc.getVectors(player);
+                if (Bukkit.getScheduler().isCurrentlyRunning(id1)) {
+                    Bukkit.getScheduler().cancelTask(id1);
+                    return false;
+                }
+                StringBuilder msg = new StringBuilder("Entites in line of sight: ");
+                for (Entity entity : rc.entitiesInLineOfSight(player)) {
+                    msg.append(entity.getType()).append(", ");
+                }
+                player.sendMessage(msg.toString());
+
+                /*
+                id1 = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(TheManHunt.getInstance(), new Runnable() {
+                            @Override
+                            public void run() {
+                                rc.entitiesInLineOfSight(player);
+                            }
+                        }, 0, 1);
+                */
+
+                return true;
+            }
+        }
+        if (label.equalsIgnoreCase("crossproduct")) {
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
+                RayCast rc = new RayCast();
+                Entity nearestEntity = null;
+                for (Entity entity : player.getNearbyEntities(100, 100, 100)) {
+                    if (nearestEntity == null) {
+                        nearestEntity = entity;
+                    } else if (entity.getLocation().distance(player.getLocation()) < nearestEntity.getLocation().distance(player.getLocation())) {
+                        nearestEntity = entity;
+                    }
+                }
+                assert nearestEntity != null;
+                //rc.getCrossProduct(player, nearestEntity);
+                System.out.println(player.getLocation().add(new Location(player.getWorld(), 0, player.getEyeHeight(), 0)));
+                System.out.println(nearestEntity.getLocation().add(new Vector(0, 1, 0)).toVector().subtract(player.getLocation().add(new Vector(0, player.getEyeHeight(), 0)).toVector()));
+                player.sendMessage(player.getLocation().add(new Location(player.getWorld(), 0, player.getEyeHeight(), 0)).getDirection().crossProduct(nearestEntity.getLocation().add(new Vector(0, 1, 0)).toVector().subtract(player.getLocation().add(new Vector(0, player.getEyeHeight(), 0)).toVector())).lengthSquared() + " < threshold: 1");
+                return true;
+            }
+        }
+        if (label.equalsIgnoreCase("dotproduct")) {
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
+                RayCast rc = new RayCast();
+                Entity nearestEntity = null;
+                for (Entity entity : player.getNearbyEntities(100, 100, 100)) {
+                    if (nearestEntity == null) {
+                        nearestEntity = entity;
+                    } else if (entity.getLocation().distance(player.getLocation()) < nearestEntity.getLocation().distance(player.getLocation())) {
+                        nearestEntity = entity;
+                    }
+                }
+                assert nearestEntity != null;
+                //rc.getDotProduct(player, nearestEntity);
+                player.sendMessage(String.valueOf(nearestEntity.getLocation().toVector().subtract(player.getLocation().toVector()).normalize().dot(player.getLocation().getDirection().normalize())) + " >= 0");
+                return true;
+            }
+        }
+        if (label.equalsIgnoreCase("showLine")) {
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
+                RayCast rc = new RayCast();
+                Entity nearestEntity = null;
+                for (Entity entity : player.getNearbyEntities(100, 100, 100)) {
+                    if (nearestEntity == null) {
+                        nearestEntity = entity;
+                    } else if (entity.getLocation().distance(player.getLocation()) < nearestEntity.getLocation().distance(player.getLocation())) {
+                        nearestEntity = entity;
+                    }
+                }
+                assert nearestEntity != null;
+                rc.showLineToTarget(player, nearestEntity);
                 return true;
             }
         }
