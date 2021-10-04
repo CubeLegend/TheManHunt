@@ -32,11 +32,14 @@ public class TheManHunt extends JavaPlugin {
         registerPluginMessageingChannels();
         config.options().copyDefaults(true);
         this.saveConfig();
+
+        Freeze.getInstance().startFreezeVisionRoutine(1);
     }
 
     @Override
     public void onDisable(){
         unregisterPluginMessageingChannels();
+        Freeze.getInstance().stopFreezeVisionRoutine();
     }
 
     private int id1 = 0;
@@ -123,6 +126,9 @@ public class TheManHunt extends JavaPlugin {
             }
         }
         if (label.equalsIgnoreCase("showLine")) {
+            Freeze.getInstance().addPlayersToVision("Runners");
+
+            /*
             if (sender instanceof Player) {
                 Player player = (Player) sender;
                 RayCast rc = new RayCast();
@@ -138,6 +144,7 @@ public class TheManHunt extends JavaPlugin {
                 rc.showLineToTarget(player, nearestEntity);
                 return true;
             }
+             */
         }
         return false;
     }

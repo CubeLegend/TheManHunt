@@ -1,8 +1,10 @@
 package me.CubeLegend.TheManHunt;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class Team {
@@ -38,6 +40,14 @@ public class Team {
             player.setPlayerListName(playerNameWithoutColor);
         }
         members.remove(player.getUniqueId());
+    }
+
+    public List<Player> getMembers() {
+        List<Player> membersAsPlayers = new ArrayList<>();
+        for (UUID uuid : members) {
+            membersAsPlayers.add(Bukkit.getPlayer(uuid));
+        }
+        return membersAsPlayers;
     }
 
     public String getTeamName() {
