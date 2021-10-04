@@ -32,9 +32,9 @@ public class Freeze implements Listener {
 
     private final ArrayList<UUID> vision = new ArrayList<>();
 
-    private final ArrayList<UUID> freezedPlayers = new ArrayList<>();
+    private final ArrayList<UUID> frozenPlayers = new ArrayList<>();
 
-    private final ArrayList<UUID> freezedEntities = new ArrayList<>();
+    private final ArrayList<UUID> frozenEntities = new ArrayList<>();
 
     private int FreezeVisionRoutine;
 
@@ -50,21 +50,21 @@ public class Freeze implements Listener {
 
     public void startFreezeVisionRoutine(long period) {
         FreezeVisionRoutine = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(TheManHunt.getInstance(), () -> {
-            freezedPlayers.clear();
-            for (UUID freezedEntity : freezedEntities) {
+            frozenPlayers.clear();
+            for (UUID freezedEntity : frozenEntities) {
                 ((LivingEntity) Objects.requireNonNull(Bukkit.getEntity(freezedEntity))).setAI(true);
             }
-            freezedEntities.clear();
+            frozenEntities.clear();
 
             for (UUID uuid : vision) {
                 for (LivingEntity entity : entitiesInLineOfSight(Bukkit.getPlayer(uuid))) {
                     if (entity instanceof Player) {
-                        if (!freezedPlayers.contains(entity.getUniqueId())) {
-                            freezedPlayers.add(entity.getUniqueId());
+                        if (!frozenPlayers.contains(entity.getUniqueId())) {
+                            frozenPlayers.add(entity.getUniqueId());
                         }
                     } else {
-                        if (!freezedEntities.contains(entity.getUniqueId())) {
-                            freezedEntities.add(entity.getUniqueId());
+                        if (!frozenEntities.contains(entity.getUniqueId())) {
+                            frozenEntities.add(entity.getUniqueId());
                             entity.setAI(false);
                         }
                     }
@@ -167,28 +167,28 @@ public class Freeze implements Listener {
     //Freeze Events ----------------------
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerMoveEvent(PlayerMoveEvent event) {
-        if (freezedPlayers.contains(event.getPlayer().getUniqueId())) {
+        if (frozenPlayers.contains(event.getPlayer().getUniqueId())) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerToggleSneakEvent(PlayerToggleSneakEvent event) {
-        if (freezedPlayers.contains(event.getPlayer().getUniqueId())) {
+        if (frozenPlayers.contains(event.getPlayer().getUniqueId())) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onBlockBreakEvent(BlockBreakEvent event) {
-        if (freezedPlayers.contains(event.getPlayer().getUniqueId())) {
+        if (frozenPlayers.contains(event.getPlayer().getUniqueId())) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onBlockPlaceEvent(BlockPlaceEvent event) {
-        if (freezedPlayers.contains(event.getPlayer().getUniqueId())) {
+        if (frozenPlayers.contains(event.getPlayer().getUniqueId())) {
             event.setCancelled(true);
         }
     }
@@ -197,14 +197,14 @@ public class Freeze implements Listener {
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player)) return;
         Player damager = (Player) event.getDamager();
-        if (freezedPlayers.contains(damager.getUniqueId())) {
+        if (frozenPlayers.contains(damager.getUniqueId())) {
             event.setCancelled(true);
             return;
         }
 
         if (!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
-        if (freezedPlayers.contains(player.getUniqueId()) && vision.contains(damager)) {
+        if (frozenPlayers.contains(player.getUniqueId()) && vision.contains(damager.getUniqueId())) {
             event.setCancelled(true);
         }
     }

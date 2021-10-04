@@ -25,8 +25,8 @@ public class Team {
     public void addMember(Player player) {
         members.add(player.getUniqueId());
 
-        player.setDisplayName("§" + teamColor + player.getDisplayName());
-        player.setPlayerListName("§" + teamColor + player.getDisplayName());
+        player.setDisplayName("§" + teamColor + player.getDisplayName() + "§r");
+        player.setPlayerListName("§" + teamColor + player.getDisplayName() + "§r");
     }
 
     public void removeMember(Player player) {
@@ -34,8 +34,13 @@ public class Team {
             return;
         }
         if (player.getDisplayName().contains("§")) {
-            int index = player.getDisplayName().indexOf("§");
-            String playerNameWithoutColor = player.getDisplayName().substring(0, index) + player.getDisplayName().substring(index + 2);
+            int index1 = player.getDisplayName().indexOf("§");
+            int index2 = player.getDisplayName().indexOf("§r");
+            System.out.println(index1);
+            System.out.println(index2);
+            System.out.println(player.getDisplayName());
+            String playerNameWithoutColor = player.getDisplayName().substring(0, index1) + player.getDisplayName().substring(index1 + 2, index2);
+            System.out.println(playerNameWithoutColor);
             player.setDisplayName(playerNameWithoutColor);
             player.setPlayerListName(playerNameWithoutColor);
         }

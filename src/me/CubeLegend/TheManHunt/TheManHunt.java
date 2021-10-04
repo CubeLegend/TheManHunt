@@ -1,5 +1,6 @@
 package me.CubeLegend.TheManHunt;
 
+import me.CubeLegend.TheManHunt.Compass.VillageTracker;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -11,7 +12,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
-import java.util.List;
 import java.util.Objects;
 
 public class TheManHunt extends JavaPlugin {
@@ -34,12 +34,14 @@ public class TheManHunt extends JavaPlugin {
         this.saveConfig();
 
         Freeze.getInstance().startFreezeVisionRoutine(1);
+        VillageTracker.getInstance().startVillageTracking(1);
     }
 
     @Override
     public void onDisable(){
         unregisterPluginMessageingChannels();
         Freeze.getInstance().stopFreezeVisionRoutine();
+        VillageTracker.getInstance().stopVillageTracking();
     }
 
     private int id1 = 0;
@@ -60,37 +62,26 @@ public class TheManHunt extends JavaPlugin {
             }
         }
 
+        if (label.equalsIgnoreCase("dev")) {
+            if (args[0].equalsIgnoreCase("giveVillageTracker")) {
+                if (sender instanceof Player) {
+                    VillageTracker.getInstance().givePlayerVillageTracker(((Player) sender));
+                }
+            }
+            if (args[0].equalsIgnoreCase("removeMember")) {
+                TeamHandler.getInstance().getTeam(args[1]).removeMember(Objects.requireNonNull(Bukkit.getPlayer(args[2])));
+            }
+        }
+        /*
         if (label.equalsIgnoreCase("vectorof")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
-                RayCast rc = new RayCast();
-                //rc.getVectors(player);
-                if (Bukkit.getScheduler().isCurrentlyRunning(id1)) {
-                    Bukkit.getScheduler().cancelTask(id1);
-                    return false;
-                }
-                StringBuilder msg = new StringBuilder("Entites in line of sight: ");
-                for (Entity entity : rc.entitiesInLineOfSight(player)) {
-                    msg.append(entity.getType()).append(", ");
-                }
-                player.sendMessage(msg.toString());
-
-                /*
-                id1 = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(TheManHunt.getInstance(), new Runnable() {
-                            @Override
-                            public void run() {
-                                rc.entitiesInLineOfSight(player);
-                            }
-                        }, 0, 1);
-                */
-
                 return true;
             }
         }
         if (label.equalsIgnoreCase("crossproduct")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
-                RayCast rc = new RayCast();
                 Entity nearestEntity = null;
                 for (Entity entity : player.getNearbyEntities(100, 100, 100)) {
                     if (nearestEntity == null) {
@@ -110,7 +101,6 @@ public class TheManHunt extends JavaPlugin {
         if (label.equalsIgnoreCase("dotproduct")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
-                RayCast rc = new RayCast();
                 Entity nearestEntity = null;
                 for (Entity entity : player.getNearbyEntities(100, 100, 100)) {
                     if (nearestEntity == null) {
@@ -144,8 +134,8 @@ public class TheManHunt extends JavaPlugin {
                 rc.showLineToTarget(player, nearestEntity);
                 return true;
             }
-             */
-        }
+             //*
+        }*/
         return false;
     }
 
