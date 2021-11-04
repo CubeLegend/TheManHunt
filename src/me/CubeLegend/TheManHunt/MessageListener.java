@@ -13,6 +13,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class MessageListener implements PluginMessageListener {
+
     @Override
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {
         System.out.println(channel);

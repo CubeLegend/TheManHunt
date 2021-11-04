@@ -1,26 +1,21 @@
 package me.CubeLegend.TheManHunt.NMSUtils;
 
-import net.minecraft.server.v1_16_R3.StructureGenerator;
-import net.minecraft.server.v1_16_R3.WorldGenFeatureVillageConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Objects;
 
 public class MinecraftStructures {
 
-	public static double getDistanceToVillage(World world, Location from) {
-		return from.distance(getStructureLocation(world, from, "Village"));
-	}
-	
 	//Locate ---------------------------------------------------------------------
-	public static Location getStructureLocation(World world, Location from, String structure) {
+	public static Location getStructureLocation(Location from, String structure) {
 		String stringVillageLocation = null;
 		try {
 			stringVillageLocation = getStructure(from, structure);
-		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassNotFoundException | InstantiationException e) {
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassNotFoundException | InstantiationException | NoSuchFieldException e) {
 			e.printStackTrace();
 		}
 		if (stringVillageLocation == null)
@@ -29,24 +24,30 @@ public class MinecraftStructures {
 		String[] stringVillageLocationArray = stringVillageLocation.split(",");
 		
 		String stringVillageLocationX = stringVillageLocationArray[0];
+		String stringVillageLocationY = stringVillageLocationArray[1];
 		String stringVillageLocationZ = stringVillageLocationArray[2];
-		
+
 		stringVillageLocationX = stringVillageLocationX.replaceAll("[^0-9-]", "");
 		stringVillageLocationX = stringVillageLocationX.trim();
 		stringVillageLocationX = stringVillageLocationX.replaceAll(" ", "");
+
+		stringVillageLocationY = stringVillageLocationY.replaceAll("[^0-9-]", "");
+		stringVillageLocationY = stringVillageLocationY.trim();
+		stringVillageLocationY = stringVillageLocationY.replaceAll(" ", "");
 		
 		stringVillageLocationZ = stringVillageLocationZ.replaceAll("[^0-9-]", "");
 		stringVillageLocationZ = stringVillageLocationZ.trim();
 		stringVillageLocationZ = stringVillageLocationZ.replaceAll(" ", "");
 		
 		int VillageLocationX = Integer.parseInt(stringVillageLocationX);
+		int VillageLocationY = Integer.parseInt(stringVillageLocationY);
 		int VillageLocationZ = Integer.parseInt(stringVillageLocationZ);
-		Location VillageLocation = new Location(world, VillageLocationX, 50, VillageLocationZ);
+		Location VillageLocation = new Location(from.getWorld(), VillageLocationX, VillageLocationY, VillageLocationZ);
 
 		return VillageLocation;
 	}
 	
-    private static String getStructure(Location l, String structure) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, InstantiationException {
+    private static String getStructure(Location l, String structure) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, InstantiationException, NoSuchFieldException {
 		String firstVersionNumber = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3].split("_")[0].replace("v", "");
 		String secondVersionNumber = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3].split("_")[1];
 		String thirdVersionNumber = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3].split("_")[2].replace("R", "");
@@ -59,10 +60,12 @@ public class MinecraftStructures {
 			return blockPositionString.toString();
 		}
 		if (fullVersionNumber >= 1160) {
-			Method getHandle = l.getWorld().getClass().getMethod("getHandle");
+			Method getHandle = Objects.requireNonNull(l.getWorld()).getClass().getMethod("getHandle");
 			Object nmsWorld = getHandle.invoke(l.getWorld());
-			StructureGenerator<WorldGenFeatureVillageConfiguration> StructureGenerator = net.minecraft.server.v1_16_R3.StructureGenerator.VILLAGE;
-			Object blockPositionString = nmsWorld.getClass().getMethod("a", new Class[] { getNMSClass("StructureGenerator"), getNMSClass("BlockPosition"), int.class, boolean.class }).invoke(nmsWorld, StructureGenerator, getBlockPosition(l), 100, false);
+			Class<?> structureGeneratorClass = getNMSClass("StructureGenerator");
+			Field field = structureGeneratorClass.getField(structure.toUpperCase());
+			Object WorldGen = field.get(null);
+			Object blockPositionString = nmsWorld.getClass().getMethod("a", new Class[] { getNMSClass("StructureGenerator"), getNMSClass("BlockPosition"), int.class, boolean.class }).invoke(nmsWorld, WorldGen, getBlockPosition(l), 100, false);
 			return blockPositionString.toString();
 		}
 		System.out.println("Invalid Version");

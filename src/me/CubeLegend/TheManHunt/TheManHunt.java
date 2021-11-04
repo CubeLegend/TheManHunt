@@ -1,17 +1,20 @@
 package me.CubeLegend.TheManHunt;
 
+import me.CubeLegend.TheManHunt.Compass.CompassSpinning;
+import me.CubeLegend.TheManHunt.Compass.RunnerTracker;
 import me.CubeLegend.TheManHunt.Compass.VillageTracker;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Entity;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.util.Objects;
 
 public class TheManHunt extends JavaPlugin {
@@ -34,14 +37,18 @@ public class TheManHunt extends JavaPlugin {
         this.saveConfig();
 
         Freeze.getInstance().startFreezeVisionRoutine(1);
-        VillageTracker.getInstance().startVillageTracking(1);
+        VillageTracker.getInstance().startVillageTrackingRoutine(1);
+        RunnerTracker.getInstance().startRunnerTrackerRoutine(1);
+        CompassSpinning.getInstance().startSpinningCompassRoutine(2);
     }
 
     @Override
     public void onDisable(){
         unregisterPluginMessageingChannels();
         Freeze.getInstance().stopFreezeVisionRoutine();
-        VillageTracker.getInstance().stopVillageTracking();
+        VillageTracker.getInstance().stopVillageTrackingRoutine();
+        RunnerTracker.getInstance().stopRunnerTrackerRoutine();
+        CompassSpinning.getInstance().stopSpinningCompassRoutine();
     }
 
     private int id1 = 0;
@@ -68,8 +75,38 @@ public class TheManHunt extends JavaPlugin {
                     VillageTracker.getInstance().givePlayerVillageTracker(((Player) sender));
                 }
             }
+            if (args[0].equalsIgnoreCase("giveRunnerTracker")) {
+                if (sender instanceof Player) {
+                    RunnerTracker.getInstance().givePlayerRunnerTracker(((Player) sender));
+                }
+            }
             if (args[0].equalsIgnoreCase("removeMember")) {
                 TeamHandler.getInstance().getTeam(args[1]).removeMember(Objects.requireNonNull(Bukkit.getPlayer(args[2])));
+            }
+            if (args[0].equalsIgnoreCase("printFields")) {
+                try {
+                    for (Field f : getNMSClass("StructureGenerator").getDeclaredFields()) {
+                        System.out.println(f.getName());
+                    }
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (args[0].equalsIgnoreCase("printField")) {
+                try {
+                    Class<?> StructureGenerator = getNMSClass("StructureGenerator");
+                    Field village = StructureGenerator.getField("VILLAGE");
+                    System.out.println(village.getName());
+                    System.out.println(village.getType());
+                    Constructor<?> newSG = StructureGenerator.getConstructor(StructureGenerator, village.getType());
+                } catch (ClassNotFoundException | NoSuchFieldException | NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (args[0].equalsIgnoreCase("getMeta")) {
+                if (sender instanceof Player) {
+                    ((Player) sender).sendMessage(Objects.requireNonNull(((Player) sender).getInventory().getItemInMainHand().getItemMeta()).toString());
+                }
             }
         }
         /*
@@ -139,8 +176,18 @@ public class TheManHunt extends JavaPlugin {
         return false;
     }
 
+    private static Class<?> getNMSClass(String nmsClassString) throws ClassNotFoundException {
+        String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3] + ".";
+        String name = "net.minecraft.server." + version + nmsClassString;
+        return Class.forName(name);
+    }
+
     private void registerListeners() {
         PluginManager pm = Bukkit.getPluginManager();
+        pm.registerEvents(CompassSpinning.getInstance(), this);
+        pm.registerEvents(VillageTracker.getInstance(), this);
+        pm.registerEvents(RunnerTracker.getInstance(), this);
+        pm.registerEvents(Freeze.getInstance(), this);
 
     }
 
@@ -153,4 +200,5 @@ public class TheManHunt extends JavaPlugin {
         this.getServer().getMessenger().unregisterIncomingPluginChannel(this, "BungeeCord");
         this.getServer().getMessenger().unregisterIncomingPluginChannel(this, Objects.requireNonNull(this.getConfig().getString("PluginMessagingChannelOfMiniGame")));
     }
+
 }

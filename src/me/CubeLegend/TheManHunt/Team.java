@@ -30,9 +30,7 @@ public class Team {
     }
 
     public void removeMember(Player player) {
-        if (!members.contains(player.getUniqueId())) {
-            return;
-        }
+        if (!members.contains(player.getUniqueId())) return;
         if (player.getDisplayName().contains("§")) {
             int index1 = player.getDisplayName().indexOf("§");
             int index2 = player.getDisplayName().indexOf("§r");
@@ -45,6 +43,14 @@ public class Team {
             player.setPlayerListName(playerNameWithoutColor);
         }
         members.remove(player.getUniqueId());
+    }
+
+    public Player getMember(int index) {
+        return Bukkit.getPlayer(members.get(index));
+    }
+
+    public int getIndexOfMember(Player player) {
+        return members.indexOf(player.getUniqueId());
     }
 
     public List<Player> getMembers() {
