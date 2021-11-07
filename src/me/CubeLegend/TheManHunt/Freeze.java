@@ -48,11 +48,17 @@ public class Freeze implements Listener {
         vision.remove(player.getUniqueId());
     }
 
+    public void clear() {
+        frozenPlayers.clear();
+        frozenEntities.clear();
+        vision.clear();
+    }
+
     public void startFreezeVisionRoutine(long period) {
         FreezeVisionRoutine = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(TheManHunt.getInstance(), () -> {
             frozenPlayers.clear();
-            for (UUID freezedEntity : frozenEntities) {
-                ((LivingEntity) Objects.requireNonNull(Bukkit.getEntity(freezedEntity))).setAI(true);
+            for (UUID frozenEntity : frozenEntities) {
+                ((LivingEntity) Objects.requireNonNull(Bukkit.getEntity(frozenEntity))).setAI(true);
             }
             frozenEntities.clear();
 
@@ -208,6 +214,7 @@ public class Freeze implements Listener {
             event.setCancelled(true);
         }
     }
+
     //------------------------------------
 
     /* Would be inserted in the entities in line of sight for loop. This shows vectors that are useful for raycasting.

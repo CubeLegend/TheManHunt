@@ -57,4 +57,8 @@ public class TeamHandler {
     public int getTotalMemberCount() {
         return this.getTeam("Hunters").getMemberCount() + this.getTeam("Runners").getMemberCount();
     }
+
+    public void deleteTeams() {
+        teams.clear();
+    }
 }

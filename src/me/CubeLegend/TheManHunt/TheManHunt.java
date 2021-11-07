@@ -188,11 +188,12 @@ public class TheManHunt extends JavaPlugin {
         pm.registerEvents(VillageTracker.getInstance(), this);
         pm.registerEvents(RunnerTracker.getInstance(), this);
         pm.registerEvents(Freeze.getInstance(), this);
-
+        pm.registerEvents(new RunnerWin(), this);
     }
 
     private void registerPluginMessageingChannels() {
         this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new MessageListener());
+        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         this.getServer().getMessenger().registerIncomingPluginChannel(this, Objects.requireNonNull(this.getConfig().getString("PluginMessagingChannelOfMiniGame")), new MessageListener());
     }
 
