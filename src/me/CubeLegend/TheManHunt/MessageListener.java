@@ -17,9 +17,6 @@ public class MessageListener implements PluginMessageListener {
     @Override
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {
         System.out.println(channel);
-        /*if (!channel.equals(Objects.requireNonNull(TheManHunt.getInstance().getConfig().getString("PluginMessagingChannelOfMiniGame")))) {
-            return;
-        }*/
         ByteArrayDataInput in = ByteStreams.newDataInput(message);
 
         String subChannel = in.readUTF();
@@ -27,28 +24,32 @@ public class MessageListener implements PluginMessageListener {
         if (subChannel.equals(Objects.requireNonNull(TheManHunt.getInstance().getConfig().getString("PluginMessagingChannelOfMiniGame")))) {
 
             short len = in.readShort();
-            byte[] msgbytes = new byte[len];
-            in.readFully(msgbytes);
-            DataInputStream msgin = new DataInputStream(new ByteArrayInputStream(msgbytes));
+            byte[] msgBytes = new byte[len];
+            in.readFully(msgBytes);
+            DataInputStream msgIn = new DataInputStream(new ByteArrayInputStream(msgBytes));
             try {
-                String dataDescription = msgin.readUTF();
-                System.out.println(dataDescription);
+                String dataDescription = msgIn.readUTF();
+                Bukkit.getLogger().info(dataDescription);
                 if (dataDescription.equalsIgnoreCase("teamInformation")) {
-                    System.out.println("Test 2");
 
-                    String teamName = msgin.readUTF();
-                    String teamIcon = msgin.readUTF();
-                    int teamSelectionSlot = msgin.readInt();
-                    String teamColor = msgin.readUTF();
-                    int membersLength = msgin.readInt();
+                    String teamName = msgIn.readUTF();
+                    Bukkit.getLogger().info(teamName);
+                    String teamIcon = msgIn.readUTF();
+                    Bukkit.getLogger().info(teamIcon);
+                    int teamSelectionSlot = msgIn.readInt();
+                    Bukkit.getLogger().info(String.valueOf(teamSelectionSlot));
+                    String teamColor = msgIn.readUTF();
+                    Bukkit.getLogger().info(teamColor);
+                    int membersLength = msgIn.readInt();
+                    Bukkit.getLogger().info(String.valueOf(membersLength));
 
-                    System.out.println("Test 3");
                     TeamHandler.getInstance().createTeam(teamName, teamIcon, teamSelectionSlot, teamColor);
                     int teamNumber = TeamHandler.getInstance().getTotalTeamNumber() - 1;
                     for (int i = 0; i < membersLength; i++) {
                         System.out.println(teamNumber);
-                        TeamHandler.getInstance().getTeam(teamNumber).addMember(Objects.requireNonNull(Bukkit.getPlayer(UUID.fromString(msgin.readUTF()))));
+                        TeamHandler.getInstance().getTeam(teamNumber).addMember(Objects.requireNonNull(Bukkit.getPlayer(UUID.fromString(msgIn.readUTF()))));
                     }
+                    GameHandler.getInstance().checkAllTeamsSetup();
                 }
             } catch (IOException e) {
                 e.printStackTrace();

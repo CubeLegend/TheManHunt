@@ -48,6 +48,10 @@ public class Freeze implements Listener {
         vision.remove(player.getUniqueId());
     }
 
+    public void clearFrozenPlayers() {
+        frozenPlayers.clear();
+    }
+
     public void clear() {
         frozenPlayers.clear();
         frozenEntities.clear();
@@ -56,6 +60,7 @@ public class Freeze implements Listener {
 
     public void startFreezeVisionRoutine(long period) {
         FreezeVisionRoutine = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(TheManHunt.getInstance(), () -> {
+            if (GameHandler.getInstance().getGameState() != GameState.PLAYING) return;
             frozenPlayers.clear();
             for (UUID frozenEntity : frozenEntities) {
                 ((LivingEntity) Objects.requireNonNull(Bukkit.getEntity(frozenEntity))).setAI(true);
@@ -171,35 +176,35 @@ public class Freeze implements Listener {
     }
 
     //Freeze Events ----------------------
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.LOW)
     public void onPlayerMoveEvent(PlayerMoveEvent event) {
         if (frozenPlayers.contains(event.getPlayer().getUniqueId())) {
             event.setCancelled(true);
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.LOW)
     public void onPlayerToggleSneakEvent(PlayerToggleSneakEvent event) {
         if (frozenPlayers.contains(event.getPlayer().getUniqueId())) {
             event.setCancelled(true);
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.LOW)
     public void onBlockBreakEvent(BlockBreakEvent event) {
         if (frozenPlayers.contains(event.getPlayer().getUniqueId())) {
             event.setCancelled(true);
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.LOW)
     public void onBlockPlaceEvent(BlockPlaceEvent event) {
         if (frozenPlayers.contains(event.getPlayer().getUniqueId())) {
             event.setCancelled(true);
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player)) return;
         Player damager = (Player) event.getDamager();

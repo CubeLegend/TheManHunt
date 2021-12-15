@@ -5,6 +5,11 @@ main: me.CubeLegend.TheManHunt.TheManHunt
 api-version: 1.16
 
 commands:
+  start:
+    description: Starts the game if it isn't allready running and if it there are enough players in the Teams
+    usage: /start
+    permission: TheManHunt.GameManagement
+
   MembersOf:
   Dev:
   VectorOf:
