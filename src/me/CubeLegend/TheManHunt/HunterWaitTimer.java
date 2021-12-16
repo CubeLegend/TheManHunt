@@ -30,8 +30,7 @@ public class HunterWaitTimer {
 			if (time <= 0) {
 
 				Bukkit.broadcastMessage("§6The hunters got released!");
-				Freeze.getInstance().clearFrozenPlayers();
-				//if (Settings.getInstance().FreezeVisionMode) Freeze.getInstance().startFreezeVision();
+				Freeze.getInstance().removeFrozenPlayers(TeamHandler.getInstance().getTeam("Hunters").getMembers());
 				GameHandler.getInstance().setGameState(GameState.PLAYING);
 				Bukkit.getScheduler().cancelTask(TaskID);
 			}

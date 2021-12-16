@@ -1,8 +1,11 @@
 package me.CubeLegend.TheManHunt;
 
+import me.CubeLegend.TheManHunt.Commands.CommandJoin;
+import me.CubeLegend.TheManHunt.Commands.CommandStart;
 import me.CubeLegend.TheManHunt.Compass.CompassSpinning;
 import me.CubeLegend.TheManHunt.Compass.RunnerTracker;
 import me.CubeLegend.TheManHunt.Compass.VillageTracker;
+import me.CubeLegend.TheManHunt.SpecialAbilities.FreezeVision;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -36,7 +39,7 @@ public class TheManHunt extends JavaPlugin {
         this.saveConfig();
 
         GameHandler.getInstance().setGameState(GameState.IDLE);
-        Freeze.getInstance().startFreezeVisionRoutine(1);
+        FreezeVision.getInstance().startFreezeVisionRoutine(1);
         VillageTracker.getInstance().startVillageTrackingRoutine(1);
         RunnerTracker.getInstance().startRunnerTrackerRoutine(1);
         CompassSpinning.getInstance().startSpinningCompassRoutine(2);
@@ -44,8 +47,8 @@ public class TheManHunt extends JavaPlugin {
 
     @Override
     public void onDisable(){
-        unregisterPluginMessageingChannels();
-        Freeze.getInstance().stopFreezeVisionRoutine();
+        unregisterPluginMessagingChannels();
+        FreezeVision.getInstance().stopFreezeVisionRoutine();
         VillageTracker.getInstance().stopVillageTrackingRoutine();
         RunnerTracker.getInstance().stopRunnerTrackerRoutine();
         CompassSpinning.getInstance().stopSpinningCompassRoutine();
@@ -105,12 +108,6 @@ public class TheManHunt extends JavaPlugin {
             if (args[0].equalsIgnoreCase("getMeta")) {
                 if (sender instanceof Player) {
                     ((Player) sender).sendMessage(Objects.requireNonNull(((Player) sender).getInventory().getItemInMainHand().getItemMeta()).toString());
-                }
-            }
-            if (args[0].equalsIgnoreCase("start")) {
-                if (sender instanceof Player) {
-                    Freeze.getInstance().addPlayersToVision("Runners");
-                    GameHandler.getInstance().setGameState(GameState.PLAYING);
                 }
             }
         }
@@ -188,7 +185,8 @@ public class TheManHunt extends JavaPlugin {
     }
 
     private void registerCommands() {
-        this.getCommand("start").setExecutor(new CommandStart());
+        this.getCommand("Start").setExecutor(new CommandStart());
+        this.getCommand("Join").setExecutor(new CommandJoin());
     }
 
     private void registerListeners() {
@@ -207,8 +205,9 @@ public class TheManHunt extends JavaPlugin {
         this.getServer().getMessenger().registerIncomingPluginChannel(this, Objects.requireNonNull(this.getConfig().getString("PluginMessagingChannelOfMiniGame")), new MessageListener());
     }
 
-    private void unregisterPluginMessageingChannels() {
+    private void unregisterPluginMessagingChannels() {
         this.getServer().getMessenger().unregisterIncomingPluginChannel(this, "BungeeCord");
+        this.getServer().getMessenger().unregisterOutgoingPluginChannel(this, "BungeeCord");
         this.getServer().getMessenger().unregisterIncomingPluginChannel(this, Objects.requireNonNull(this.getConfig().getString("PluginMessagingChannelOfMiniGame")));
     }
 
