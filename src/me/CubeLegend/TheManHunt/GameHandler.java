@@ -6,13 +6,13 @@ import me.CubeLegend.TheManHunt.Compass.CompassSpinning;
 import me.CubeLegend.TheManHunt.Compass.RunnerTracker;
 import me.CubeLegend.TheManHunt.Compass.VillageTracker;
 import me.CubeLegend.TheManHunt.SpecialAbilities.FreezeVision;
+import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class GameHandler {
@@ -42,7 +42,7 @@ public class GameHandler {
 		if (state == GameState.RUNAWAYTIME) {
 			Freeze.getInstance().addFrozenPlayers(TeamHandler.getInstance().getTeam("Hunters").getMembers());
 			HunterWaitTimer.getInstance().startTimer();
-			if (Settings.getInstance().freezeVision) {
+			if (Settings.getInstance().FreezeVision) {
 				for (Player runner : TeamHandler.getInstance().getTeam("Runners").getMembers()) {
 					FreezeVision.getInstance().givePlayerFreezeVision(runner);
 				}
@@ -55,7 +55,7 @@ public class GameHandler {
 		}
 
 		if (state == GameState.END) {
-			if (Settings.getInstance().freezeVision) {
+			if (Settings.getInstance().FreezeVision) {
 				for (Player runner : TeamHandler.getInstance().getTeam("Runners").getMembers()) {
 					FreezeVision.getInstance().takePlayerFreezeVision(runner);
 				}

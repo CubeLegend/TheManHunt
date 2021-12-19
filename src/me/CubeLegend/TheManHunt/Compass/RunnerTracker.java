@@ -1,10 +1,9 @@
 package me.CubeLegend.TheManHunt.Compass;
 
-import me.CubeLegend.TheManHunt.TeamHandler;
+import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import me.CubeLegend.TheManHunt.TheManHunt;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -18,7 +17,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 
 import java.util.HashMap;
 import java.util.Objects;

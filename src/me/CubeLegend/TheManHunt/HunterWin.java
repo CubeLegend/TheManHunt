@@ -1,5 +1,6 @@
 package me.CubeLegend.TheManHunt;
 
+import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import net.minecraft.server.v1_16_R3.PacketPlayOutEntityStatus;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;

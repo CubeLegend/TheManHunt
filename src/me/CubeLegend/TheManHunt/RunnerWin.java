@@ -1,5 +1,6 @@
 package me.CubeLegend.TheManHunt;
 
+import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;

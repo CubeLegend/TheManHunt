@@ -2,7 +2,7 @@ package me.CubeLegend.TheManHunt.Commands;
 
 import me.CubeLegend.TheManHunt.GameHandler;
 import me.CubeLegend.TheManHunt.GameState;
-import me.CubeLegend.TheManHunt.TeamHandler;
+import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

@@ -6,6 +6,9 @@ import me.CubeLegend.TheManHunt.Compass.CompassSpinning;
 import me.CubeLegend.TheManHunt.Compass.RunnerTracker;
 import me.CubeLegend.TheManHunt.Compass.VillageTracker;
 import me.CubeLegend.TheManHunt.SpecialAbilities.FreezeVision;
+import me.CubeLegend.TheManHunt.SpecialAbilities.HunterNearWarning;
+import me.CubeLegend.TheManHunt.TeamSystem.Team;
+import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -39,10 +42,11 @@ public class TheManHunt extends JavaPlugin {
         this.saveConfig();
 
         GameHandler.getInstance().setGameState(GameState.IDLE);
-        FreezeVision.getInstance().startFreezeVisionRoutine(1);
-        VillageTracker.getInstance().startVillageTrackingRoutine(1);
-        RunnerTracker.getInstance().startRunnerTrackerRoutine(1);
-        CompassSpinning.getInstance().startSpinningCompassRoutine(2);
+        FreezeVision.getInstance().startFreezeVisionRoutine(Settings.getInstance().FreezeVisionUpdatePeriod);
+        VillageTracker.getInstance().startVillageTrackingRoutine(Settings.getInstance().VillageTrackerUpdatePeriod);
+        RunnerTracker.getInstance().startRunnerTrackerRoutine(Settings.getInstance().RunnerTrackerUpdatePeriod);
+        CompassSpinning.getInstance().startSpinningCompassRoutine(Settings.getInstance().CompassSpinningUpdatePeriod);
+        HunterNearWarning.getInstance().startRoutine(Settings.getInstance().HunterNearWarningUpdatePeriod, Settings.getInstance().HunterNearWarningRadius);
     }
 
     @Override
@@ -52,6 +56,7 @@ public class TheManHunt extends JavaPlugin {
         VillageTracker.getInstance().stopVillageTrackingRoutine();
         RunnerTracker.getInstance().stopRunnerTrackerRoutine();
         CompassSpinning.getInstance().stopSpinningCompassRoutine();
+        HunterNearWarning.getInstance().stopRoutine();
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

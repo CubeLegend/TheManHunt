@@ -1,4 +1,4 @@
-package me.CubeLegend.TheManHunt;
+package me.CubeLegend.TheManHunt.TeamSystem;
 
 import org.bukkit.entity.Player;
 
