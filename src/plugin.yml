@@ -3,6 +3,7 @@ version: 0.1
 author: CubeLegend
 main: me.CubeLegend.TheManHunt.TheManHunt
 api-version: 1.16
+load: STARTUP
 
 commands:
   Start:
@@ -12,7 +13,7 @@ commands:
 
   Join:
     description: To join a team
-    usage: /Join
+    usage: /Join <Team Name>
     permission: TheManHunt.GameManagement
 
   MembersOf:

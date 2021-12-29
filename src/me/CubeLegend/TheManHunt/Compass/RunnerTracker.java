@@ -87,9 +87,10 @@ public class RunnerTracker implements Listener {
 				CompassMeta compassMeta = null;
 				for (ItemStack is : player.getInventory().getContents()) {
 					if (is == null) continue;
-					if (is.getType() == Material.COMPASS
-							&& Objects.requireNonNull(is.getItemMeta()).getDisplayName().equals(Objects.requireNonNull(this.getRunnerTrackerItem().getItemMeta()).getDisplayName())
-							&& is.getItemMeta().isUnbreakable() == this.getRunnerTrackerItem().getItemMeta().isUnbreakable()) {
+					if (is.getType() != Material.COMPASS) continue;
+					if (is.getItemMeta() == null) continue;
+					if (!is.getItemMeta().getDisplayName().equals(Objects.requireNonNull(this.getRunnerTrackerItem().getItemMeta()).getDisplayName())) continue;
+					if (is.getItemMeta().isUnbreakable() == this.getRunnerTrackerItem().getItemMeta().isUnbreakable()) {
 						compassItem = is;
 						compassMeta = (CompassMeta) is.getItemMeta();
 						break;

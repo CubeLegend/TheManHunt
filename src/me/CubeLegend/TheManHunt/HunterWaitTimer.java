@@ -24,7 +24,7 @@ public class HunterWaitTimer {
 
 		if (isRunning) { return; }
 		isRunning = true;
-		time = 10;
+		time = Settings.getInstance().HunterWaitTimer;
 		TaskID = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(TheManHunt.getInstance(), () -> {
 
 			GameHandler.getInstance().setGameState(GameState.RUNAWAYTIME);

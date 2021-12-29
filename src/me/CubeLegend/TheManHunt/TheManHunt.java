@@ -10,6 +10,7 @@ import me.CubeLegend.TheManHunt.SpecialAbilities.HunterNearWarning;
 import me.CubeLegend.TheManHunt.TeamSystem.Team;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -17,9 +18,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.util.Objects;
+import java.util.*;
 
 public class TheManHunt extends JavaPlugin {
 
@@ -29,34 +34,87 @@ public class TheManHunt extends JavaPlugin {
         return instance;
     }
 
+    /*@Override
+    public void onLoad() {
+//        List<File> worldFiles = new ArrayList<>();
+//        for (World world : Bukkit.getWorlds()) {
+//            worldFiles.add(world.getWorldFolder().getAbsoluteFile());
+//            System.out.println(Bukkit.getServer().unloadWorld(world, false));
+//        }
+        FileInputStream in = null;
+        try {
+            // Initially empty.
+            Properties properties = new Properties();
+
+            // You can read files using FileInputStream or FileReader.
+            in = new FileInputStream(filename);
+
+            // This line reads the properties file.
+            properties.load(in);
+
+            // Your code goes here.
+        } catch (FileNotFoundException ex) {
+            // Handle missing properties file errors.
+        } catch (IOException ex) {
+            // Handle IO errors.
+        } finally {
+            // Need to do some work to close the stream.
+            try {
+                if (in != null) in.close();
+            } catch (IOException ex) {
+                // Handle IO errors or log a warning.
+            }
+        }
+        List<File> worldFiles = new ArrayList<>(Arrays.asList(Objects.requireNonNull(Bukkit.getWorldContainer().getAbsoluteFile().listFiles())));
+        for (File file : worldFiles) {
+            System.out.println(file);
+            System.out.println(file.delete());
+        }
+    }*/
+
     @Override
-    public void onEnable(){
+    public void onEnable() {
         instance = this;
 
         this.saveDefaultConfig();
-        FileConfiguration config = this.getConfig();
+        Settings.getInstance().loadSettingsFromConfig();
+        //FileConfiguration config = this.getConfig();
         registerCommands();
         registerListeners();
         registerPluginMessagingChannels();
-        config.options().copyDefaults(true);
-        this.saveConfig();
+        //config.options().copyDefaults(true);
+        //this.saveConfig();
 
+        startRoutines();
         GameHandler.getInstance().setGameState(GameState.IDLE);
-        FreezeVision.getInstance().startFreezeVisionRoutine(Settings.getInstance().FreezeVisionUpdatePeriod);
-        VillageTracker.getInstance().startVillageTrackingRoutine(Settings.getInstance().VillageTrackerUpdatePeriod);
-        RunnerTracker.getInstance().startRunnerTrackerRoutine(Settings.getInstance().RunnerTrackerUpdatePeriod);
-        CompassSpinning.getInstance().startSpinningCompassRoutine(Settings.getInstance().CompassSpinningUpdatePeriod);
-        HunterNearWarning.getInstance().startRoutine(Settings.getInstance().HunterNearWarningUpdatePeriod, Settings.getInstance().HunterNearWarningRadius);
     }
 
     @Override
-    public void onDisable(){
+    public void onDisable() {
         unregisterPluginMessagingChannels();
         FreezeVision.getInstance().stopFreezeVisionRoutine();
         VillageTracker.getInstance().stopVillageTrackingRoutine();
         RunnerTracker.getInstance().stopRunnerTrackerRoutine();
         CompassSpinning.getInstance().stopSpinningCompassRoutine();
         HunterNearWarning.getInstance().stopRoutine();
+    }
+
+    private void startRoutines() {
+        if (Settings.getInstance().FreezeVision) {
+            FreezeVision.getInstance().startFreezeVisionRoutine(Settings.getInstance().FreezeVisionUpdatePeriod);
+        }
+        if (Settings.getInstance().VillageTracker) {
+            VillageTracker.getInstance().startVillageTrackingRoutine(Settings.getInstance().VillageTrackerUpdatePeriod);
+        }
+        if (Settings.getInstance().RunnerTracker) {
+            RunnerTracker.getInstance().startRunnerTrackerRoutine(Settings.getInstance().RunnerTrackerUpdatePeriod);
+        }
+        if (Settings.getInstance().VillageTracker || Settings.getInstance().RunnerTracker) {
+            CompassSpinning.getInstance().startSpinningCompassRoutine(Settings.getInstance().CompassSpinningUpdatePeriod);
+        }
+        if (Settings.getInstance().HunterNearWarning) {
+            HunterNearWarning.getInstance().startRoutine(Settings.getInstance().HunterNearWarningUpdatePeriod, Settings.getInstance().HunterNearWarningRadius);
+        }
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

@@ -1,1 +1,17 @@
 PluginMessagingChannelOfMiniGame: "themanhunt:minigame"
+
+FreezeVision: false
+HunterNearWarning: false
+VillageTracker: false
+RunnerTracker: false
+
+HunterWaitTimer: 10
+HunterNearWarningRadius: 50
+
+FreezeVisionUpdatePeriod: 1
+HunterNearWarningUpdatePeriod: 1
+VillageTrackerUpdatePeriod: 1
+RunnerTrackerUpdatePeriod: 1
+CompassSpinningUpdatePeriod: 1
+
+SetLocationOfPlayerCompassIfPossible: true

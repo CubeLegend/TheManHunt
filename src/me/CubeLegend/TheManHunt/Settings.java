@@ -1,5 +1,7 @@
 package me.CubeLegend.TheManHunt;
 
+import org.bukkit.configuration.file.FileConfiguration;
+
 public class Settings {
 
     private static Settings instance;
@@ -10,6 +12,8 @@ public class Settings {
         }
         return instance;
     }
+
+    private final FileConfiguration config = TheManHunt.getInstance().getConfig();
 
     public String PluginMessagingChannel = "themanhunt:minigame";
 
@@ -30,8 +34,39 @@ public class Settings {
     public boolean SetLocationOfPlayerCompassIfPossible = true;
 
     public void loadSettingsFromConfig() {
-        PluginMessagingChannel = TheManHunt.getInstance().getConfig().getString("PluginMessagingChannelOfMiniGame");
+        PluginMessagingChannel = config.getString("PluginMessagingChannelOfMiniGame");
 
-        //TODO setup these settings in the config file and load them
+        FreezeVision = config.getBoolean("FreezeVision");
+        HunterNearWarning = config.getBoolean("HunterNearWarning");
+        VillageTracker = config.getBoolean("VillageTracker");
+        RunnerTracker = config.getBoolean("RunnerTracker");
+
+        HunterWaitTimer = config.getInt("HunterWaitTimer");
+        HunterNearWarningRadius = config.getInt("HunterNearWarningRadius");
+
+        FreezeVisionUpdatePeriod = config.getInt("FreezeVisionUpdatePeriod");
+        HunterNearWarningUpdatePeriod = config.getInt("HunterNearWarningUpdatePeriod");
+        VillageTrackerUpdatePeriod = config.getInt("VillageTrackerUpdatePeriod");
+        RunnerTrackerUpdatePeriod = config.getInt("RunnerTrackerUpdatePeriod");
+        CompassSpinningUpdatePeriod = config.getInt("CompassSpinningUpdatePeriod");
+    }
+
+    public void safeSettingsToConfig() {
+        config.set("PluginMessagingChannelOfMiniGame", PluginMessagingChannel);
+
+        config.set("FreezeVision", FreezeVision);
+        config.set("HunterNearWarning", HunterNearWarning);
+        config.set("VillageTracker", VillageTracker);
+        config.set("RunnerTracker", RunnerTracker);
+
+        config.set("HunterWaitTimer", HunterWaitTimer);
+        config.set("HunterNearWarningRadius", HunterNearWarningRadius);
+
+        config.set("FreezeVisionUpdatePeriod", FreezeVisionUpdatePeriod);
+        config.set("HunterNearWarningUpdatePeriod", HunterNearWarningUpdatePeriod);
+        config.set("VillageTrackerUpdatePeriod", VillageTrackerUpdatePeriod);
+        config.set("RunnerTrackerUpdatePeriod", RunnerTrackerUpdatePeriod);
+        config.set("CompassSpinningUpdatePeriod", CompassSpinningUpdatePeriod);
+        TheManHunt.getInstance().saveConfig();
     }
 }
