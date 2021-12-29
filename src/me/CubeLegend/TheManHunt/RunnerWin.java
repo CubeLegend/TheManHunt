@@ -1,7 +1,6 @@
 package me.CubeLegend.TheManHunt;
 
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
-import org.bukkit.Bukkit;
 import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,15 +16,7 @@ public class RunnerWin implements Listener {
         if (!(GameHandler.getInstance().getGameState() == GameState.RUNAWAYTIME || GameHandler.getInstance().getGameState() == GameState.PLAYING)) return;
         if (!TeamHandler.getInstance().getTeam("Runners").checkForMember(player)) return;
         if (event.getFrom().getEnvironment().equals(Environment.THE_END)) {
-            RunnerWinGame();
+            TeamHandler.getInstance().getTeam("Runners").win();
         }
-    }
-
-    public void RunnerWinGame() {
-        GameHandler.getInstance().setGameState(GameState.END);
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            player.sendTitle("§6Die §1Runner §6haben Gewonnen!!!", null, 10, 70, 20);
-        }
-        GameHandler.getInstance().connectPlayersToLobby();
     }
 }

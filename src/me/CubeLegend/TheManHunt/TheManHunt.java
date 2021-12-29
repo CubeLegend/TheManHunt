@@ -259,7 +259,7 @@ public class TheManHunt extends JavaPlugin {
         pm.registerEvents(RunnerTracker.getInstance(), this);
         pm.registerEvents(Freeze.getInstance(), this);
         pm.registerEvents(new RunnerWin(), this);
-        pm.registerEvents(new HunterWin(), this);
+        pm.registerEvents(new PlayerDeathHandler(), this);
     }
 
     private void registerPluginMessagingChannels() {

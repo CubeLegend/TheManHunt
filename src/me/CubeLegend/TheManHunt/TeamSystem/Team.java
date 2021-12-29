@@ -1,5 +1,7 @@
 package me.CubeLegend.TheManHunt.TeamSystem;
 
+import me.CubeLegend.TheManHunt.GameHandler;
+import me.CubeLegend.TheManHunt.GameState;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -83,5 +85,13 @@ public class Team {
 
     public int getMemberCount() {
         return members.size();
+    }
+
+    public void win() {
+        GameHandler.getInstance().setGameState(GameState.END);
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.sendTitle(String.format("§6Die %s%s §6haben Gewonnen!!!",teamColor,teamName), null, 10, 70, 20);
+        }
+        GameHandler.getInstance().connectPlayersToLobby();
     }
 }
