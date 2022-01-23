@@ -2,7 +2,6 @@ package me.CubeLegend.TheManHunt;
 
 import me.CubeLegend.TheManHunt.Commands.CommandJoin;
 import me.CubeLegend.TheManHunt.Commands.CommandStart;
-import me.CubeLegend.TheManHunt.Compass.CompassSpinning;
 import me.CubeLegend.TheManHunt.Compass.RunnerTracker;
 import me.CubeLegend.TheManHunt.Compass.VillageTracker;
 import me.CubeLegend.TheManHunt.SpecialAbilities.FreezeVision;
@@ -10,18 +9,12 @@ import me.CubeLegend.TheManHunt.SpecialAbilities.HunterNearWarning;
 import me.CubeLegend.TheManHunt.TeamSystem.Team;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -95,7 +88,6 @@ public class TheManHunt extends JavaPlugin {
         FreezeVision.getInstance().stopFreezeVisionRoutine();
         VillageTracker.getInstance().stopVillageTrackingRoutine();
         RunnerTracker.getInstance().stopRunnerTrackerRoutine();
-        CompassSpinning.getInstance().stopSpinningCompassRoutine();
         HunterNearWarning.getInstance().stopRoutine();
     }
 
@@ -108,9 +100,6 @@ public class TheManHunt extends JavaPlugin {
         }
         if (Settings.getInstance().RunnerTracker) {
             RunnerTracker.getInstance().startRunnerTrackerRoutine(Settings.getInstance().RunnerTrackerUpdatePeriod);
-        }
-        if (Settings.getInstance().VillageTracker || Settings.getInstance().RunnerTracker) {
-            CompassSpinning.getInstance().startSpinningCompassRoutine(Settings.getInstance().CompassSpinningUpdatePeriod);
         }
         if (Settings.getInstance().HunterNearWarning) {
             HunterNearWarning.getInstance().startRoutine(Settings.getInstance().HunterNearWarningUpdatePeriod, Settings.getInstance().HunterNearWarningRadius);
@@ -254,7 +243,6 @@ public class TheManHunt extends JavaPlugin {
 
     private void registerListeners() {
         PluginManager pm = Bukkit.getPluginManager();
-        pm.registerEvents(CompassSpinning.getInstance(), this);
         pm.registerEvents(VillageTracker.getInstance(), this);
         pm.registerEvents(RunnerTracker.getInstance(), this);
         pm.registerEvents(Freeze.getInstance(), this);

@@ -18,6 +18,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import javax.management.RuntimeErrorException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
@@ -47,14 +49,23 @@ public class RunnerTracker implements Listener {
 	    meta.setUnbreakable(true);
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 	    compass.setItemMeta(meta);
-	    
 	    return compass;
 	}
-	
+
 	public void givePlayerRunnerTracker(Player player) {
 		ItemStack compass = getRunnerTrackerItem();
 	    
 	    player.getInventory().addItem(compass);
+	}
+
+	public boolean isRunnerTracker(ItemStack is) {
+		if (is == null) return false;
+		if (is.getType() != Material.COMPASS) return false;
+		if (is.getItemMeta() == null) return false;
+		if (!is.getItemMeta().getDisplayName().equals(Objects.requireNonNull(RunnerTracker.getInstance().getRunnerTrackerItem().getItemMeta()).getDisplayName())) return false;
+		if (!(is.getItemMeta().isUnbreakable() == Objects.requireNonNull(this.getRunnerTrackerItem().getItemMeta()).isUnbreakable())) return false;
+
+		return true;
 	}
 
 	public boolean containsPlayerTrackingKey(Player hunter) {
@@ -82,43 +93,36 @@ public class RunnerTracker implements Listener {
 	public void startRunnerTrackerRoutine(int period) {
 		TaskId = Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(TheManHunt.getInstance(), () -> {
 
-			for (Player player : Bukkit.getOnlinePlayers()) {
-				ItemStack compassItem = null;
-				CompassMeta compassMeta = null;
-				for (ItemStack is : player.getInventory().getContents()) {
-					if (is == null) continue;
-					if (is.getType() != Material.COMPASS) continue;
-					if (is.getItemMeta() == null) continue;
-					if (!is.getItemMeta().getDisplayName().equals(Objects.requireNonNull(this.getRunnerTrackerItem().getItemMeta()).getDisplayName())) continue;
-					if (is.getItemMeta().isUnbreakable() == this.getRunnerTrackerItem().getItemMeta().isUnbreakable()) {
-						compassItem = is;
-						compassMeta = (CompassMeta) is.getItemMeta();
-						break;
-					}
-				}
-				if (compassItem != null) {
-					if (!RunnerTracker.getInstance().containsPlayerTrackingKey(player)) {
-						if (!CompassSpinning.getInstance().containsSpinPlayerCompass(player)) CompassSpinning.getInstance().addSpinPlayerCompass(player);
-						continue;
-					}
-					Player runner = RunnerTracker.getInstance().getPlayerTrackingValue(player);
-					if (runner == null) {
-						if (!CompassSpinning.getInstance().containsSpinPlayerCompass(player)) CompassSpinning.getInstance().addSpinPlayerCompass(player);
-						continue;
-					}
-					if (player.getWorld().getName().equals(runner.getWorld().getName())) {
-						CompassSpinning.getInstance().removeSpinPlayerCompass(player);
-						if (player.getWorld().getEnvironment() == World.Environment.NORMAL) {
-							player.setCompassTarget(runner.getLocation());
-						} else {
-							compassMeta.setLodestone(runner.getLocation());
-							compassItem.setItemMeta(compassMeta);
+			for (UUID uuid : PlayerTracking.keySet()) {
+				Player hunter = Bukkit.getPlayer(uuid);
+				if (hunter == null) continue;
+				Player runner = Bukkit.getPlayer(PlayerTracking.get(uuid));
+				if (runner != null && runner.getWorld().equals(hunter.getWorld())) {
+					if (hunter.getWorld().getEnvironment() == World.Environment.NORMAL) {
+						ItemStack runnerTracker = null;
+						for (ItemStack is : hunter.getInventory()) {
+							if (RunnerTracker.getInstance().isRunnerTracker(is)) runnerTracker = is;
 						}
-						continue;
+						if (runnerTracker != null && ((CompassMeta) Objects.requireNonNull(runnerTracker.getItemMeta())).hasLodestone()) {
+							runnerTracker.setItemMeta(RunnerTracker.getInstance().getRunnerTrackerItem().getItemMeta());
+						}
+						hunter.setCompassTarget(runner.getLocation());
+
+					} else {
+						ItemStack runnerTracker = null;
+						for (ItemStack is : hunter.getInventory()) {
+							if (RunnerTracker.getInstance().isRunnerTracker(is)) runnerTracker = is;
+						}
+						if (runnerTracker != null) {
+							CompassMeta cm = (CompassMeta) runnerTracker.getItemMeta();
+							assert cm != null;
+							cm.setLodestone(runner.getLocation());
+							runnerTracker.setItemMeta(cm);
+						}
 					}
-					if (!CompassSpinning.getInstance().containsSpinPlayerCompass(player)) CompassSpinning.getInstance().addSpinPlayerCompass(player);
 				}
 			}
+
 		}, 0, period).getTaskId();
 	}
 
@@ -143,18 +147,18 @@ public class RunnerTracker implements Listener {
 	@EventHandler
 	public void onPlayerInteractEvent(final PlayerInteractEvent event) {
 		Player player = event.getPlayer();
-		if (event.hasItem() && Objects.equals(event.getItem(), RunnerTracker.getInstance().getRunnerTrackerItem()) &&
+		if (event.hasItem() &&
 				(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR)) {
+			assert event.getItem() != null;
+			if (event.getItem().getType() != Material.COMPASS) return;
+			if (event.getItem().getItemMeta() == null) return;
+			if (!event.getItem().getItemMeta().getDisplayName().equals(RunnerTracker.getInstance().getRunnerTrackerItem().getItemMeta().getDisplayName())) return;
+			if (event.getItem().getItemMeta().isUnbreakable() != RunnerTracker.getInstance().getRunnerTrackerItem().getItemMeta().isUnbreakable()) return;
 			if (event.getClickedBlock() != null) {
 				if (Objects.requireNonNull(event.getClickedBlock()).getType() == Material.LODESTONE) {
 					event.setCancelled(true);
 					return;
 				}
-			}
-
-			if (!(TeamHandler.getInstance().getTeam("Runners").getMemberCount() > 0)) {
-				if (!CompassSpinning.getInstance().containsSpinPlayerCompass(player)) CompassSpinning.getInstance().addSpinPlayerCompass(player);
-				return;
 			}
 
 			if (!RunnerTracker.getInstance().containsPlayerTrackingKey(player)) {

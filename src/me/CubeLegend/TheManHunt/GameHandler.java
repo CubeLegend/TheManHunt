@@ -2,7 +2,6 @@ package me.CubeLegend.TheManHunt;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import me.CubeLegend.TheManHunt.Compass.CompassSpinning;
 import me.CubeLegend.TheManHunt.Compass.RunnerTracker;
 import me.CubeLegend.TheManHunt.Compass.VillageTracker;
 import me.CubeLegend.TheManHunt.SpecialAbilities.FreezeVision;
@@ -72,7 +71,6 @@ public class GameHandler {
 				//HunterNearWarning.getInstance().cancelHunterNearWarning();
 				RunnerTracker.getInstance().stopRunnerTrackerRoutine();
 				VillageTracker.getInstance().stopVillageTrackingRoutine();
-				CompassSpinning.getInstance().stopSpinningCompassRoutine();
 
 				TeamHandler.getInstance().deleteTeams();
 
