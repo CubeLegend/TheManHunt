@@ -78,6 +78,7 @@ public class TheManHunt extends JavaPlugin {
         //config.options().copyDefaults(true);
         //this.saveConfig();
 
+        createTeams();
         startRoutines();
         GameHandler.getInstance().setGameState(GameState.IDLE);
     }
@@ -89,6 +90,11 @@ public class TheManHunt extends JavaPlugin {
         VillageTracker.getInstance().stopVillageTrackingRoutine();
         RunnerTracker.getInstance().stopRunnerTrackerRoutine();
         HunterNearWarning.getInstance().stopRoutine();
+    }
+
+    private void createTeams() {
+        TeamHandler.getInstance().createTeam("Runners", "diamond_shovel", 3, "1");
+        TeamHandler.getInstance().createTeam("Hunters", "diamond_sword", 6, "4");
     }
 
     private void startRoutines() {

@@ -4,9 +4,9 @@ import me.CubeLegend.TheManHunt.Freeze;
 import me.CubeLegend.TheManHunt.GameHandler;
 import me.CubeLegend.TheManHunt.GameState;
 import me.CubeLegend.TheManHunt.TheManHunt;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -33,7 +33,9 @@ public class FreezeVision {
     private final ArrayList<UUID> freezeVision = new ArrayList<>();
 
     private final List<Player> playersILOS = new ArrayList<>(); // ILOS = in line of sight
+    private final List<Player> recentPlayersILOS = new ArrayList<>(); // ILOS = in line of sight
     private final List<LivingEntity> livingEntitiesILOS = new ArrayList<>();
+    private final List<LivingEntity> recentLivingEntitiesILOS = new ArrayList<>();
 
     private int freezeVisionRoutine;
 
@@ -50,21 +52,15 @@ public class FreezeVision {
 
     public void startFreezeVisionRoutine(long period) {
         freezeVisionRoutine = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(TheManHunt.getInstance(), () -> {
-            Freeze.getInstance().removeFrozenPlayers(playersILOS);
-            playersILOS.clear();
-            Freeze.getInstance().removeFrozenEntities(livingEntitiesILOS);
-            livingEntitiesILOS.clear();
-
-            if (!(GameHandler.getInstance().getGameState() == GameState.RUNAWAYTIME || GameHandler.getInstance().getGameState() == GameState.PLAYING)) { return; }
+            if (GameHandler.getInstance().getGameState() != GameState.PLAYING) { return; }
             for (UUID uuid : freezeVision) {
                 for (LivingEntity livingEntity : entitiesInLineOfSight(Bukkit.getPlayer(uuid))) {
-                    if (livingEntity instanceof Player) {
-                        Player player = (Player) livingEntity;
-                        if (playersILOS.contains(player)) {
+                    if (livingEntity instanceof Player player) {
+                        if (!playersILOS.contains(player)) {
                             playersILOS.add(player);
                         }
                     } else {
-                        if (livingEntitiesILOS.contains(livingEntity)) {
+                        if (!livingEntitiesILOS.contains(livingEntity)) {
                             livingEntitiesILOS.add(livingEntity);
                         }
                     }
@@ -72,6 +68,8 @@ public class FreezeVision {
             }
             Freeze.getInstance().addFrozenPlayers(playersILOS);
             Freeze.getInstance().addFrozenEntities(livingEntitiesILOS);
+            removeRecentPlayersFromFreeze();
+            removeRecentEntitiesFromFreeze();
         }, 0, period);
     }
 
@@ -79,6 +77,28 @@ public class FreezeVision {
         if (Bukkit.getScheduler().isCurrentlyRunning(freezeVisionRoutine)) {
             Bukkit.getScheduler().cancelTask(freezeVisionRoutine);
         }
+    }
+
+    private void removeRecentPlayersFromFreeze() {
+        ArrayList<Player> toRemove = new ArrayList<>();
+        for (Player player : recentPlayersILOS) {
+            if (playersILOS.contains(player)) continue;
+            toRemove.add(player);
+        }
+        Freeze.getInstance().removeFrozenPlayers(toRemove);
+        recentPlayersILOS.addAll(playersILOS);
+        playersILOS.clear();
+    }
+
+    private void removeRecentEntitiesFromFreeze() {
+        ArrayList<LivingEntity> toRemove = new ArrayList<>();
+        for (LivingEntity livingEntity : recentLivingEntitiesILOS) {
+            if (livingEntitiesILOS.contains(livingEntity)) continue;
+            toRemove.add(livingEntity);
+        }
+        Freeze.getInstance().removeFrozenEntities(toRemove);
+        recentLivingEntitiesILOS.addAll(livingEntitiesILOS);
+        livingEntitiesILOS.clear();
     }
 
     public List<LivingEntity> entitiesInLineOfSight(Player player) {

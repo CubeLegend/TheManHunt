@@ -20,6 +20,7 @@ public class TeamHandler {
     private final LinkedHashMap<String, Team> teams = new LinkedHashMap<>();
 
     public void createTeam(String teamName, String teamIcon, int teamSelectionSlot, String teamColor) {
+        teamName = teamName.toLowerCase();
         if (teams.containsKey(teamName)) {
             System.out.println("A team with the name " + teamName + " already exists");
             return;
@@ -28,6 +29,7 @@ public class TeamHandler {
     }
 
     public Team getTeam(String teamName) {
+        teamName = teamName.toLowerCase();
         if (!teams.containsKey(teamName)) {
             System.out.println("No team found with the name: " + teamName);
             return null;

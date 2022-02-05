@@ -29,7 +29,7 @@ public class HunterNearWarning {
 
         warningRadius = radius;
         taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(TheManHunt.getInstance(), () -> {
-            if (!(GameHandler.getInstance().getGameState() == GameState.RUNAWAYTIME || GameHandler.getInstance().getGameState() == GameState.PLAYING)) {
+            if (!((GameHandler.getInstance().getGameState() == GameState.RUNAWAYTIME) || (GameHandler.getInstance().getGameState() == GameState.PLAYING))) {
                 return;
             }
             for (Player runner : TeamHandler.getInstance().getTeam("Runners").getMembers()) {

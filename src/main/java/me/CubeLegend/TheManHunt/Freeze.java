@@ -44,6 +44,10 @@ public class Freeze implements Listener {
         }
     }
 
+    public ArrayList<UUID> getFrozenPlayers() {
+        return frozenPlayers;
+    }
+
     private final ArrayList<UUID> frozenLivingEntities = new ArrayList<>();
 
     public void addFrozenEntities(List<LivingEntity> entities) {

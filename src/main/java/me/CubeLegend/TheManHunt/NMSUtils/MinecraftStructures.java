@@ -1,11 +1,14 @@
 package me.CubeLegend.TheManHunt.NMSUtils;
 
+import net.minecraft.world.level.levelgen.feature.StructureGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class MinecraftStructures {
@@ -52,6 +55,7 @@ public class MinecraftStructures {
 		String secondVersionNumber = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3].split("_")[1];
 		String thirdVersionNumber = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3].split("_")[2].replace("R", "");
 		int fullVersionNumber = Integer.parseInt(firstVersionNumber + secondVersionNumber + thirdVersionNumber);
+
 		if (fullVersionNumber < 1160) {
 			Method getHandle = l.getWorld().getClass().getMethod("getHandle");
 			Object nmsWorld = getHandle.invoke(l.getWorld());
@@ -59,13 +63,28 @@ public class MinecraftStructures {
 			Object blockPositionString = nmsWorld.getClass().getMethod("a", new Class[] { String.class, getNMSClass("BlockPosition"), int.class, boolean.class }).invoke(nmsWorld, structure, getBlockPosition(l), 100, false);
 			return blockPositionString.toString();
 		}
-		if (fullVersionNumber >= 1160) {
+		if (fullVersionNumber < 1170) {
 			Method getHandle = Objects.requireNonNull(l.getWorld()).getClass().getMethod("getHandle");
 			Object nmsWorld = getHandle.invoke(l.getWorld());
 			Class<?> structureGeneratorClass = getNMSClass("StructureGenerator");
 			Field field = structureGeneratorClass.getField(structure.toUpperCase());
 			Object WorldGen = field.get(null);
-			Object blockPositionString = nmsWorld.getClass().getMethod("a", new Class[] { getNMSClass("StructureGenerator"), getNMSClass("BlockPosition"), int.class, boolean.class }).invoke(nmsWorld, WorldGen, getBlockPosition(l), 100, false);
+			Object blockPositionString = nmsWorld.getClass().getMethod("a", new Class[] { getNMSClass("StructureGenerator"), getNMSClass("BlockPosition"), int.class, boolean.class })
+					.invoke(nmsWorld, WorldGen, getBlockPosition(l), 100, false);
+			return blockPositionString.toString();
+		}
+		if (fullVersionNumber >= 1180) {
+			Method getHandle = Objects.requireNonNull(l.getWorld()).getClass().getMethod("getHandle");
+			Object nmsWorld = getHandle.invoke(l.getWorld());
+			Class<?> structureGeneratorClass = Class.forName("net.minecraft.world.level.levelgen.feature.StructureGenerator");
+			Field field = null;
+			if (structure.equalsIgnoreCase("VILLAGE")) {
+				field = structureGeneratorClass.getField("r");
+			} 
+			assert field != null;
+			Object WorldGen = field.get(null);
+			Object blockPositionString = nmsWorld.getClass().getMethod("a", Class.forName("net.minecraft.world.level.levelgen.feature.StructureGenerator"), Class.forName("net.minecraft.core.BlockPosition"), int.class, boolean.class)
+					.invoke(nmsWorld, WorldGen, getBlockPositionNew(l), 100, false);
 			return blockPositionString.toString();
 		}
 		System.out.println("Invalid Version");
@@ -78,12 +97,17 @@ public class MinecraftStructures {
 		 return Class.forName(name);
 	}
 
-    private static Object getBlockPosition(Location loc) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+    private static Object getBlockPosition(Location loc) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
          Class<?> nmsBlockPosition = getNMSClass("BlockPosition");
          Object nmsBlockPositionInstance = nmsBlockPosition
                  .getConstructor(new Class[] { Double.TYPE, Double.TYPE, Double.TYPE })
                  .newInstance(new Object[] { loc.getX(), loc.getY(), loc.getZ() });
          return nmsBlockPositionInstance;
+	}
+
+	private static Object getBlockPositionNew(Location loc) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+		Class<?> nmsBlockPosition = Class.forName("net.minecraft.core.BlockPosition");
+		return nmsBlockPosition.getConstructor(Double.TYPE, Double.TYPE, Double.TYPE).newInstance(loc.getX(), loc.getY(), loc.getZ());
 	}
     //----------------------------------------------------------------------------
 }

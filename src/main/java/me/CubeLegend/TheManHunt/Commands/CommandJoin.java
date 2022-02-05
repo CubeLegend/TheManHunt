@@ -15,31 +15,33 @@ public class CommandJoin implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (label.equalsIgnoreCase("join")) {
+        if (cmd.getName().equalsIgnoreCase("join")) {
             if (args.length > 2) {
                 return true;
             }
             if (GameHandler.getInstance().getGameState() != GameState.IDLE) {
                 sender.sendMessage("§cThe game is already running§r");
-                return true;
+                return false;
             }
             if (args.length == 1 && (args[0].equalsIgnoreCase("Runners") || args[0].equalsIgnoreCase("Hunters"))) {
                 if (sender instanceof Player) {
                     TeamHandler.getInstance().getTeam(args[0]).addMember((Player) sender);
                 }
+                return false;
             }
             if (args.length == 2) {
                 if (Bukkit.getPlayer(args[0]) == null) {
-                    return true;
+                    return false;
                 }
                 if (!(args[1].equalsIgnoreCase("Runners") || args[1].equalsIgnoreCase("Hunters"))) {
-                    return true;
+                    return false;
                 }
                 TeamHandler.getInstance().getTeam(args[1]).addMember(Objects.requireNonNull(Bukkit.getPlayer(args[0])));
+                return false;
             }
         }
 
-        // the command was used correctly
+        // the command was used incorrectly
         return true;
     }
 }
