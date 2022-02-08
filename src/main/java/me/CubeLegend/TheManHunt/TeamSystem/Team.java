@@ -2,26 +2,78 @@ package me.CubeLegend.TheManHunt.TeamSystem;
 
 import me.CubeLegend.TheManHunt.GameHandler;
 import me.CubeLegend.TheManHunt.GameState;
+import me.CubeLegend.TheManHunt.TheManHunt;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Team {
+
+    private File customConfigFile;
+    private FileConfiguration customConfig;
 
     private final String teamName;
     private final String teamIcon;
     private final int teamSelectionSlot;
     private final String teamColor;
-    private final ArrayList<UUID> members = new ArrayList<>();
+    private final List<UUID> members = new ArrayList<>();
 
     public Team(String teamName, String teamIcon, int teamSelectionSlot, String teamColor) {
         this.teamName = teamName;
         this.teamIcon = teamIcon;
         this.teamSelectionSlot = teamSelectionSlot;
         this.teamColor = teamColor;
+        createCustomConfig();
+        loadMembersFromYaml();
+    }
+
+    public FileConfiguration getCustomConfig() {
+        return this.customConfig;
+    }
+
+    private void createCustomConfig() {
+        customConfigFile = new File(TheManHunt.getInstance().getDataFolder(), "teams.yml");
+        if (!customConfigFile.exists()) {
+            customConfigFile.getParentFile().mkdirs();
+            TheManHunt.getInstance().saveResource("teams.yml", false);
+        }
+
+        customConfig = new YamlConfiguration();
+        try {
+            customConfig.load(customConfigFile);
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveMembersToYaml() {
+        List<String> members = new ArrayList<>();
+        for (UUID uuid : this.members) {
+            members.add(uuid.toString());
+        }
+        this.getCustomConfig().set(teamName, members);
+        try {
+            this.getCustomConfig().save(customConfigFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadMembersFromYaml() {
+        if (this.getCustomConfig().isList(teamName)) {
+            for (String s : this.getCustomConfig().getStringList(teamName)) {
+                members.add(UUID.fromString(s));
+            }
+        }
     }
 
     public void addMember(Player player) {
@@ -29,6 +81,7 @@ public class Team {
 
         player.setDisplayName("§" + teamColor + player.getDisplayName() + "§r");
         player.setPlayerListName("§" + teamColor + player.getDisplayName() + "§r");
+        saveMembersToYaml();
     }
 
     public void removeMember(Player player) {
@@ -45,6 +98,7 @@ public class Team {
             player.setPlayerListName(playerNameWithoutColor);
         }
         members.remove(player.getUniqueId());
+        saveMembersToYaml();
     }
 
     public Player getMember(int index) {
