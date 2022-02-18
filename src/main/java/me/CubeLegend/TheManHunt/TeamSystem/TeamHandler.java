@@ -1,12 +1,17 @@
 package me.CubeLegend.TheManHunt.TeamSystem;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
-public class TeamHandler {
+public class TeamHandler implements Listener {
 
     private static TeamHandler instance;
 
@@ -18,6 +23,15 @@ public class TeamHandler {
     }
 
     private final LinkedHashMap<String, Team> teams = new LinkedHashMap<>();
+
+    private ScoreboardManager manager;
+    private Scoreboard scoreBoard;
+
+    private TeamSaver teamSaver = new TeamSaver();
+
+    public TeamSaver getTeamSaver() {
+        return teamSaver;
+    }
 
     public void createTeam(String teamName, String teamIcon, int teamSelectionSlot, String teamColor) {
         teamName = teamName.toLowerCase();
@@ -62,5 +76,38 @@ public class TeamHandler {
 
     public void deleteTeams() {
         teams.clear();
+    }
+
+    public Scoreboard getScoreBoard() {
+        return scoreBoard;
+    }
+
+    private HashMap<UUID, String>  playersToAdd = new HashMap<>();
+
+    public void addToTeamOnJoin(String teamName, List<UUID> membersToAdd) {
+        for (UUID uuid : membersToAdd) {
+            playersToAdd.put(uuid, teamName);
+        }
+    }
+
+    private int worldCount = 0;
+
+    @EventHandler
+    public void onWorldLoad(WorldLoadEvent event) {
+        if (++worldCount >= 3) {
+            manager = Bukkit.getScoreboardManager();
+            assert manager != null;
+            scoreBoard = manager.getNewScoreboard();
+            TeamHandler.getInstance().createTeam("Runners", "diamond_shovel", 3, "BLUE");
+            TeamHandler.getInstance().createTeam("Hunters", "diamond_sword", 6, "RED");
+        }
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        event.getPlayer().setScoreboard(scoreBoard);
+        if (playersToAdd.containsKey(event.getPlayer().getUniqueId())) {
+            getTeam(playersToAdd.get(event.getPlayer().getUniqueId())).addMember(event.getPlayer());
+        }
     }
 }
