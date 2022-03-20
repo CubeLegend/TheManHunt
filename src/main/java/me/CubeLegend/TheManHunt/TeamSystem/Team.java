@@ -44,6 +44,8 @@ public class Team {
     }
 
     public void addMember(Player player) {
+        if (members.contains(player.getUniqueId())) return;
+        TeamHandler.getInstance().removePlayerFromAllTeams(player);
         members.add(player.getUniqueId());
         Objects.requireNonNull(TeamHandler.getInstance().getScoreBoard().getTeam(teamName)).addEntry(player.getName());
 
