@@ -6,14 +6,14 @@ api-version: 1.16
 load: STARTUP
 
 commands:
-  Start:
+  start:
     description: Starts the game if it isn't allready running and if it there are enough players in the Teams
-    usage: /Start
+    usage: /start
     permission: TheManHunt.GameManagement
 
-  Join:
+  join:
     description: To join a team
-    usage: /Join <Team Name>
+    usage: /join <Team Name>
     permission: TheManHunt.GameManagement
 
   MembersOf:
