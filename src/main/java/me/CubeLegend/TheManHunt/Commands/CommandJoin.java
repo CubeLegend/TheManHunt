@@ -29,7 +29,7 @@ public class CommandJoin implements CommandExecutor {
                 }
                 Team team = TeamHandler.getInstance().getTeam(args[0]);
                 team.addMember((Player) sender);
-                sender.sendMessage("§6You got added to team " + team.getTeamColor() +  team.getTeamName());
+                sender.sendMessage("§6You got added to team " + team.getTeamColorAsCode() +  team.getTeamName());
                 return true;
             } else {
                 if (Bukkit.getPlayer(args[0]) == null) {
@@ -44,7 +44,7 @@ public class CommandJoin implements CommandExecutor {
                 Player player = Bukkit.getPlayer(args[0]);
                 assert player != null;
                 team.addMember(player);
-                sender.sendMessage(player.getDisplayName() + " §6got added to team " + team.getTeamColor() + team.getTeamName());
+                sender.sendMessage(player.getDisplayName() + " §6got added to team " + team.getTeamColorAsCode() + team.getTeamName());
                 return true;
             }
         } else {
@@ -68,7 +68,7 @@ public class CommandJoin implements CommandExecutor {
                 Player player = Bukkit.getPlayer(args[0]);
                 assert player != null;
                 team.addMember(player);
-                sender.sendMessage(player.getDisplayName() + " §6got added to team " + team.getTeamColor() + team.getTeamName());
+                sender.sendMessage(player.getDisplayName() + " §6got added to team " + team.getTeamColorAsCode() + team.getTeamName());
                 return true;
             }
         }

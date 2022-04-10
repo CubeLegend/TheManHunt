@@ -27,8 +27,8 @@ public class Team {
     private final String teamIcon;
     private final int teamSelectionSlot;
     private final String teamColor;
-    private final List<UUID> members = new ArrayList<>();
     private final String teamColorAsCode;
+    private final List<UUID> members = new ArrayList<>();
 
     public Team(String teamName, String teamIcon, int teamSelectionSlot, String teamColor) {
         this.teamName = teamName;
@@ -98,6 +98,10 @@ public class Team {
 
     public String getTeamColor() {
         return teamColor;
+    }
+
+    public String getTeamColorAsCode() {
+        return teamColorAsCode;
     }
 
     public boolean checkForMember(Player member) {
