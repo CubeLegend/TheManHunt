@@ -117,5 +117,6 @@ public class Team {
             player.sendTitle(String.format("§6Die %s%s §6haben Gewonnen!!!", teamColor, teamName), null, 10, 70, 20);
         }
         GameHandler.getInstance().setGameState(GameState.END);
+        TeamHandler.getInstance().getTeamSaver().removeTeamsYaml();
     }
 }

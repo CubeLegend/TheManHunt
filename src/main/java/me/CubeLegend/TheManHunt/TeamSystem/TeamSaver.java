@@ -48,6 +48,10 @@ public class TeamSaver {
         }
     }
 
+    public void removeTeamsYaml() {
+        customConfigFile.delete();
+    }
+
     public List<UUID> loadMembersFromYaml(String teamName) {
         List<UUID> members = new ArrayList<>();
         if (customConfig.isList(teamName)) {
