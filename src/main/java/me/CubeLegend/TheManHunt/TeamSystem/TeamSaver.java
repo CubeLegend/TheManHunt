@@ -61,8 +61,4 @@ public class TeamSaver {
         }
         return members;
     }
-
-    public void deleteSaves() {
-        customConfigFile.delete();
-    }
 }
