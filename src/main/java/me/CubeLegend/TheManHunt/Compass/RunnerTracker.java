@@ -13,6 +13,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
@@ -37,6 +38,8 @@ public class RunnerTracker implements Listener {
 	
 	//Hunter, Runner
 	private final HashMap<UUID, UUID> PlayerTracking = new HashMap<>();
+
+	private final ArrayList<UUID> returnTrackerToPlayer = new ArrayList<>();
 	
 	public ItemStack getRunnerTrackerItem() {
 		ItemStack compass = new ItemStack(Material.COMPASS, 1);
@@ -142,6 +145,17 @@ public class RunnerTracker implements Listener {
 	@EventHandler
 	public void onPlayerDeathEvent(final PlayerDeathEvent event) {
 		event.getDrops().remove(RunnerTracker.getInstance().getRunnerTrackerItem());
+		returnTrackerToPlayer.add(event.getEntity().getUniqueId());
+	}
+
+	@EventHandler
+	public void onPlayerRespawnEvent(final PlayerRespawnEvent event) {
+		Player player = event.getPlayer();
+		UUID playerUUID = player.getUniqueId();
+		if (returnTrackerToPlayer.contains(playerUUID)) {
+			givePlayerRunnerTracker(player);
+			returnTrackerToPlayer.remove(playerUUID);
+		}
 	}
 
 	@EventHandler

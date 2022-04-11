@@ -27,7 +27,6 @@ public class HunterWaitTimer {
 		time = Settings.getInstance().HunterWaitTimer;
 		TaskID = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(TheManHunt.getInstance(), () -> {
 
-			GameHandler.getInstance().setGameState(GameState.RUNAWAYTIME);
 			if (time <= 0) {
 
 				Bukkit.broadcastMessage("§6The hunters got released!");

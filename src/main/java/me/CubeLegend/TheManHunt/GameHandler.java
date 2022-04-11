@@ -46,6 +46,18 @@ public class GameHandler {
 					FreezeVision.getInstance().givePlayerFreezeVision(runner);
 				}
 			}
+			if (Settings.getInstance().RunnerTracker) {
+				List<Player> hunters = TeamHandler.getInstance().getTeam("Hunters").getMembers();
+				for (Player hunter : hunters) {
+					RunnerTracker.getInstance().givePlayerRunnerTracker(hunter);
+				}
+			}
+			if (Settings.getInstance().VillageTracker) {
+				List<Player> runners = TeamHandler.getInstance().getTeam("Runners").getMembers();
+				for (Player runner : runners) {
+					VillageTracker.getInstance().givePlayerVillageTracker(runner);
+				}
+			}
 			return;
 		}
 
@@ -54,12 +66,14 @@ public class GameHandler {
 		}
 
 		if (state == GameState.END) {
+			TeamHandler.getInstance().getTeamSaver().removeTeamsYaml();
 			if (Settings.getInstance().FreezeVision) {
 				for (Player runner : TeamHandler.getInstance().getTeam("Runners").getMembers()) {
 					FreezeVision.getInstance().takePlayerFreezeVision(runner);
 				}
 			}
 			connectPlayersToLobby();
+			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(TheManHunt.getInstance(), this::resetWorld, 20*20);
 			//Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(TheManHunt.getInstance(), this::resetWorld, 20*20);
 		}
 	}
@@ -96,6 +110,10 @@ public class GameHandler {
 //				}, 20);
 			}, 15 * 20);
 		}
+	}
+
+	public void setResetWorldFlag() {
+
 	}
 
 	public void resetWorld() {

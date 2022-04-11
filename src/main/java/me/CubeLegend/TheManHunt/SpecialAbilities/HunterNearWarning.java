@@ -37,7 +37,7 @@ public class HunterNearWarning {
                 double closestHunterDis = warningRadius + 1;
                 for (Entity entity : runner.getNearbyEntities(warningRadius, warningRadius, warningRadius)) {
                     if (!(entity instanceof Player)) {
-                        return;
+                        continue;
                     }
                     if (TeamHandler.getInstance().getTeam("Hunters").checkForMember((Player) entity)) {
                         double currentHunterDis = runner.getLocation().distance(entity.getLocation());
@@ -47,7 +47,7 @@ public class HunterNearWarning {
                     }
                 }
                 if (closestHunterDis <= warningRadius) {
-                    runner.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§1A Hunter is near"));
+                    runner.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§cA Hunter is near"));
                 }
             }
         },0, period);
