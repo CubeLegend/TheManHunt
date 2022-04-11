@@ -1,4 +1,5 @@
 PluginMessagingChannelOfMiniGame: "themanhunt:minigame"
+DeleteWorldOnStartUp: false
 
 FreezeVision: false
 HunterNearWarning: false

@@ -13,9 +13,14 @@ public class Settings {
         return instance;
     }
 
+    public Settings() {
+
+    }
+
     private final FileConfiguration config = TheManHunt.getInstance().getConfig();
 
     public String PluginMessagingChannel = "themanhunt:minigame";
+    public boolean DeleteWorldOnStartUp = false;
 
     public boolean FreezeVision = false;
     public boolean HunterNearWarning = false;
@@ -35,6 +40,7 @@ public class Settings {
 
     public void loadSettingsFromConfig() {
         PluginMessagingChannel = config.getString("PluginMessagingChannelOfMiniGame");
+        DeleteWorldOnStartUp = config.getBoolean("DeleteWorldOnStartUp");
 
         FreezeVision = config.getBoolean("FreezeVision");
         HunterNearWarning = config.getBoolean("HunterNearWarning");
@@ -53,6 +59,7 @@ public class Settings {
 
     public void safeSettingsToConfig() {
         config.set("PluginMessagingChannelOfMiniGame", PluginMessagingChannel);
+        config.set("DeleteWorldOnStartUp", DeleteWorldOnStartUp);
 
         config.set("FreezeVision", FreezeVision);
         config.set("HunterNearWarning", HunterNearWarning);

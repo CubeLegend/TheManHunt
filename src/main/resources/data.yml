@@ -3,7 +3,7 @@
 # You should probably not touch this.
 #
 
-DeleteWorld: false
+DeleteWorld: ""
 
 Runners:
 

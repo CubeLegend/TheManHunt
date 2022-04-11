@@ -5,6 +5,7 @@ import com.google.common.io.ByteStreams;
 import me.CubeLegend.TheManHunt.Compass.RunnerTracker;
 import me.CubeLegend.TheManHunt.Compass.VillageTracker;
 import me.CubeLegend.TheManHunt.SpecialAbilities.FreezeVision;
+import me.CubeLegend.TheManHunt.SpecialAbilities.HunterNearWarning;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -72,9 +73,9 @@ public class GameHandler {
 					FreezeVision.getInstance().takePlayerFreezeVision(runner);
 				}
 			}
+			DataConfig.getInstance().setWorldToDelete(Bukkit.getWorlds().get(0).getName());
 			connectPlayersToLobby();
-			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(TheManHunt.getInstance(), this::resetWorld, 20*20);
-			//Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(TheManHunt.getInstance(), this::resetWorld, 20*20);
+			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(TheManHunt.getInstance(), Bukkit::shutdown, 10*20);
 		}
 	}
 
@@ -82,7 +83,7 @@ public class GameHandler {
 		if (GameHandler.getInstance().getGameState() == GameState.END) {
 			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(TheManHunt.getInstance(), () -> {
 
-				//HunterNearWarning.getInstance().cancelHunterNearWarning();
+				HunterNearWarning.getInstance().stopRoutine();
 				RunnerTracker.getInstance().stopRunnerTrackerRoutine();
 				VillageTracker.getInstance().stopVillageTrackingRoutine();
 
@@ -110,29 +111,6 @@ public class GameHandler {
 //				}, 20);
 			}, 15 * 20);
 		}
-	}
-
-	public void setResetWorldFlag() {
-
-	}
-
-	public void resetWorld() {
-		if (GameHandler.getInstance().getGameState() != GameState.END) {
-			return;
-		}
-		List<File> worldFiles = new ArrayList<>();
-		for (World world : Bukkit.getWorlds()) {
-			for (Player player : world.getPlayers()) {
-				player.kickPlayer("You should have been connected to another server already");
-			}
-			worldFiles.add(world.getWorldFolder().getAbsoluteFile());
-			System.out.println(Bukkit.getServer().unloadWorld(world, false));
-		}
-		for (File file : worldFiles) {
-			System.out.println(file);
-			System.out.println(file.delete());
-		}
-		Bukkit.shutdown();
 	}
 
 	public void checkAllTeamsSetup () {

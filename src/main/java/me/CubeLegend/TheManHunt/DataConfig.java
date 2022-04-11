@@ -59,7 +59,6 @@ public class DataConfig {
     public void removeTeamsFromYaml() {
         customConfig.set("Runners", null);
         customConfig.set("Hunters", null);
-        customConfig.set("Spectators", null);
         try {
             customConfig.save(customConfigFile);
         } catch (IOException e) {
@@ -77,12 +76,16 @@ public class DataConfig {
         return members;
     }
 
-    public void setWorldDeleteFlag(boolean flag) {
-        customConfig.set("DeleteWorld", flag);
+    public void setWorldToDelete(String name) {
+        customConfig.set("DeleteWorld", name);
         try {
             customConfig.save(customConfigFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getWorldToDelete() {
+        return customConfig.getString("DeleteWorld");
     }
 }

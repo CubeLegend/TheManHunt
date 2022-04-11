@@ -9,14 +9,19 @@ import me.CubeLegend.TheManHunt.SpecialAbilities.HunterNearWarning;
 import me.CubeLegend.TheManHunt.TeamSystem.Team;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 public class TheManHunt extends JavaPlugin {
@@ -27,51 +32,41 @@ public class TheManHunt extends JavaPlugin {
         return instance;
     }
 
-    /*@Override
+    @Override
     public void onLoad() {
-//        List<File> worldFiles = new ArrayList<>();
-//        for (World world : Bukkit.getWorlds()) {
-//            worldFiles.add(world.getWorldFolder().getAbsoluteFile());
-//            System.out.println(Bukkit.getServer().unloadWorld(world, false));
-//        }
-        FileInputStream in = null;
-        try {
-            // Initially empty.
-            Properties properties = new Properties();
+        instance = this;
+        Settings.getInstance().loadSettingsFromConfig();
 
-            // You can read files using FileInputStream or FileReader.
-            in = new FileInputStream(filename);
-
-            // This line reads the properties file.
-            properties.load(in);
-
-            // Your code goes here.
-        } catch (FileNotFoundException ex) {
-            // Handle missing properties file errors.
-        } catch (IOException ex) {
-            // Handle IO errors.
-        } finally {
-            // Need to do some work to close the stream.
-            try {
-                if (in != null) in.close();
-            } catch (IOException ex) {
-                // Handle IO errors or log a warning.
+        if (Settings.getInstance().DeleteWorldOnStartUp) {
+            if (!DataConfig.getInstance().getWorldToDelete().equals("")) {
+                String worldName = DataConfig.getInstance().getWorldToDelete();
+                List<File> worlds = new ArrayList<>();
+                worlds.add(new File(Bukkit.getWorldContainer(), worldName));
+                worlds.add(new File(Bukkit.getWorldContainer(), worldName + "_nether"));
+                worlds.add(new File(Bukkit.getWorldContainer(), worldName + "_the_end"));
+                Bukkit.getConsoleSender().sendMessage("The world: " + worldName + " and all of its dimensions gets deleted");
+                for (File world : worlds) {
+                    try {
+                        Files.walk(world.toPath())
+                                .sorted(Comparator.reverseOrder())
+                                .map(Path::toFile)
+                                .forEach(File::delete);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    world.mkdirs();
+                }
+                DataConfig.getInstance().setWorldToDelete("");
             }
         }
-        List<File> worldFiles = new ArrayList<>(Arrays.asList(Objects.requireNonNull(Bukkit.getWorldContainer().getAbsoluteFile().listFiles())));
-        for (File file : worldFiles) {
-            System.out.println(file);
-            System.out.println(file.delete());
-        }
-    }*/
+    }
 
     @Override
     public void onEnable() {
-        instance = this;
+        //instance = this;
 
         this.saveDefaultConfig();
-        Settings.getInstance().loadSettingsFromConfig();
-        //FileConfiguration config = this.getConfig();
+        //Settings.getInstance().loadSettingsFromConfig();
         registerCommands();
         registerListeners();
         registerPluginMessagingChannels();
