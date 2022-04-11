@@ -1,5 +1,6 @@
 package me.CubeLegend.TheManHunt.TeamSystem;
 
+import me.CubeLegend.TheManHunt.DataConfig;
 import me.CubeLegend.TheManHunt.GameHandler;
 import me.CubeLegend.TheManHunt.GameState;
 import me.CubeLegend.TheManHunt.TheManHunt;
@@ -40,7 +41,7 @@ public class Team {
         board.registerNewTeam(teamName);
         //Objects.requireNonNull(board.getTeam(teamName)).setPrefix(teamColorAsCode + "Nice"); //doesn't work but should?
         board.getTeam(teamName).setColor(ChatColor.valueOf(teamColor));
-        TeamHandler.getInstance().addToTeamOnJoin(teamName, TeamHandler.getInstance().getTeamSaver().loadMembersFromYaml(teamName));
+        TeamHandler.getInstance().addToTeamOnJoin(teamName, DataConfig.getInstance().loadMembersFromYaml(teamName));
     }
 
     public void addMember(Player player) {
@@ -51,7 +52,7 @@ public class Team {
 
         player.setDisplayName(teamColorAsCode + player.getDisplayName() + "§r");
         player.setPlayerListName(teamColorAsCode + player.getDisplayName() + "§r");
-        TeamHandler.getInstance().getTeamSaver().saveMembersToYaml(teamName, members);
+        DataConfig.getInstance().saveMembersToYaml(teamName, members);
     }
 
     public void removeMember(Player player) {
@@ -65,7 +66,7 @@ public class Team {
         }
         members.remove(player.getUniqueId());
         Objects.requireNonNull(TeamHandler.getInstance().getScoreBoard().getTeam(teamName)).removeEntry(player.getName());
-        TeamHandler.getInstance().getTeamSaver().saveMembersToYaml(teamName, members);
+        DataConfig.getInstance().saveMembersToYaml(teamName, members);
     }
 
     public Player getMember(int index) {

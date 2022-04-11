@@ -27,12 +27,6 @@ public class TeamHandler implements Listener {
     private ScoreboardManager manager;
     private Scoreboard scoreBoard;
 
-    private TeamSaver teamSaver = new TeamSaver();
-
-    public TeamSaver getTeamSaver() {
-        return teamSaver;
-    }
-
     public void createTeam(String teamName, String teamIcon, int teamSelectionSlot, String teamColor) {
         teamName = teamName.toLowerCase();
         if (teams.containsKey(teamName)) {

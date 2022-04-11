@@ -1,6 +1,5 @@
-package me.CubeLegend.TheManHunt.TeamSystem;
+package me.CubeLegend.TheManHunt;
 
-import me.CubeLegend.TheManHunt.TheManHunt;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -11,20 +10,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class TeamSaver {
+public class DataConfig {
+
+    private static DataConfig dataConfig;
+
+    public static DataConfig getInstance() {
+        if (dataConfig == null) {
+            dataConfig = new DataConfig();
+        }
+        return dataConfig;
+    }
 
     private File customConfigFile;
     private FileConfiguration customConfig;
 
-    TeamSaver() {
+    DataConfig() {
         createCustomConfig();
     }
 
     private void createCustomConfig() {
-        customConfigFile = new File(TheManHunt.getInstance().getDataFolder(), "teams.yml");
+        customConfigFile = new File(TheManHunt.getInstance().getDataFolder(), "data.yml");
         if (!customConfigFile.exists()) {
             customConfigFile.getParentFile().mkdirs();
-            TheManHunt.getInstance().saveResource("teams.yml", false);
+            TheManHunt.getInstance().saveResource("data.yml", false);
         }
 
         customConfig = new YamlConfiguration();
@@ -48,8 +56,15 @@ public class TeamSaver {
         }
     }
 
-    public void removeTeamsYaml() {
-        customConfigFile.delete();
+    public void removeTeamsFromYaml() {
+        customConfig.set("Runners", null);
+        customConfig.set("Hunters", null);
+        customConfig.set("Spectators", null);
+        try {
+            customConfig.save(customConfigFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<UUID> loadMembersFromYaml(String teamName) {
@@ -60,5 +75,14 @@ public class TeamSaver {
             }
         }
         return members;
+    }
+
+    public void setWorldDeleteFlag(boolean flag) {
+        customConfig.set("DeleteWorld", flag);
+        try {
+            customConfig.save(customConfigFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

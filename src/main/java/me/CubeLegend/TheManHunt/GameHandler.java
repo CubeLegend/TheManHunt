@@ -66,7 +66,7 @@ public class GameHandler {
 		}
 
 		if (state == GameState.END) {
-			TeamHandler.getInstance().getTeamSaver().removeTeamsYaml();
+			DataConfig.getInstance().removeTeamsFromYaml();
 			if (Settings.getInstance().FreezeVision) {
 				for (Player runner : TeamHandler.getInstance().getTeam("Runners").getMembers()) {
 					FreezeVision.getInstance().takePlayerFreezeVision(runner);
