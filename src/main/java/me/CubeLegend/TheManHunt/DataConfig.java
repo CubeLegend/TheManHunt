@@ -44,12 +44,7 @@ public class DataConfig {
         }
     }
 
-    public void saveMembersToYaml(String teamName, List<UUID> members) {
-        List<String> sMembers = new ArrayList<>();
-        for (UUID uuid : members) {
-            sMembers.add(uuid.toString());
-        }
-        customConfig.set(teamName, sMembers);
+    public void saveCustomConfig() {
         try {
             customConfig.save(customConfigFile);
         } catch (IOException e) {
@@ -57,15 +52,18 @@ public class DataConfig {
         }
     }
 
+    public void saveMembersToYaml(String teamName, List<UUID> members) {
+        List<String> sMembers = new ArrayList<>();
+        for (UUID uuid : members) {
+            sMembers.add(uuid.toString());
+        }
+        customConfig.set(teamName, sMembers);
+    }
+
     public void removeTeamsFromYaml() {
         List<UUID> empty = new ArrayList<>();
         customConfig.set("Runners", empty);
         customConfig.set("Hunters", empty);
-        try {
-            customConfig.save(customConfigFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public List<UUID> loadMembersFromYaml(String teamName) {

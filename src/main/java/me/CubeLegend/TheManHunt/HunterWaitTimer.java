@@ -31,6 +31,7 @@ public class HunterWaitTimer {
 
 				Bukkit.broadcastMessage("§6The hunters got released!");
 				Freeze.getInstance().removeFrozenPlayers(TeamHandler.getInstance().getTeam("Hunters").getMembers());
+				DataConfig.getInstance().saveCustomConfig();
 				GameHandler.getInstance().setGameState(GameState.PLAYING);
 				Bukkit.getScheduler().cancelTask(TaskID);
 			}
