@@ -28,7 +28,6 @@ public class TeamHandler implements Listener {
     private Scoreboard scoreBoard;
 
     public void createTeam(String teamName, String teamIcon, int teamSelectionSlot, String teamColor) {
-        teamName = teamName.toLowerCase();
         if (teams.containsKey(teamName)) {
             System.out.println("A team with the name " + teamName + " already exists");
             return;
@@ -37,7 +36,6 @@ public class TeamHandler implements Listener {
     }
 
     public Team getTeam(String teamName) {
-        teamName = teamName.toLowerCase();
         if (!teams.containsKey(teamName)) {
             System.out.println("No team found with the name: " + teamName);
             return null;

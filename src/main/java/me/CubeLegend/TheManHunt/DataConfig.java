@@ -4,6 +4,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import javax.management.ListenerNotFoundException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,8 +58,9 @@ public class DataConfig {
     }
 
     public void removeTeamsFromYaml() {
-        customConfig.set("Runners", null);
-        customConfig.set("Hunters", null);
+        List<UUID> empty = new ArrayList<>();
+        customConfig.set("Runners", empty);
+        customConfig.set("Hunters", empty);
         try {
             customConfig.save(customConfigFile);
         } catch (IOException e) {
@@ -73,6 +75,7 @@ public class DataConfig {
                 members.add(UUID.fromString(s));
             }
         }
+        if (!members.isEmpty()) GameHandler.getInstance().setGameState(GameState.PLAYING);
         return members;
     }
 
