@@ -115,7 +115,7 @@ public class Team {
 
     public void win() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            player.sendTitle(String.format("§6Die %s%s §6haben Gewonnen!!!", teamColor, teamName), null, 10, 70, 20);
+            player.sendTitle(String.format("§6Die %s%s §6haben Gewonnen!!!", teamColorAsCode, teamName), null, 10, 70, 20);
         }
         GameHandler.getInstance().setGameState(GameState.END);
     }
