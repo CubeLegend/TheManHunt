@@ -112,6 +112,7 @@ public class FreezeVision {
 
         for (Entity other : player.getNearbyEntities(range, range, range)) {
             if (!(other instanceof LivingEntity)) continue;
+            if (!(other instanceof Player)) continue;
             Location otherLoc = other.getLocation().add(new Location(other.getWorld(), 0, EntityPosYOffset, 0));
             final Vector difference = otherLoc.toVector().subtract(playerLoc.toVector()); // Vectors mutate very easily. You should always use .clone(), if you use vector.dot(), vector.crossproduct(), etc
 
