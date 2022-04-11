@@ -56,6 +56,16 @@ public class TheManHunt extends JavaPlugin {
                     }
                     world.mkdirs();
                 }
+                (new File(worlds.get(0), "advancements")).mkdirs();
+                (new File(worlds.get(0), "datapacks")).mkdirs();
+                (new File(worlds.get(0), "playerdata")).mkdirs();
+                (new File(worlds.get(0), "stats")).mkdirs();
+                for (File world : worlds) {
+                    (new File(world, "data")).mkdirs();
+                    (new File(world, "entities")).mkdirs();
+                    (new File(world, "poi")).mkdirs();
+                    (new File(world, "region")).mkdirs();
+                }
                 DataConfig.getInstance().setWorldToDelete("");
             }
         }
