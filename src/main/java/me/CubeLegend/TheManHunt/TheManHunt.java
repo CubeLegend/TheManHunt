@@ -1,7 +1,7 @@
 package me.CubeLegend.TheManHunt;
 
-import me.CubeLegend.TheManHunt.Commands.CommandJoin;
 import me.CubeLegend.TheManHunt.Commands.CommandStart;
+import me.CubeLegend.TheManHunt.Commands.CommandTeam;
 import me.CubeLegend.TheManHunt.Compass.RunnerTracker;
 import me.CubeLegend.TheManHunt.Compass.VillageTracker;
 import me.CubeLegend.TheManHunt.SpecialAbilities.FreezeVision;
@@ -9,7 +9,6 @@ import me.CubeLegend.TheManHunt.SpecialAbilities.HunterNearWarning;
 import me.CubeLegend.TheManHunt.TeamSystem.Team;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -243,7 +242,7 @@ public class TheManHunt extends JavaPlugin {
 
     private void registerCommands() {
         this.getCommand("Start").setExecutor(new CommandStart());
-        this.getCommand("Join").setExecutor(new CommandJoin());
+        this.getCommand("team").setExecutor(new CommandTeam());
     }
 
     private void registerListeners() {

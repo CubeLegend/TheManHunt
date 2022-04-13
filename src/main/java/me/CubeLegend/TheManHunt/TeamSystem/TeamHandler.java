@@ -52,6 +52,10 @@ public class TeamHandler implements Listener {
         return teamNumbers.get(teamNumber);
     }
 
+    public List<String> getTeams() {
+        return teams.keySet().stream().toList();
+    }
+
     public int getTotalTeamNumber() {
         return teams.size();
     }
