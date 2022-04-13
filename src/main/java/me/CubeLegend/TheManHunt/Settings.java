@@ -23,6 +23,7 @@ public class Settings {
     public boolean DeleteWorldOnStartUp = false;
 
     public boolean FreezeVision = false;
+    public boolean OneHitKill = false;
     public boolean HunterNearWarning = false;
     public boolean VillageTracker = false;
     public boolean RunnerTracker = false;
@@ -43,6 +44,7 @@ public class Settings {
         DeleteWorldOnStartUp = config.getBoolean("DeleteWorldOnStartUp");
 
         FreezeVision = config.getBoolean("FreezeVision");
+        OneHitKill = config.getBoolean("OneHitKill");
         HunterNearWarning = config.getBoolean("HunterNearWarning");
         VillageTracker = config.getBoolean("VillageTracker");
         RunnerTracker = config.getBoolean("RunnerTracker");

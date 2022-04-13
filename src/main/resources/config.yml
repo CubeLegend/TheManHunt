@@ -2,6 +2,7 @@ PluginMessagingChannelOfMiniGame: "themanhunt:minigame"
 DeleteWorldOnStartUp: false
 
 FreezeVision: false
+OneHitKill: false
 HunterNearWarning: false
 VillageTracker: false
 RunnerTracker: false

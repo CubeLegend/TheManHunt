@@ -6,6 +6,7 @@ import me.CubeLegend.TheManHunt.Compass.RunnerTracker;
 import me.CubeLegend.TheManHunt.Compass.VillageTracker;
 import me.CubeLegend.TheManHunt.SpecialAbilities.FreezeVision;
 import me.CubeLegend.TheManHunt.SpecialAbilities.HunterNearWarning;
+import me.CubeLegend.TheManHunt.SpecialAbilities.OneHitKill;
 import me.CubeLegend.TheManHunt.TeamSystem.Team;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import org.bukkit.Bukkit;
@@ -253,6 +254,7 @@ public class TheManHunt extends JavaPlugin {
         pm.registerEvents(new RunnerWin(), this);
         pm.registerEvents(new PlayerDeathHandler(), this);
         pm.registerEvents(TeamHandler.getInstance(), this);
+        pm.registerEvents(OneHitKill.getInstance(), this);
     }
 
     private void registerPluginMessagingChannels() {
