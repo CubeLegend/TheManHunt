@@ -70,8 +70,21 @@ public class Language {
                 if (text.contains("<team>")) text = text.replace("<team>", args[0]);
                 player.sendMessage(text);
             }
+            case YOU_LEFT_TEAM -> {
+                String text = languageMessage.getString("YOU_LEFT_TEAM");
+                if (text == null) return;
+                if (text.contains("<team>")) text = text.replace("<team>", args[0]);
+                player.sendMessage(text);
+            }
             case OTHER_PLAYER_ADDED_TO_TEAM -> {
                 String text = languageMessage.getString("OTHER_PLAYER_ADDED_TO_TEAM");
+                if (text == null) return;
+                if (text.contains("<player>")) text = text.replace("<player>", args[0]);
+                if (text.contains("<team>")) text = text.replace("<team>", args[1]);
+                player.sendMessage(text);
+            }
+            case OTHER_PLAYER_REMOVED_FROM_TEAM -> {
+                String text = languageMessage.getString("OTHER_PLAYER_REMOVED_FROM_TEAM");
                 if (text == null) return;
                 if (text.contains("<player>")) text = text.replace("<player>", args[0]);
                 if (text.contains("<team>")) text = text.replace("<team>", args[1]);

@@ -10,5 +10,7 @@ ERROR_GAME_IS_RUNNING: "§cThe game is already running"
 ERROR_PLAYER_IS_NOT_ONLINE: "§4<player> §cis not online!"
 
 YOU_JOINED_TEAM: "§6You joined team <team>!"
-OTHER_PLAYER_ADDED_TO_TEAM: "§6<player> got added to team <team>"
+YOU_LEFT_TEAM: "§6You left team <team>!"
+OTHER_PLAYER_ADDED_TO_TEAM: "§6<player> got added to team <team>."
+OTHER_PLAYER_REMOVED_FROM_TEAM: "§6<player> got removed from team <team>."
 MEMBERS_OF_TEAM_LISTED: "§6Members of team <team>:"

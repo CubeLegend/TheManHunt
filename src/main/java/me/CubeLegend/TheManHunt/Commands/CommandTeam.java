@@ -53,52 +53,63 @@ public class CommandTeam implements TabExecutor {
                     lManager.sendMessage(commandSender, Message.ERROR_INVALID_TEAM, new String[] {args[1]});
                     return true;
                 }
-                List<Player> members = TeamHandler.getInstance().getTeam(args[1]).getMembers();
-                commandSender.sendMessage("§6Members of team " + args[1] + ":");
-                for (int i = 0; i < 20; i++) {
-                    if (members.size() == i) break;
-                    commandSender.sendMessage("§6" + members.get(i).getName());
-                }
+//                List<Player> members = TeamHandler.getInstance().getTeam(args[1]).getMembers();
+//                commandSender.sendMessage("§6Members of team " + args[1] + ":");
+//                for (int i = 0; i < 20; i++) {
+//                    if (members.size() == i) break;
+//                    commandSender.sendMessage("§6" + members.get(i).getName());
+//                }
+                lManager.sendMessage(commandSender, Message.MEMBERS_OF_TEAM_LISTED, new String[] {args[1]});
                 return true;
             }
             case "add" -> {
                 if (args.length > 3) return false;
                 Player player1 = Bukkit.getPlayer(args[1]);
                 if (player1 == null) {
-                    commandSender.sendMessage("§4" + args[1] + " §cis not online!");
+                    //commandSender.sendMessage("§4" + args[1] + " §cis not online!");
+                    lManager.sendMessage(commandSender, Message.ERROR_PLAYER_IS_NOT_ONLINE, new String[] {args[1]});
                     return true;
                 }
                 if (!TeamHandler.getInstance().getTeams().contains(args[2])) {
-                    player1.sendMessage("§4" + args[2] + " §cis not a valid team!");
+                    //player1.sendMessage("§4" + args[2] + " §cis not a valid team!");
+                    lManager.sendMessage(commandSender, Message.ERROR_INVALID_TEAM, new String[] {args[2]});
                     return true;
                 }
                 if (!GameHandler.getInstance().getGameState().equals(GameState.IDLE)) {
-                    commandSender.sendMessage("§cThe game is already running");
+                    //commandSender.sendMessage("§cThe game is already running");
+                    lManager.sendMessage(commandSender, Message.ERROR_GAME_IS_RUNNING, new String[0]);
                     return true;
                 }
                 TeamHandler.getInstance().getTeam(args[2]).addMember(player1);
-                commandSender.sendMessage("§6" + args[1] + " got added to team " + args[2]);
-                player1.sendMessage("§6You got added to team " + args[2]);
+                //commandSender.sendMessage("§6" + args[1] + " got added to team " + args[2]);
+                //player1.sendMessage("§6You got added to team " + args[2]);
+                lManager.sendMessage(commandSender, Message.OTHER_PLAYER_ADDED_TO_TEAM, new String[] {args[1], args[2]});
+                lManager.sendMessage(player1, Message.YOU_JOINED_TEAM, new String[0]);
                 return true;
             }
             case "remove" -> {
                 if (args.length > 3) return false;
                 Player player2 = Bukkit.getPlayer(args[1]);
                 if (player2 == null) {
-                    commandSender.sendMessage("§4" + args[1] + " §cis not online!");
+                    //commandSender.sendMessage("§4" + args[1] + " §cis not online!");
+                    lManager.sendMessage(commandSender, Message.ERROR_PLAYER_IS_NOT_ONLINE, new String[] {args[1]});
                     return true;
                 }
                 if (!TeamHandler.getInstance().getTeams().contains(args[2])) {
-                    player2.sendMessage("§4" + args[2] + " §cis not a valid team!");
+                    //player2.sendMessage("§4" + args[2] + " §cis not a valid team!");
+                    lManager.sendMessage(commandSender, Message.ERROR_INVALID_TEAM, new String[] {args[2]});
                     return true;
                 }
                 if (!GameHandler.getInstance().getGameState().equals(GameState.IDLE)) {
-                    commandSender.sendMessage("§cThe game is already running");
+                    //commandSender.sendMessage("§cThe game is already running");
+                    lManager.sendMessage(commandSender, Message.ERROR_GAME_IS_RUNNING, new String[0]);
                     return true;
                 }
                 TeamHandler.getInstance().getTeam(args[2]).removeMember(player2);
-                commandSender.sendMessage("§6" + args[1] + " got removed from team " + args[2]);
-                player2.sendMessage("§6You got removed from team " + args[2]);
+                //commandSender.sendMessage("§6" + args[1] + " got removed from team " + args[2]);
+                //player2.sendMessage("§6You got removed from team " + args[2]);
+                lManager.sendMessage(commandSender, Message.OTHER_PLAYER_REMOVED_FROM_TEAM, new String[] {args[1], args[2]});
+                lManager.sendMessage(player2, Message.YOU_LEFT_TEAM, new String[0]);
                 return true;
             }
         }
