@@ -2,6 +2,8 @@ package me.CubeLegend.TheManHunt.Commands;
 
 import me.CubeLegend.TheManHunt.GameHandler;
 import me.CubeLegend.TheManHunt.GameState;
+import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
+import me.CubeLegend.TheManHunt.LanguageSystem.Message;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -16,6 +18,8 @@ import java.util.List;
 
 public class CommandTeam implements TabExecutor {
 
+    private LanguageManager lManager = LanguageManager.getInstance();
+
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
@@ -23,25 +27,30 @@ public class CommandTeam implements TabExecutor {
             case "join" -> {
                 if (args.length > 2) return false;
                 if (!(commandSender instanceof Player player)) {
-                    commandSender.sendMessage("§cYou need to be a player to join a team!");
+                    //commandSender.sendMessage("§cYou need to be a player to join a team!");
+                    lManager.sendMessage(commandSender, Message.ERROR_ONLY_FOR_PLAYERS, new String[0]);
                     return true;
                 }
                 if (!TeamHandler.getInstance().getTeams().contains(args[1])) {
-                    player.sendMessage("§4" + args[1] + " §cis not a valid team!");
+                    //player.sendMessage("§4" + args[1] + " §cis not a valid team!");
+                    lManager.sendMessage(player, Message.ERROR_INVALID_TEAM, new String[] {args[1]});
                     return true;
                 }
                 if (!GameHandler.getInstance().getGameState().equals(GameState.IDLE)) {
-                    commandSender.sendMessage("§cThe game is already running");
+                    //player.sendMessage("§cThe game is already running");
+                    lManager.sendMessage(player, Message.ERROR_GAME_IS_RUNNING, new String[0]);
                     return true;
                 }
                 TeamHandler.getInstance().getTeam(args[1]).addMember(player);
-                player.sendMessage("§6You joined team " + args[1] + "!");
+                //player.sendMessage("§6You joined team " + args[1] + "!");
+                lManager.sendMessage(player, Message.YOU_JOINED_TEAM, new String[] {args[1]});
                 return true;
             }
             case "list" -> {
                 if (args.length > 2) return false;
                 if (!TeamHandler.getInstance().getTeams().contains(args[1])) {
-                    commandSender.sendMessage("§4" + args[1] + " §cis not a valid team!");
+                    //commandSender.sendMessage("§4" + args[1] + " §cis not a valid team!");
+                    lManager.sendMessage(commandSender, Message.ERROR_INVALID_TEAM, new String[] {args[1]});
                     return true;
                 }
                 List<Player> members = TeamHandler.getInstance().getTeam(args[1]).getMembers();

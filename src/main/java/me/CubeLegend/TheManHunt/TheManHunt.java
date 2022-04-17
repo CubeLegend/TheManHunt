@@ -4,6 +4,7 @@ import me.CubeLegend.TheManHunt.Commands.CommandStart;
 import me.CubeLegend.TheManHunt.Commands.CommandTeam;
 import me.CubeLegend.TheManHunt.Compass.RunnerTracker;
 import me.CubeLegend.TheManHunt.Compass.VillageTracker;
+import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
 import me.CubeLegend.TheManHunt.SpecialAbilities.FreezeVision;
 import me.CubeLegend.TheManHunt.SpecialAbilities.HunterNearWarning;
 import me.CubeLegend.TheManHunt.SpecialAbilities.OneHitKill;
@@ -82,6 +83,7 @@ public class TheManHunt extends JavaPlugin {
         registerPluginMessagingChannels();
         //config.options().copyDefaults(true);
         //this.saveConfig();
+        LanguageManager.getInstance().setDefaultLanguage(Settings.getInstance().DefaultLanguage);
 
         startRoutines();
         GameHandler.getInstance().setGameState(GameState.IDLE);
@@ -255,6 +257,7 @@ public class TheManHunt extends JavaPlugin {
         pm.registerEvents(new PlayerDeathHandler(), this);
         pm.registerEvents(TeamHandler.getInstance(), this);
         pm.registerEvents(OneHitKill.getInstance(), this);
+        pm.registerEvents(LanguageManager.getInstance(), this);
     }
 
     private void registerPluginMessagingChannels() {

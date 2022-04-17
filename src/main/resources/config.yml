@@ -1,5 +1,6 @@
 PluginMessagingChannelOfMiniGame: "themanhunt:minigame"
 DeleteWorldOnStartUp: false
+DefaultLanguage: "English"
 
 FreezeVision: false
 OneHitKill: false

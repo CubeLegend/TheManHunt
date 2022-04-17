@@ -1,0 +1,14 @@
+
+
+LanguageFile: true
+Name: "English"
+DisplayItem: "stick"
+
+ERROR_ONLY_FOR_PLAYERS: "§cYou need to be a player to join a team!"
+ERROR_INVALID_TEAM: "§4<team> §cis not a valid team!"
+ERROR_GAME_IS_RUNNING: "§cThe game is already running"
+ERROR_PLAYER_IS_NOT_ONLINE: "§4<player> §cis not online!"
+
+YOU_JOINED_TEAM: "§6You joined team <team>!"
+OTHER_PLAYER_ADDED_TO_TEAM: "§6<player> got added to team <team>"
+MEMBERS_OF_TEAM_LISTED: "§6Members of team <team>:"

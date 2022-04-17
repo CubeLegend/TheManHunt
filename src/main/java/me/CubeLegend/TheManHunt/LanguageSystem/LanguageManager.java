@@ -1,0 +1,132 @@
+package me.CubeLegend.TheManHunt.LanguageSystem;
+
+import me.CubeLegend.TheManHunt.TheManHunt;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+
+import java.io.*;
+import java.util.HashMap;
+import java.util.UUID;
+
+public class LanguageManager implements Listener {
+
+    private static LanguageManager instance;
+
+    public static LanguageManager getInstance() {
+        if (instance == null) {
+            instance = new LanguageManager();
+        }
+        return instance;
+    }
+
+    private final HashMap<UUID, String> playerLanguages = new HashMap<>();
+
+    private final HashMap<String, Language> languages = new HashMap<>();
+
+    private String defaultLanguage;
+
+    File languagesDir = new File(TheManHunt.getInstance().getDataFolder(), "languages");
+
+    LanguageManager() {
+        languagesDir.mkdirs();
+        File[] files = languagesDir.listFiles();
+
+        assert files != null;
+        if (files.length == 0) {
+            createLanguageFromSource("english.yml");
+            return;
+        }
+        for (File file : files) {
+            Language language = new Language(file);
+            languages.put(language.name, language);
+        }
+    }
+
+    private void createLanguageFromSource(String filename) {
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
+        File file = new File(languagesDir, filename);
+        try {
+            inputStream = TheManHunt.getInstance().getResource(filename);
+            outputStream = new FileOutputStream(file);
+
+            int read = 0;
+            byte[] bytes = new byte[1024];
+
+            while ((read = inputStream.read(bytes)) != -1) {
+                outputStream.write(bytes, 0, read);
+            }
+
+            Language language = new Language(file);
+            languages.put(language.name, language);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (outputStream != null) {
+                try {
+                    // outputStream.flush();
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void removeLanguage(Language l) {
+        languages.remove(l);
+    }
+
+    public void setDefaultLanguage(String language) {
+        if (!languages.containsKey(language)) {
+            Bukkit.getConsoleSender().sendMessage("§4Default language doesn't exist");
+            return;
+        }
+        defaultLanguage = language;
+    }
+
+    public void setPlayerLanguage(Player player, String language) {
+        if (languages.containsKey(language)) {
+            playerLanguages.put(player.getUniqueId(), language);
+        }
+    }
+
+    public void sendMessage(CommandSender commandSender, Message message, String[] args) {
+        if (commandSender instanceof Player player) {
+            sendMessage(player, message, args);
+        } else if (commandSender instanceof ConsoleCommandSender) {
+            sendMessageToConsole(message, args);
+        }
+    }
+
+    public void sendMessage(Player player, Message message, String[] args) {
+        String playerLanguageString = playerLanguages.get(player.getUniqueId());
+        Language playerLanguage = languages.get(playerLanguageString);
+        playerLanguage.sendMessage(player, message, args);
+    }
+
+    public void sendMessageToConsole(Message message, String[] args) {
+        Language language = languages.get(defaultLanguage);
+        language.sendMessageToConsole(message, args);
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        if (!playerLanguages.containsKey(player.getUniqueId())) {
+            setPlayerLanguage(player, defaultLanguage);
+        }
+    }
+}

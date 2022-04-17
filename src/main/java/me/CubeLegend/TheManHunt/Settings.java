@@ -22,6 +22,8 @@ public class Settings {
     public String PluginMessagingChannel = "themanhunt:minigame";
     public boolean DeleteWorldOnStartUp = false;
 
+    public String DefaultLanguage = "English";
+
     public boolean FreezeVision = false;
     public boolean OneHitKill = false;
     public boolean HunterNearWarning = false;
@@ -42,6 +44,7 @@ public class Settings {
     public void loadSettingsFromConfig() {
         PluginMessagingChannel = config.getString("PluginMessagingChannelOfMiniGame");
         DeleteWorldOnStartUp = config.getBoolean("DeleteWorldOnStartUp");
+        DefaultLanguage = config.getString("DefaultLanguage");
 
         FreezeVision = config.getBoolean("FreezeVision");
         OneHitKill = config.getBoolean("OneHitKill");
