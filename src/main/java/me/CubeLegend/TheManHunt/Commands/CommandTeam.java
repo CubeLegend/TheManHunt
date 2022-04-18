@@ -23,9 +23,10 @@ public class CommandTeam implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
+        if (args.length < 1) return false;
         switch (args[0]) {
             case "join" -> {
-                if (args.length > 2) return false;
+                if (args.length != 2) return false;
                 if (!(commandSender instanceof Player player)) {
                     //commandSender.sendMessage("§cYou need to be a player to join a team!");
                     lManager.sendMessage(commandSender, Message.ERROR_ONLY_FOR_PLAYERS, new String[0]);
@@ -47,7 +48,7 @@ public class CommandTeam implements TabExecutor {
                 return true;
             }
             case "list" -> {
-                if (args.length > 2) return false;
+                if (args.length != 2) return false;
                 if (!TeamHandler.getInstance().getTeams().contains(args[1])) {
                     //commandSender.sendMessage("§4" + args[1] + " §cis not a valid team!");
                     lManager.sendMessage(commandSender, Message.ERROR_INVALID_TEAM, new String[] {args[1]});
@@ -63,7 +64,7 @@ public class CommandTeam implements TabExecutor {
                 return true;
             }
             case "add" -> {
-                if (args.length > 3) return false;
+                if (args.length != 3) return false;
                 Player player1 = Bukkit.getPlayer(args[1]);
                 if (player1 == null) {
                     //commandSender.sendMessage("§4" + args[1] + " §cis not online!");
@@ -84,11 +85,11 @@ public class CommandTeam implements TabExecutor {
                 //commandSender.sendMessage("§6" + args[1] + " got added to team " + args[2]);
                 //player1.sendMessage("§6You got added to team " + args[2]);
                 lManager.sendMessage(commandSender, Message.OTHER_PLAYER_ADDED_TO_TEAM, new String[] {args[1], args[2]});
-                lManager.sendMessage(player1, Message.YOU_JOINED_TEAM, new String[0]);
+                lManager.sendMessage(player1, Message.YOU_JOINED_TEAM, new String[] {args[2]});
                 return true;
             }
             case "remove" -> {
-                if (args.length > 3) return false;
+                if (args.length != 3) return false;
                 Player player2 = Bukkit.getPlayer(args[1]);
                 if (player2 == null) {
                     //commandSender.sendMessage("§4" + args[1] + " §cis not online!");
@@ -109,7 +110,7 @@ public class CommandTeam implements TabExecutor {
                 //commandSender.sendMessage("§6" + args[1] + " got removed from team " + args[2]);
                 //player2.sendMessage("§6You got removed from team " + args[2]);
                 lManager.sendMessage(commandSender, Message.OTHER_PLAYER_REMOVED_FROM_TEAM, new String[] {args[1], args[2]});
-                lManager.sendMessage(player2, Message.YOU_LEFT_TEAM, new String[0]);
+                lManager.sendMessage(player2, Message.YOU_LEFT_TEAM, new String[] {args[2]});
                 return true;
             }
         }

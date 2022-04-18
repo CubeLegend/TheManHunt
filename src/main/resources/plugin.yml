@@ -6,9 +6,9 @@ api-version: 1.16
 load: STARTUP
 
 commands:
-  start:
-    description: Starts the game if it isn't allready running and if it there are enough players in the Teams
-    usage: /start
+  game:
+    description: Starts the game if it isn't already running and if it there are enough players in the Teams
+    usage: /game <start|stop>
     permission: TheManHunt.GameManagement
 
   team:

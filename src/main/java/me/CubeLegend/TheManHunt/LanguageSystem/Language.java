@@ -54,10 +54,20 @@ public class Language {
                 String text = languageMessage.getString("ERROR_GAME_IS_RUNNING");
                 return text;
             }
+            case ERROR_GAME_IS_NOT_RUNNING -> {
+                String text = languageMessage.getString("ERROR_GAME_IS_NOT_RUNNING");
+                return text;
+            }
             case ERROR_PLAYER_IS_NOT_ONLINE -> {
                 String text = languageMessage.getString("ERROR_PLAYER_IS_NOT_ONLINE");
                 if (text == null) return null;
                 if (text.contains("<player>")) text = text.replace("<player>", args[0]);
+                return text;
+            }
+            case ERROR_NOT_ENOUGH_TEAM_MEMBERS -> {
+                String text = languageMessage.getString("ERROR_NOT_ENOUGH_TEAM_MEMBERS");
+                if (text == null) return null;
+                if (text.contains("<team>")) text = text.replace("<team>", args[0]);
                 return text;
             }
             case YOU_JOINED_TEAM -> {
@@ -90,6 +100,10 @@ public class Language {
                 String text = languageMessage.getString("MEMBERS_OF_TEAM_LISTED");
                 if (text == null) return null;
                 if (text.contains("<team>")) text = text.replace("<team>", args[0]);
+                return text;
+            }
+            case GAME_STOPPED -> {
+                String text = languageMessage.getString("GAME_STOPPED");
                 return text;
             }
         }

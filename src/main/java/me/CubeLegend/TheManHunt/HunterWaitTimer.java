@@ -44,4 +44,10 @@ public class HunterWaitTimer {
 			time--;
 		}, 0, 20);
 	}
+
+	public void stopTimer() {
+		if (Bukkit.getScheduler().isCurrentlyRunning(TaskID)) {
+			Bukkit.getScheduler().cancelTask(TaskID);
+		}
+	}
 }
