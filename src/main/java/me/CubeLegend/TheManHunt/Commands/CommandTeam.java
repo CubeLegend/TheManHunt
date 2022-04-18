@@ -53,13 +53,13 @@ public class CommandTeam implements TabExecutor {
                     lManager.sendMessage(commandSender, Message.ERROR_INVALID_TEAM, new String[] {args[1]});
                     return true;
                 }
-//                List<Player> members = TeamHandler.getInstance().getTeam(args[1]).getMembers();
-//                commandSender.sendMessage("§6Members of team " + args[1] + ":");
-//                for (int i = 0; i < 20; i++) {
-//                    if (members.size() == i) break;
-//                    commandSender.sendMessage("§6" + members.get(i).getName());
-//                }
+                //commandSender.sendMessage("§6Members of team " + args[1] + ":");
                 lManager.sendMessage(commandSender, Message.MEMBERS_OF_TEAM_LISTED, new String[] {args[1]});
+                List<Player> members = TeamHandler.getInstance().getTeam(args[1]).getMembers();
+                for (int i = 0; i < 20; i++) {
+                    if (members.size() == i) break;
+                    commandSender.sendMessage(" §6- " + members.get(i).getName());
+                }
                 return true;
             }
             case "add" -> {

@@ -114,12 +114,16 @@ public class LanguageManager implements Listener {
     public void sendMessage(Player player, Message message, String[] args) {
         String playerLanguageString = playerLanguages.get(player.getUniqueId());
         Language playerLanguage = languages.get(playerLanguageString);
-        playerLanguage.sendMessage(player, message, args);
+        String text = playerLanguage.getMessage(message, args);
+        if (text == null) return;
+        player.sendMessage(text);
     }
 
     public void sendMessageToConsole(Message message, String[] args) {
         Language language = languages.get(defaultLanguage);
-        language.sendMessageToConsole(message, args);
+        String text = language.getMessage(message, args);
+        if (text == null) return;
+        Bukkit.getConsoleSender().sendMessage(text);
     }
 
     @EventHandler
