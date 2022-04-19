@@ -1,7 +1,6 @@
 package me.CubeLegend.TheManHunt;
 
 import me.CubeLegend.TheManHunt.Commands.CommandGame;
-import me.CubeLegend.TheManHunt.Commands.CommandStart;
 import me.CubeLegend.TheManHunt.Commands.CommandTeam;
 import me.CubeLegend.TheManHunt.Compass.RunnerTracker;
 import me.CubeLegend.TheManHunt.Compass.VillageTracker;
