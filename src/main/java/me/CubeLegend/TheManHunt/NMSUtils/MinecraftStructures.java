@@ -1,14 +1,11 @@
 package me.CubeLegend.TheManHunt.NMSUtils;
 
-import net.minecraft.world.level.levelgen.feature.StructureGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class MinecraftStructures {
