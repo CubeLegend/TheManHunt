@@ -2,16 +2,34 @@ package me.CubeLegend.TheManHunt.NMSUtils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.generator.ChunkGenerator;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.Objects;
 
 public class MinecraftStructures {
 
+	private static int versionNumber;
+
 	//Locate ---------------------------------------------------------------------
 	public static Location getStructureLocation(Location from, String structure) {
+		String firstVersionNumber = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3].split("_")[0].replace("v", "");
+		String secondVersionNumber = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3].split("_")[1];
+		String thirdVersionNumber = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3].split("_")[2].replace("R", "");
+		versionNumber = Integer.parseInt(firstVersionNumber + secondVersionNumber + thirdVersionNumber);
+
+		if (versionNumber >= 1131) {
+			try {
+				return getStructureFromApi(from, structure);
+			} catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+				throw new RuntimeException(e);
+			}
+		}
+
 		String stringVillageLocation = null;
 		try {
 			stringVillageLocation = getStructure(from, structure);
@@ -46,12 +64,33 @@ public class MinecraftStructures {
 
 		return VillageLocation;
 	}
+
+	private static Location getStructureFromApi(Location l, String structure) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+		World world = l.getWorld();
+
+		Class<?> structureTypeClass = Class.forName("org.bukkit.StructureType");
+		Map<String, Object> map = (Map<String, Object>) structureTypeClass.getMethod("getStructureTypes").invoke(structureTypeClass);
+		Object structureType = map.get(structure.toLowerCase());
+
+		Method locateNearestStructure = world.getClass().getMethod( "locateNearestStructure",
+				Location.class,
+				structureTypeClass,
+				int.class,
+				boolean.class);
+		return (Location) locateNearestStructure.invoke(world, l, structureType, 100, false);
+	}
 	
     private static String getStructure(Location l, String structure) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, InstantiationException, NoSuchFieldException {
 		String firstVersionNumber = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3].split("_")[0].replace("v", "");
 		String secondVersionNumber = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3].split("_")[1];
 		String thirdVersionNumber = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3].split("_")[2].replace("R", "");
 		int fullVersionNumber = Integer.parseInt(firstVersionNumber + secondVersionNumber + thirdVersionNumber);
+
+		if (versionNumber <= 1130) {
+			ChunkGenerator chunkGenerator = l.getWorld().getGenerator();
+			System.out.println(chunkGenerator.getClass().getMethods());
+			//TODO add nms for 1130 version
+		}
 
 		if (fullVersionNumber < 1160) {
 			Method getHandle = l.getWorld().getClass().getMethod("getHandle");
