@@ -33,6 +33,7 @@ public class HunterNearWarning {
                 return;
             }
             for (Player runner : TeamHandler.getInstance().getTeam("Runners").getMembers()) {
+                if (runner == null) continue;
                 if (!runner.isOnline()) continue;
                 double closestHunterDis = warningRadius + 1;
                 for (Entity entity : runner.getNearbyEntities(warningRadius, warningRadius, warningRadius)) {
