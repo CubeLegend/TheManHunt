@@ -1,11 +1,7 @@
 package me.CubeLegend.TheManHunt.Compass;
 
-import me.CubeLegend.TheManHunt.NMSUtils.MinecraftStructures;
 import me.CubeLegend.TheManHunt.TheManHunt;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,7 +12,6 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.CompassMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Objects;
@@ -36,6 +31,7 @@ public class VillageTracker implements Listener {
         ItemStack compass = new ItemStack(Material.COMPASS, 1);
 
         ItemMeta meta = compass.getItemMeta();
+        assert meta != null;
         meta.setDisplayName("Village Tracker");
         meta.addEnchant(Enchantment.DURABILITY, 1, true);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -60,7 +56,11 @@ public class VillageTracker implements Listener {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (player.getInventory().contains(this.getVillageTrackerItem())) {
                     if (player.getWorld().getEnvironment() == World.Environment.NORMAL) {
-                        Location VillageLocation = MinecraftStructures.getStructureLocation(player.getLocation(), "Village");
+                        Location VillageLocation = player.getWorld().locateNearestStructure(
+                                player.getLocation(),
+                                StructureType.VILLAGE,
+                                100,
+                                false);
                         if (VillageLocation != null) {
                             player.setCompassTarget(VillageLocation);
                         }
@@ -108,7 +108,11 @@ public class VillageTracker implements Listener {
             if (player.getWorld().getEnvironment() != World.Environment.NORMAL) {
                 player.sendMessage(("§cDu kannst den Village Tracker nur in der Overworld benutzen!"));
             } else {
-                Location villageLocation = MinecraftStructures.getStructureLocation(player.getLocation(), "Village");
+                Location villageLocation = player.getWorld().locateNearestStructure(
+                        player.getLocation(),
+                        StructureType.VILLAGE,
+                        100,
+                        false);
                 assert villageLocation != null;
                 villageLocation.setY(player.getLocation().getY());
                 villageLocation.add(0.5, 0, 0.5);
