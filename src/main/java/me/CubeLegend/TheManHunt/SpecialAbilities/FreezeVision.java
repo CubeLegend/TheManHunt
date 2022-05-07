@@ -4,7 +4,7 @@ import me.CubeLegend.TheManHunt.Freeze;
 import me.CubeLegend.TheManHunt.GameHandler;
 import me.CubeLegend.TheManHunt.GameState;
 import me.CubeLegend.TheManHunt.TheManHunt;
-import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang.Validate;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
