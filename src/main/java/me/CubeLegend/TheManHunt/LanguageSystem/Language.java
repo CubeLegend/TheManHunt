@@ -70,6 +70,10 @@ public class Language {
                 if (text.contains("<team>")) text = text.replace("<team>", args[0]);
                 return text;
             }
+            case ERROR_USE_ONLY_IN_OVERWORLD -> {
+                String text = languageMessage.getString("ERROR_USE_ONLY_IN_OVERWORLD");
+                return text;
+            }
             case YOU_JOINED_TEAM -> {
                 String text = languageMessage.getString("YOU_JOINED_TEAM");
                 if (text == null) return null;
@@ -104,6 +108,38 @@ public class Language {
             }
             case GAME_STOPPED -> {
                 String text = languageMessage.getString("GAME_STOPPED");
+                return text;
+            }
+            case HUNTER_NEAR -> {
+                String text = languageMessage.getString("HUNTER_NEAR");
+                return text;
+            }
+            case COMPASS_POINTS_TO -> {
+                String text = languageMessage.getString("HUNTER_NEAR");
+                if (text == null) return null;
+                if (text.contains("<player>")) text = text.replace("<player>", args[0]);
+                return text;
+            }
+            case NEXT_VILLAGE_X_BLOCKS_AWAY -> {
+                String text = languageMessage.getString("NEXT_VILLAGE_X_BLOCKS_AWAY");
+                if (text == null) return null;
+                if (text.contains("<distance>")) text = text.replace("<distance>", args[0]);
+                return text;
+            }
+            case TEAM_HAS_WON -> {
+                String text = languageMessage.getString("TEAM_HAS_WON");
+                if (text == null) return null;
+                if (text.contains("<team>")) text = text.replace("<team>", args[0]);
+                return text;
+            }
+            case HUNTERS_RELEASED -> {
+                String text = languageMessage.getString("HUNTERS_RELEASED");
+                return text;
+            }
+            case TIME_UNTIL_HUNTERS_RELEASED -> {
+                String text = languageMessage.getString("HUNTERS_RELEASED");
+                if (text == null) return null;
+                if (text.contains("<time>")) text = text.replace("<time>", args[0]);
                 return text;
             }
         }
