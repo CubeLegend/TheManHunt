@@ -1,6 +1,8 @@
 package me.CubeLegend.TheManHunt.LanguageSystem;
 
 import me.CubeLegend.TheManHunt.TheManHunt;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -134,6 +136,22 @@ public class LanguageManager implements Listener {
             if (text == null) return;
             player.sendMessage(text);
         }
+    }
+
+    public void sendActionbar(Player player, Message message, String[] args) {
+        String playerLanguageString = playerLanguages.get(player.getUniqueId());
+        Language playerLanguage = languages.get(playerLanguageString);
+        String text = playerLanguage.getMessage(message, args);
+        if (text == null) return;
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(text));
+    }
+
+    public void sendTitle(Player player, Message message, String[] args) {
+        String playerLanguageString = playerLanguages.get(player.getUniqueId());
+        Language playerLanguage = languages.get(playerLanguageString);
+        String text = playerLanguage.getMessage(message, args);
+        if (text == null) return;
+        player.sendTitle(text, "", 50, 50, 50);
     }
 
     @EventHandler

@@ -115,7 +115,7 @@ public class Language {
                 return text;
             }
             case COMPASS_POINTS_TO -> {
-                String text = languageMessage.getString("HUNTER_NEAR");
+                String text = languageMessage.getString("COMPASS_POINTS_TO");
                 if (text == null) return null;
                 if (text.contains("<player>")) text = text.replace("<player>", args[0]);
                 return text;
@@ -137,7 +137,7 @@ public class Language {
                 return text;
             }
             case TIME_UNTIL_HUNTERS_RELEASED -> {
-                String text = languageMessage.getString("HUNTERS_RELEASED");
+                String text = languageMessage.getString("TIME_UNTIL_HUNTERS_RELEASED");
                 if (text == null) return null;
                 if (text.contains("<time>")) text = text.replace("<time>", args[0]);
                 return text;

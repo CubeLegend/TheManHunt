@@ -1,5 +1,7 @@
 package me.CubeLegend.TheManHunt.Compass;
 
+import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
+import me.CubeLegend.TheManHunt.LanguageSystem.Message;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import me.CubeLegend.TheManHunt.TheManHunt;
 import org.bukkit.Bukkit;
@@ -144,8 +146,10 @@ public class RunnerTracker implements Listener {
 
 	@EventHandler
 	public void onPlayerDeathEvent(final PlayerDeathEvent event) {
-		event.getDrops().remove(RunnerTracker.getInstance().getRunnerTrackerItem());
-		returnTrackerToPlayer.add(event.getEntity().getUniqueId());
+		if (event.getDrops().contains(RunnerTracker.getInstance().getRunnerTrackerItem())) {
+			event.getDrops().remove(RunnerTracker.getInstance().getRunnerTrackerItem());
+			returnTrackerToPlayer.add(event.getEntity().getUniqueId());
+		}
 	}
 
 	@EventHandler
@@ -182,8 +186,9 @@ public class RunnerTracker implements Listener {
 			Player currentRunner = RunnerTracker.getInstance().getPlayerTrackingValue(player);
 			int nextIndex = TeamHandler.getInstance().getTeam("Runners").getIndexOfMember(currentRunner) + 1;
 			if (nextIndex >= TeamHandler.getInstance().getTeam("Runners").getMemberCount()) nextIndex = 0;
-			RunnerTracker.getInstance().updatePlayerTracking(player, TeamHandler.getInstance().getTeam("Runners").getMember(nextIndex));
-			player.sendMessage(("§6Der Kompass zeigt jetzt auf §9" + TeamHandler.getInstance().getTeam("Runners").getMember(nextIndex).getDisplayName() + "§6."));
+			Player runner = TeamHandler.getInstance().getTeam("Runners").getMember(nextIndex);
+			RunnerTracker.getInstance().updatePlayerTracking(player, runner);
+			LanguageManager.getInstance().sendMessage(player, Message.COMPASS_POINTS_TO, new String[] {runner.getDisplayName()});
 		}
 	}
 }

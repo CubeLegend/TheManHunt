@@ -3,6 +3,8 @@ package me.CubeLegend.TheManHunt.TeamSystem;
 import me.CubeLegend.TheManHunt.DataConfig;
 import me.CubeLegend.TheManHunt.GameHandler;
 import me.CubeLegend.TheManHunt.GameState;
+import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
+import me.CubeLegend.TheManHunt.LanguageSystem.Message;
 import me.CubeLegend.TheManHunt.TheManHunt;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -115,7 +117,7 @@ public class Team {
 
     public void win() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            player.sendTitle(String.format("§6Die %s%s §6haben Gewonnen!!!", teamColorAsCode, teamName), null, 10, 70, 20);
+            LanguageManager.getInstance().sendTitle(player, Message.TEAM_HAS_WON, new String[] {teamName});
         }
         GameHandler.getInstance().setGameState(GameState.END);
     }

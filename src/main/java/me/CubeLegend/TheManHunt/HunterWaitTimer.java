@@ -1,5 +1,8 @@
 package me.CubeLegend.TheManHunt;
 
+import me.CubeLegend.TheManHunt.LanguageSystem.Language;
+import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
+import me.CubeLegend.TheManHunt.LanguageSystem.Message;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import org.bukkit.Bukkit;
 
@@ -29,7 +32,7 @@ public class HunterWaitTimer {
 
 			if (time <= 0) {
 
-				Bukkit.broadcastMessage("§6The hunters got released!");
+				LanguageManager.getInstance().broadcastMessage(Message.HUNTERS_RELEASED, new String[0]);
 				Freeze.getInstance().removeFrozenPlayers(TeamHandler.getInstance().getTeam("Hunters").getMembers());
 				DataConfig.getInstance().saveCustomConfig();
 				GameHandler.getInstance().setGameState(GameState.PLAYING);
@@ -38,7 +41,7 @@ public class HunterWaitTimer {
 
 			if (time % 10 == 0 && time >= 10 || time <= 5 && time != 0) {
 
-				Bukkit.broadcastMessage("§6The hunters get released in §1" + time + " §6seconds");
+				LanguageManager.getInstance().broadcastMessage(Message.TIME_UNTIL_HUNTERS_RELEASED, new String[] {String.valueOf(time)});;
 			}
 
 			time--;

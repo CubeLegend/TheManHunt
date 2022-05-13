@@ -2,6 +2,8 @@ package me.CubeLegend.TheManHunt.SpecialAbilities;
 
 import me.CubeLegend.TheManHunt.GameHandler;
 import me.CubeLegend.TheManHunt.GameState;
+import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
+import me.CubeLegend.TheManHunt.LanguageSystem.Message;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import me.CubeLegend.TheManHunt.TheManHunt;
 import net.md_5.bungee.api.ChatMessageType;
@@ -48,7 +50,8 @@ public class HunterNearWarning {
                     }
                 }
                 if (closestHunterDis <= warningRadius) {
-                    runner.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§cA Hunter is near"));
+                    assert runner.getPlayer() != null;
+                    LanguageManager.getInstance().sendActionbar(runner.getPlayer(), Message.HUNTER_NEAR, new String[0]);
                 }
             }
         },0, period);
