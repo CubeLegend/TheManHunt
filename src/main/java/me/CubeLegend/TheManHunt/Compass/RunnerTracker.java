@@ -2,9 +2,11 @@ package me.CubeLegend.TheManHunt.Compass;
 
 import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
 import me.CubeLegend.TheManHunt.LanguageSystem.Message;
+import me.CubeLegend.TheManHunt.Settings;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import me.CubeLegend.TheManHunt.TheManHunt;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
@@ -42,7 +44,7 @@ public class RunnerTracker implements Listener {
 	private final HashMap<UUID, UUID> PlayerTracking = new HashMap<>();
 
 	private final ArrayList<UUID> returnTrackerToPlayer = new ArrayList<>();
-	
+
 	public ItemStack getRunnerTrackerItem() {
 		ItemStack compass = new ItemStack(Material.COMPASS, 1);
 		
@@ -103,6 +105,7 @@ public class RunnerTracker implements Listener {
 				if (hunter == null) continue;
 				Player runner = Bukkit.getPlayer(PlayerTracking.get(uuid));
 				if (runner != null && runner.getWorld().equals(hunter.getWorld())) {
+
 					if (hunter.getWorld().getEnvironment() == World.Environment.NORMAL) {
 						ItemStack runnerTracker = null;
 						for (ItemStack is : hunter.getInventory()) {
@@ -114,14 +117,17 @@ public class RunnerTracker implements Listener {
 						hunter.setCompassTarget(runner.getLocation());
 
 					} else {
-						ItemStack runnerTracker = null;
-						for (ItemStack is : hunter.getInventory()) {
-							if (RunnerTracker.getInstance().isRunnerTracker(is)) runnerTracker = is;
-						}
+						ItemStack runnerTracker = findRunnerTracker(hunter);
 						if (runnerTracker != null) {
 							CompassMeta cm = (CompassMeta) runnerTracker.getItemMeta();
+							Location runnerLoc = runner.getLocation().getBlock().getLocation();
 							assert cm != null;
-							cm.setLodestone(runner.getLocation());
+							if (Settings.getInstance().AlwaysUpdateRunnerTracker) {
+								if (runnerLoc.equals(cm.getLodestone())) {
+									runnerLoc = runnerLoc.add(0, 10, 0);
+								}
+							}
+							cm.setLodestone(runnerLoc);
 							runnerTracker.setItemMeta(cm);
 						}
 					}
@@ -135,6 +141,15 @@ public class RunnerTracker implements Listener {
 		if (Bukkit.getScheduler().isCurrentlyRunning(TaskId)) {
 			Bukkit.getScheduler().cancelTask(TaskId);
 		}
+	}
+
+	private ItemStack findRunnerTracker(Player player) {
+		for (ItemStack is : player.getInventory()) {
+			if (RunnerTracker.getInstance().isRunnerTracker(is)) {
+				return is;
+			}
+		}
+		return null;
 	}
 
 	@EventHandler

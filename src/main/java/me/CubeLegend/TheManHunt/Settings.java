@@ -39,7 +39,7 @@ public class Settings {
     public int RunnerTrackerUpdatePeriod = 1;
     public int CompassSpinningUpdatePeriod = 1;
 
-    public boolean SetLocationOfPlayerCompassIfPossible = true;
+    public boolean AlwaysUpdateRunnerTracker = true;
 
     public void loadSettingsFromConfig() {
         PluginMessagingChannel = config.getString("PluginMessagingChannelOfMiniGame");
@@ -60,6 +60,8 @@ public class Settings {
         VillageTrackerUpdatePeriod = config.getInt("VillageTrackerUpdatePeriod");
         RunnerTrackerUpdatePeriod = config.getInt("RunnerTrackerUpdatePeriod");
         CompassSpinningUpdatePeriod = config.getInt("CompassSpinningUpdatePeriod");
+
+        AlwaysUpdateRunnerTracker = config.getBoolean("AlwaysUpdateRunnerTracker");
     }
 
     public void safeSettingsToConfig() {
@@ -79,6 +81,8 @@ public class Settings {
         config.set("VillageTrackerUpdatePeriod", VillageTrackerUpdatePeriod);
         config.set("RunnerTrackerUpdatePeriod", RunnerTrackerUpdatePeriod);
         config.set("CompassSpinningUpdatePeriod", CompassSpinningUpdatePeriod);
+
+        config.set("AlwaysUpdateRunnerTracker", AlwaysUpdateRunnerTracker);
         TheManHunt.getInstance().saveConfig();
     }
 }
