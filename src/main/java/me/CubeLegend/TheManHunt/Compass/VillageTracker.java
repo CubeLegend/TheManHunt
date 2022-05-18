@@ -52,6 +52,16 @@ public class VillageTracker implements Listener {
         player.getInventory().addItem(compass);
     }
 
+    public boolean isVillageTracker(ItemStack is) {
+        if (is == null) return false;
+        if (is.getType() != Material.COMPASS) return false;
+        if (is.getItemMeta() == null) return false;
+        if (!is.getItemMeta().getDisplayName().equals(Objects.requireNonNull(this.getVillageTrackerItem().getItemMeta()).getDisplayName())) return false;
+        if (!(is.getItemMeta().isUnbreakable() == Objects.requireNonNull(this.getVillageTrackerItem().getItemMeta()).isUnbreakable())) return false;
+
+        return true;
+    }
+
     private int TaskId = 0;
 
     public void startVillageTrackingRoutine(int period) {
@@ -66,7 +76,11 @@ public class VillageTracker implements Listener {
                                 100,
                                 false);
                         if (VillageLocation != null) {
-                            player.setCompassTarget(VillageLocation);
+                            if (Settings.getInstance().VillageTrackerUseLodestone) {
+                                setLodestone(player, VillageLocation);
+                            } else {
+                                player.setCompassTarget(VillageLocation);
+                            }
                         }
                     }
                 }
@@ -119,10 +133,6 @@ public class VillageTracker implements Listener {
                         false);
                 assert villageLocation != null;
                 villageLocation.setY(player.getLocation().getY());
-                if (Settings.getInstance().VillageTrackerUseLodestone) {
-                    setLodestone(player, villageLocation);
-                    return;
-                }
                 villageLocation.add(0.5, 0, 0.5);
                 double villageDistance = player.getLocation().distance(villageLocation);
                 int intVillageDistance = (int) Math.round(villageDistance);
@@ -134,7 +144,7 @@ public class VillageTracker implements Listener {
     void setLodestone(Player player, Location target) {
         ItemStack villageTracker = null;
         for (ItemStack is : player.getInventory()) {
-            if (RunnerTracker.getInstance().isRunnerTracker(is)) {
+            if (this.isVillageTracker(is)) {
                 villageTracker =  is;
                 break;
             }
