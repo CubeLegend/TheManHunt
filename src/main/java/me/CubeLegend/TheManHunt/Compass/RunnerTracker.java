@@ -24,6 +24,7 @@ import org.bukkit.inventory.meta.CompassMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.management.RuntimeErrorException;
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -106,35 +107,43 @@ public class RunnerTracker implements Listener {
 				Player runner = Bukkit.getPlayer(PlayerTracking.get(uuid));
 				if (runner != null && runner.getWorld().equals(hunter.getWorld())) {
 
-					if (hunter.getWorld().getEnvironment() == World.Environment.NORMAL) {
-						ItemStack runnerTracker = null;
-						for (ItemStack is : hunter.getInventory()) {
-							if (RunnerTracker.getInstance().isRunnerTracker(is)) runnerTracker = is;
-						}
-						if (runnerTracker != null && ((CompassMeta) Objects.requireNonNull(runnerTracker.getItemMeta())).hasLodestone()) {
-							runnerTracker.setItemMeta(RunnerTracker.getInstance().getRunnerTrackerItem().getItemMeta());
-						}
-						hunter.setCompassTarget(runner.getLocation());
-
+					if (hunter.getWorld().getEnvironment() != World.Environment.NORMAL
+							|| Settings.getInstance().AlwaysSetLodestone) {
+						setLodestone(hunter, runner);
 					} else {
-						ItemStack runnerTracker = findRunnerTracker(hunter);
-						if (runnerTracker != null) {
-							CompassMeta cm = (CompassMeta) runnerTracker.getItemMeta();
-							Location runnerLoc = runner.getLocation().getBlock().getLocation();
-							assert cm != null;
-							if (Settings.getInstance().AlwaysUpdateRunnerTracker) {
-								if (runnerLoc.equals(cm.getLodestone())) {
-									runnerLoc = runnerLoc.add(0, 10, 0);
-								}
-							}
-							cm.setLodestone(runnerLoc);
-							runnerTracker.setItemMeta(cm);
-						}
+						setTarget(hunter, runner);
 					}
 				}
 			}
 
 		}, 0, period).getTaskId();
+	}
+
+	private void setTarget(Player hunter, Player runner) {
+		ItemStack runnerTracker = null;
+		for (ItemStack is : hunter.getInventory()) {
+			if (RunnerTracker.getInstance().isRunnerTracker(is)) runnerTracker = is;
+		}
+		if (runnerTracker != null && ((CompassMeta) Objects.requireNonNull(runnerTracker.getItemMeta())).hasLodestone()) {
+			runnerTracker.setItemMeta(RunnerTracker.getInstance().getRunnerTrackerItem().getItemMeta());
+		}
+		hunter.setCompassTarget(runner.getLocation());
+	}
+
+	void setLodestone(Player hunter, Player runner) {
+		ItemStack runnerTracker = findRunnerTracker(hunter);
+		if (runnerTracker != null) {
+			CompassMeta cm = (CompassMeta) runnerTracker.getItemMeta();
+			Location runnerLoc = runner.getLocation().getBlock().getLocation();
+			assert cm != null;
+			if (Settings.getInstance().AlwaysUpdateRunnerTracker) {
+				if (runnerLoc.equals(cm.getLodestone())) {
+					runnerLoc = runnerLoc.add(0, 10, 0);
+				}
+			}
+			cm.setLodestone(runnerLoc);
+			runnerTracker.setItemMeta(cm);
+		}
 	}
 
 	public void stopRunnerTrackerRoutine() {

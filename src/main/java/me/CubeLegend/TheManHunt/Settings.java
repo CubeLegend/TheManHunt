@@ -40,6 +40,7 @@ public class Settings {
     public int CompassSpinningUpdatePeriod = 1;
 
     public boolean AlwaysUpdateRunnerTracker = true;
+    public boolean AlwaysSetLodestone = false;
 
     public void loadSettingsFromConfig() {
         PluginMessagingChannel = config.getString("PluginMessagingChannelOfMiniGame");
@@ -62,6 +63,7 @@ public class Settings {
         CompassSpinningUpdatePeriod = config.getInt("CompassSpinningUpdatePeriod");
 
         AlwaysUpdateRunnerTracker = config.getBoolean("AlwaysUpdateRunnerTracker");
+        AlwaysSetLodestone = config.getBoolean("AlwaysSetLodestone");
     }
 
     public void safeSettingsToConfig() {
@@ -83,6 +85,7 @@ public class Settings {
         config.set("CompassSpinningUpdatePeriod", CompassSpinningUpdatePeriod);
 
         config.set("AlwaysUpdateRunnerTracker", AlwaysUpdateRunnerTracker);
+        config.set("AlwaysSetLodestone", AlwaysSetLodestone);
         TheManHunt.getInstance().saveConfig();
     }
 }
