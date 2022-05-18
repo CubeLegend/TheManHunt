@@ -2,6 +2,7 @@ package me.CubeLegend.TheManHunt.Compass;
 
 import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
 import me.CubeLegend.TheManHunt.LanguageSystem.Message;
+import me.CubeLegend.TheManHunt.Settings;
 import me.CubeLegend.TheManHunt.TheManHunt;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
@@ -14,6 +15,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.CompassMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Objects;
@@ -117,11 +119,31 @@ public class VillageTracker implements Listener {
                         false);
                 assert villageLocation != null;
                 villageLocation.setY(player.getLocation().getY());
+                if (Settings.getInstance().VillageTrackerUseLodestone) {
+                    setLodestone(player, villageLocation);
+                    return;
+                }
                 villageLocation.add(0.5, 0, 0.5);
                 double villageDistance = player.getLocation().distance(villageLocation);
                 int intVillageDistance = (int) Math.round(villageDistance);
                 LanguageManager.getInstance().sendMessage(player, Message.NEXT_VILLAGE_X_BLOCKS_AWAY, new String[] {String.valueOf(intVillageDistance)});
             }
+        }
+    }
+
+    void setLodestone(Player player, Location target) {
+        ItemStack villageTracker = null;
+        for (ItemStack is : player.getInventory()) {
+            if (RunnerTracker.getInstance().isRunnerTracker(is)) {
+                villageTracker =  is;
+                break;
+            }
+        }
+        if (villageTracker != null) {
+            CompassMeta cm = (CompassMeta) villageTracker.getItemMeta();
+            assert cm != null;
+            cm.setLodestone(target);
+            villageTracker.setItemMeta(cm);
         }
     }
 }

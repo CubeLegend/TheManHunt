@@ -19,3 +19,5 @@ CompassSpinningUpdatePeriod: 1
 
 AlwaysUpdateRunnerTracker: true
 AlwaysSetLodestone: false
+
+VillageTrackerUseLodestone: false

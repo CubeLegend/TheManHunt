@@ -42,6 +42,8 @@ public class Settings {
     public boolean AlwaysUpdateRunnerTracker = true;
     public boolean AlwaysSetLodestone = false;
 
+    public boolean VillageTrackerUseLodestone = false;
+
     public void loadSettingsFromConfig() {
         PluginMessagingChannel = config.getString("PluginMessagingChannelOfMiniGame");
         DeleteWorldOnStartUp = config.getBoolean("DeleteWorldOnStartUp");
@@ -64,6 +66,8 @@ public class Settings {
 
         AlwaysUpdateRunnerTracker = config.getBoolean("AlwaysUpdateRunnerTracker");
         AlwaysSetLodestone = config.getBoolean("AlwaysSetLodestone");
+
+        VillageTrackerUseLodestone = config.getBoolean("VillageTrackerUseLodestone");
     }
 
     public void safeSettingsToConfig() {
@@ -86,6 +90,8 @@ public class Settings {
 
         config.set("AlwaysUpdateRunnerTracker", AlwaysUpdateRunnerTracker);
         config.set("AlwaysSetLodestone", AlwaysSetLodestone);
+
+        config.set("VillageTrackerUseLodestone", VillageTrackerUseLodestone);
         TheManHunt.getInstance().saveConfig();
     }
 }
