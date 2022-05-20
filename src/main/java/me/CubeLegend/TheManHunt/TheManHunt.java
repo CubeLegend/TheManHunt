@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -111,136 +112,6 @@ public class TheManHunt extends JavaPlugin {
         if (Settings.getInstance().HunterNearWarning) {
             HunterNearWarning.getInstance().startRoutine(Settings.getInstance().HunterNearWarningUpdatePeriod, Settings.getInstance().HunterNearWarningRadius);
         }
-    }
-
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (label.equalsIgnoreCase("membersof")) {
-            if (sender instanceof Player) {
-                Player player = (Player) sender;
-                Team team = TeamHandler.getInstance().getTeam(args[0]);
-                if (team != null) {
-                    player.sendMessage("§6Members of Team " + team.getTeamName() + ":");
-                    for (Player current : Bukkit.getOnlinePlayers()) {
-                        if (TeamHandler.getInstance().getTeam(args[0]).checkForMember(current)) {
-                            player.sendMessage(current.getDisplayName());
-                        }
-                    }
-                    return true;
-                }
-            }
-        }
-
-        if (label.equalsIgnoreCase("dev")) {
-            if (args[0].equalsIgnoreCase("giveVillageTracker")) {
-                if (sender instanceof Player) {
-                    VillageTracker.getInstance().givePlayerVillageTracker(((Player) sender));
-                }
-            }
-            if (args[0].equalsIgnoreCase("giveRunnerTracker")) {
-                if (sender instanceof Player) {
-                    RunnerTracker.getInstance().givePlayerRunnerTracker(((Player) sender));
-                }
-            }
-            if (args[0].equalsIgnoreCase("removeMember")) {
-                TeamHandler.getInstance().getTeam(args[1]).removeMember(Objects.requireNonNull(Bukkit.getPlayer(args[2])));
-            }
-            if (args[0].equalsIgnoreCase("printFields")) {
-                try {
-                    for (Field f : getNMSClass("StructureGenerator").getDeclaredFields()) {
-                        System.out.println(f.getName());
-                    }
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (args[0].equalsIgnoreCase("printField")) {
-                try {
-                    Class<?> StructureGenerator = getNMSClass("StructureGenerator");
-                    Field village = StructureGenerator.getField("VILLAGE");
-                    System.out.println(village.getName());
-                    System.out.println(village.getType());
-                    Constructor<?> newSG = StructureGenerator.getConstructor(StructureGenerator, village.getType());
-                } catch (ClassNotFoundException | NoSuchFieldException | NoSuchMethodException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (args[0].equalsIgnoreCase("getMeta")) {
-                if (sender instanceof Player) {
-                    ((Player) sender).sendMessage(Objects.requireNonNull(((Player) sender).getInventory().getItemInMainHand().getItemMeta()).toString());
-                }
-            }
-        }
-        /*
-        if (label.equalsIgnoreCase("vectorof")) {
-            if (sender instanceof Player) {
-                Player player = (Player) sender;
-                return true;
-            }
-        }
-        if (label.equalsIgnoreCase("crossproduct")) {
-            if (sender instanceof Player) {
-                Player player = (Player) sender;
-                Entity nearestEntity = null;
-                for (Entity entity : player.getNearbyEntities(100, 100, 100)) {
-                    if (nearestEntity == null) {
-                        nearestEntity = entity;
-                    } else if (entity.getLocation().distance(player.getLocation()) < nearestEntity.getLocation().distance(player.getLocation())) {
-                        nearestEntity = entity;
-                    }
-                }
-                assert nearestEntity != null;
-                //rc.getCrossProduct(player, nearestEntity);
-                System.out.println(player.getLocation().add(new Location(player.getWorld(), 0, player.getEyeHeight(), 0)));
-                System.out.println(nearestEntity.getLocation().add(new Vector(0, 1, 0)).toVector().subtract(player.getLocation().add(new Vector(0, player.getEyeHeight(), 0)).toVector()));
-                player.sendMessage(player.getLocation().add(new Location(player.getWorld(), 0, player.getEyeHeight(), 0)).getDirection().crossProduct(nearestEntity.getLocation().add(new Vector(0, 1, 0)).toVector().subtract(player.getLocation().add(new Vector(0, player.getEyeHeight(), 0)).toVector())).lengthSquared() + " < threshold: 1");
-                return true;
-            }
-        }
-        if (label.equalsIgnoreCase("dotproduct")) {
-            if (sender instanceof Player) {
-                Player player = (Player) sender;
-                Entity nearestEntity = null;
-                for (Entity entity : player.getNearbyEntities(100, 100, 100)) {
-                    if (nearestEntity == null) {
-                        nearestEntity = entity;
-                    } else if (entity.getLocation().distance(player.getLocation()) < nearestEntity.getLocation().distance(player.getLocation())) {
-                        nearestEntity = entity;
-                    }
-                }
-                assert nearestEntity != null;
-                //rc.getDotProduct(player, nearestEntity);
-                player.sendMessage(String.valueOf(nearestEntity.getLocation().toVector().subtract(player.getLocation().toVector()).normalize().dot(player.getLocation().getDirection().normalize())) + " >= 0");
-                return true;
-            }
-        }
-        if (label.equalsIgnoreCase("showLine")) {
-            Freeze.getInstance().addPlayersToVision("Runners");
-
-            /*
-            if (sender instanceof Player) {
-                Player player = (Player) sender;
-                RayCast rc = new RayCast();
-                Entity nearestEntity = null;
-                for (Entity entity : player.getNearbyEntities(100, 100, 100)) {
-                    if (nearestEntity == null) {
-                        nearestEntity = entity;
-                    } else if (entity.getLocation().distance(player.getLocation()) < nearestEntity.getLocation().distance(player.getLocation())) {
-                        nearestEntity = entity;
-                    }
-                }
-                assert nearestEntity != null;
-                rc.showLineToTarget(player, nearestEntity);
-                return true;
-            }
-             //*
-        }*/
-        return false;
-    }
-
-    private static Class<?> getNMSClass(String nmsClassString) throws ClassNotFoundException {
-        String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3] + ".";
-        String name = "net.minecraft.server." + version + nmsClassString;
-        return Class.forName(name);
     }
 
     private void registerCommands() {
