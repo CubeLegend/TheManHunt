@@ -1,20 +1,25 @@
 package me.CubeLegend.TheManHunt.LanguageSystem;
 
-import org.bukkit.Bukkit;
-import org.bukkit.command.ConsoleCommandSender;
+import me.CubeLegend.TheManHunt.Settings;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Language {
 
     private final File languageMessageFile;
     public String name;
     private FileConfiguration languageMessage;
+
+    private String defaultColor = "§r";
+    private String highlightColor = "§r";
 
     Language(File file) {
         languageMessageFile = file;
@@ -23,6 +28,7 @@ public class Language {
             LanguageManager.getInstance().removeLanguage(this);
         }
         name = languageMessage.getString("Name");
+        updateColors();
     }
 
     private void createCustomConfig() {
@@ -38,109 +44,131 @@ public class Language {
         }
     }
 
+    private void updateColors() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("§r");
+        for (String s : Settings.getInstance().DefaultMessageColor) {
+            sb.append(ChatColor.valueOf(s));
+        }
+        defaultColor = sb.toString();
+
+        sb = new StringBuilder();
+        sb.append("§r");
+        for (String s : Settings.getInstance().HighlightedMessageColor) {
+            sb.append(ChatColor.valueOf(s));
+        }
+        highlightColor = sb.toString();
+    }
+
     public String getMessage(Message message, String[] args) {
         switch (message) {
             case ERROR_ONLY_FOR_PLAYERS -> {
                 String text = languageMessage.getString("ERROR_ONLY_FOR_PLAYERS");
-                return text;
+                if (text == null) return null;
+                return defaultColor + text;
             }
             case ERROR_INVALID_TEAM -> {
                 String text = languageMessage.getString("ERROR_INVALID_TEAM");
                 if (text == null) return null;
-                if (text.contains("<team>")) text = text.replace("<team>", args[0]);
-                return text;
+                if (text.contains("<team>")) text = text.replace("<team>", highlightColor + args[0] + defaultColor);
+                return defaultColor + text;
             }
             case ERROR_GAME_IS_RUNNING -> {
                 String text = languageMessage.getString("ERROR_GAME_IS_RUNNING");
-                return text;
+                if (text == null) return null;
+                return defaultColor + text;
             }
             case ERROR_GAME_IS_NOT_RUNNING -> {
                 String text = languageMessage.getString("ERROR_GAME_IS_NOT_RUNNING");
-                return text;
+                if (text == null) return null;
+                return defaultColor + text;
             }
             case ERROR_PLAYER_IS_NOT_ONLINE -> {
                 String text = languageMessage.getString("ERROR_PLAYER_IS_NOT_ONLINE");
                 if (text == null) return null;
-                if (text.contains("<player>")) text = text.replace("<player>", args[0]);
-                return text;
+                if (text.contains("<player>")) text = text.replace("<player>", highlightColor + args[0] + defaultColor);
+                return defaultColor + text;
             }
             case ERROR_NOT_ENOUGH_TEAM_MEMBERS -> {
                 String text = languageMessage.getString("ERROR_NOT_ENOUGH_TEAM_MEMBERS");
                 if (text == null) return null;
-                if (text.contains("<team>")) text = text.replace("<team>", args[0]);
+                if (text.contains("<team>")) text = text.replace("<team>", highlightColor + args[0] + defaultColor);
                 return text;
             }
             case ERROR_USE_ONLY_IN_OVERWORLD -> {
                 String text = languageMessage.getString("ERROR_USE_ONLY_IN_OVERWORLD");
-                return text;
+                return defaultColor + text;
             }
             case YOU_JOINED_TEAM -> {
                 String text = languageMessage.getString("YOU_JOINED_TEAM");
                 if (text == null) return null;
-                if (text.contains("<team>")) text = text.replace("<team>", args[0]);
-                return text;
+                if (text.contains("<team>")) text = text.replace("<team>", highlightColor + args[0] + defaultColor);
+                return defaultColor + text;
             }
             case YOU_LEFT_TEAM -> {
                 String text = languageMessage.getString("YOU_LEFT_TEAM");
                 if (text == null) return null;
-                if (text.contains("<team>")) text = text.replace("<team>", args[0]);
-                return text;
+                if (text.contains("<team>")) text = text.replace("<team>", highlightColor + args[0] + defaultColor);
+                return defaultColor + text;
             }
             case OTHER_PLAYER_ADDED_TO_TEAM -> {
                 String text = languageMessage.getString("OTHER_PLAYER_ADDED_TO_TEAM");
                 if (text == null) return null;
-                if (text.contains("<player>")) text = text.replace("<player>", args[0]);
-                if (text.contains("<team>")) text = text.replace("<team>", args[1]);
-                return text;
+                if (text.contains("<player>")) text = text.replace("<player>", highlightColor + args[0] + defaultColor);
+                if (text.contains("<team>")) text = text.replace("<team>", highlightColor + args[1] + defaultColor);
+                return defaultColor + text;
             }
             case OTHER_PLAYER_REMOVED_FROM_TEAM -> {
                 String text = languageMessage.getString("OTHER_PLAYER_REMOVED_FROM_TEAM");
                 if (text == null) return null;
-                if (text.contains("<player>")) text = text.replace("<player>", args[0]);
-                if (text.contains("<team>")) text = text.replace("<team>", args[1]);
-                return text;
+                if (text.contains("<player>")) text = text.replace("<player>", highlightColor + args[0] + defaultColor);
+                if (text.contains("<team>")) text = text.replace("<team>", highlightColor + args[1] + defaultColor);
+                return defaultColor + text;
             }
             case MEMBERS_OF_TEAM_LISTED -> {
                 String text = languageMessage.getString("MEMBERS_OF_TEAM_LISTED");
                 if (text == null) return null;
-                if (text.contains("<team>")) text = text.replace("<team>", args[0]);
-                return text;
+                if (text.contains("<team>")) text = text.replace("<team>", highlightColor + args[0] + defaultColor);
+                return defaultColor + text;
             }
             case GAME_STOPPED -> {
                 String text = languageMessage.getString("GAME_STOPPED");
-                return text;
+                if (text == null) return null;
+                return defaultColor + text;
             }
             case HUNTER_NEAR -> {
                 String text = languageMessage.getString("HUNTER_NEAR");
-                return text;
+                if (text == null) return null;
+                return defaultColor + text;
             }
             case COMPASS_POINTS_TO -> {
                 String text = languageMessage.getString("COMPASS_POINTS_TO");
                 if (text == null) return null;
-                if (text.contains("<player>")) text = text.replace("<player>", args[0]);
-                return text;
+                if (text.contains("<player>")) text = text.replace("<player>", highlightColor + args[0] + defaultColor);
+                return defaultColor + text;
             }
             case NEXT_VILLAGE_X_BLOCKS_AWAY -> {
                 String text = languageMessage.getString("NEXT_VILLAGE_X_BLOCKS_AWAY");
                 if (text == null) return null;
-                if (text.contains("<distance>")) text = text.replace("<distance>", args[0]);
-                return text;
+                if (text.contains("<distance>")) text = text.replace("<distance>", highlightColor + args[0] + defaultColor);
+                return defaultColor + text;
             }
             case TEAM_HAS_WON -> {
                 String text = languageMessage.getString("TEAM_HAS_WON");
                 if (text == null) return null;
-                if (text.contains("<team>")) text = text.replace("<team>", args[0]);
-                return text;
+                if (text.contains("<team>")) text = text.replace("<team>", highlightColor + args[0] + defaultColor);
+                return defaultColor + text;
             }
             case HUNTERS_RELEASED -> {
                 String text = languageMessage.getString("HUNTERS_RELEASED");
-                return text;
+                if (text == null) return null;
+                return defaultColor + text;
             }
             case TIME_UNTIL_HUNTERS_RELEASED -> {
                 String text = languageMessage.getString("TIME_UNTIL_HUNTERS_RELEASED");
                 if (text == null) return null;
-                if (text.contains("<time>")) text = text.replace("<time>", args[0]);
-                return text;
+                if (text.contains("<time>")) text = text.replace("<time>", highlightColor + args[0] + defaultColor);
+                return defaultColor + text;
             }
         }
         return null;

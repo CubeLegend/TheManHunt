@@ -2,6 +2,8 @@ package me.CubeLegend.TheManHunt;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.List;
+
 public class Settings {
 
     private static Settings instance;
@@ -21,6 +23,9 @@ public class Settings {
 
     public String PluginMessagingChannel = "themanhunt:minigame";
     public boolean DeleteWorldOnStartUp = false;
+
+    public List<String> DefaultMessageColor = List.of("GOLD");
+    public List<String> HighlightedMessageColor = List.of("GOLD", "UNDERLINE", "BOLD");
 
     public String DefaultLanguage = "English";
 
@@ -47,6 +52,8 @@ public class Settings {
     public void loadSettingsFromConfig() {
         PluginMessagingChannel = config.getString("PluginMessagingChannelOfMiniGame");
         DeleteWorldOnStartUp = config.getBoolean("DeleteWorldOnStartUp");
+        DefaultMessageColor = config.getStringList("DefaultMessageColor");
+        HighlightedMessageColor = config.getStringList("HighlightedMessageColor");
         DefaultLanguage = config.getString("DefaultLanguage");
 
         FreezeVision = config.getBoolean("FreezeVision");
