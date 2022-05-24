@@ -20,6 +20,8 @@ public class Language {
 
     private String defaultColor = "§r";
     private String highlightColor = "§r";
+    private String errorColor = "§c";
+    private String errorHighlightColor = "§c";
 
     Language(File file) {
         languageMessageFile = file;
@@ -58,6 +60,20 @@ public class Language {
             sb.append(ChatColor.valueOf(s));
         }
         highlightColor = sb.toString();
+
+        sb = new StringBuilder();
+        sb.append("§r");
+        for (String s : Settings.getInstance().ErrorMessageColor) {
+            sb.append(ChatColor.valueOf(s));
+        }
+        errorColor = sb.toString();
+
+        sb = new StringBuilder();
+        sb.append("§r");
+        for (String s : Settings.getInstance().ErrorHighlightedMessageColor) {
+            sb.append(ChatColor.valueOf(s));
+        }
+        errorHighlightColor = sb.toString();
     }
 
     public String getMessage(Message message, String[] args) {
@@ -65,39 +81,39 @@ public class Language {
             case ERROR_ONLY_FOR_PLAYERS -> {
                 String text = languageMessage.getString("ERROR_ONLY_FOR_PLAYERS");
                 if (text == null) return null;
-                return defaultColor + text;
+                return errorColor + text;
             }
             case ERROR_INVALID_TEAM -> {
                 String text = languageMessage.getString("ERROR_INVALID_TEAM");
                 if (text == null) return null;
-                if (text.contains("<team>")) text = text.replace("<team>", highlightColor + args[0] + defaultColor);
-                return defaultColor + text;
+                if (text.contains("<team>")) text = text.replace("<team>", errorHighlightColor + args[0] + errorColor);
+                return errorColor + text;
             }
             case ERROR_GAME_IS_RUNNING -> {
                 String text = languageMessage.getString("ERROR_GAME_IS_RUNNING");
                 if (text == null) return null;
-                return defaultColor + text;
+                return errorColor + text;
             }
             case ERROR_GAME_IS_NOT_RUNNING -> {
                 String text = languageMessage.getString("ERROR_GAME_IS_NOT_RUNNING");
                 if (text == null) return null;
-                return defaultColor + text;
+                return errorColor + text;
             }
             case ERROR_PLAYER_IS_NOT_ONLINE -> {
                 String text = languageMessage.getString("ERROR_PLAYER_IS_NOT_ONLINE");
                 if (text == null) return null;
-                if (text.contains("<player>")) text = text.replace("<player>", highlightColor + args[0] + defaultColor);
-                return defaultColor + text;
+                if (text.contains("<player>")) text = text.replace("<player>", errorHighlightColor + args[0] + errorColor);
+                return errorColor + text;
             }
             case ERROR_NOT_ENOUGH_TEAM_MEMBERS -> {
                 String text = languageMessage.getString("ERROR_NOT_ENOUGH_TEAM_MEMBERS");
                 if (text == null) return null;
-                if (text.contains("<team>")) text = text.replace("<team>", highlightColor + args[0] + defaultColor);
+                if (text.contains("<team>")) text = text.replace("<team>", errorHighlightColor + args[0] + errorColor);
                 return text;
             }
             case ERROR_USE_ONLY_IN_OVERWORLD -> {
                 String text = languageMessage.getString("ERROR_USE_ONLY_IN_OVERWORLD");
-                return defaultColor + text;
+                return errorColor + text;
             }
             case YOU_JOINED_TEAM -> {
                 String text = languageMessage.getString("YOU_JOINED_TEAM");

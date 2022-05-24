@@ -2,6 +2,8 @@ PluginMessagingChannelOfMiniGame: "themanhunt:minigame"
 DeleteWorldOnStartUp: false
 DefaultMessageColor: ["GOLD"]
 HighlightedMessageColor: ["GOLD", "UNDERLINE", "BOLD"]
+ErrorMessageColor: ["RED"]
+ErrorHighlightedMessageColor: ["RED", "UNDERLINE", "BOLD"]
 DefaultLanguage: "English"
 
 FreezeVision: false
