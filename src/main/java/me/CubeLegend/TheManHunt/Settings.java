@@ -29,6 +29,10 @@ public class Settings {
     public List<String> ErrorMessageColor = List.of("RED");
     public List<String> ErrorHighlightedMessageColor = List.of("RED", "UNDERLINE", "BOLD");
 
+    public int TitleFadeIn = 50;
+    public int TitleStay = 50;
+    public int TitleFadeOut = 50;
+
     public String DefaultLanguage = "English";
 
     public boolean FreezeVision = false;
@@ -54,6 +58,7 @@ public class Settings {
     public void loadSettingsFromConfig() {
         PluginMessagingChannel = config.getString("PluginMessagingChannelOfMiniGame");
         DeleteWorldOnStartUp = config.getBoolean("DeleteWorldOnStartUp");
+
         if (config.isList("DefaultMessageColor"))
             DefaultMessageColor = config.getStringList("DefaultMessageColor");
         if (config.isList("HighlightedMessageColor"))
@@ -62,6 +67,11 @@ public class Settings {
             ErrorMessageColor = config.getStringList("ErrorMessageColor");
         if (config.isList("ErrorHighlightedMessageColor"))
             ErrorHighlightedMessageColor = config.getStringList("ErrorHighlightedMessageColor");
+
+        TitleFadeIn = config.getInt("TitleFadeIn");
+        TitleStay = config.getInt("TitleStay");
+        TitleFadeOut = config.getInt("TitleFadeOut");
+
         DefaultLanguage = config.getString("DefaultLanguage");
 
         FreezeVision = config.getBoolean("FreezeVision");

@@ -1,5 +1,6 @@
 package me.CubeLegend.TheManHunt.LanguageSystem;
 
+import me.CubeLegend.TheManHunt.Settings;
 import me.CubeLegend.TheManHunt.TheManHunt;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -146,12 +147,15 @@ public class LanguageManager implements Listener {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(text));
     }
 
-    public void sendTitle(Player player, Message message, String[] args) {
+    public void sendTitle(Player player, Message titleMessage, Message subtitleMessage, String[] args) {
         String playerLanguageString = playerLanguages.get(player.getUniqueId());
         Language playerLanguage = languages.get(playerLanguageString);
-        String text = playerLanguage.getMessage(message, args);
-        if (text == null) return;
-        player.sendTitle(text, "", 50, 50, 50);
+        String title = playerLanguage.getMessage(titleMessage, args);
+        String subtitle = playerLanguage.getMessage(subtitleMessage, args);
+        if (title == null) return;
+        if (subtitle == null) return;
+        Settings settings = Settings.getInstance();
+        player.sendTitle(title, subtitle, settings.TitleFadeIn, settings.TitleStay, settings.TitleFadeOut);
     }
 
     @EventHandler

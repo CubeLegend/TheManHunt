@@ -17,6 +17,7 @@ public class RunnerWin implements Listener {
         if (!TeamHandler.getInstance().getTeam("Runners").checkForMember(player)) return;
         if (event.getFrom().getEnvironment().equals(Environment.THE_END)) {
             TeamHandler.getInstance().getTeam("Runners").win();
+            TeamHandler.getInstance().getTeam("Hunters").lose();
         }
     }
 }

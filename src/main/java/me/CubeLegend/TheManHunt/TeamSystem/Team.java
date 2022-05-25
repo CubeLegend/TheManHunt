@@ -116,9 +116,15 @@ public class Team {
     }
 
     public void win() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            LanguageManager.getInstance().sendTitle(player, Message.TEAM_HAS_WON, new String[] {teamName});
+        for (Player player : this.getMembers()) {
+            LanguageManager.getInstance().sendTitle(player, Message.TEAM_HAS_WON, Message.TEAM_HAS_WON_SUBTITLE, new String[] {teamName});
         }
         GameHandler.getInstance().setGameState(GameState.END);
+    }
+
+    public void lose() {
+        for (Player player : this.getMembers()) {
+            LanguageManager.getInstance().sendTitle(player, Message.TEAM_HAS_LOST, Message.TEAM_HAS_LOST_SUBTITLE, new String[] {teamName});
+        }
     }
 }

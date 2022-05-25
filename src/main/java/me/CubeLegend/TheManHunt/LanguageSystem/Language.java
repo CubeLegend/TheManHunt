@@ -172,6 +172,22 @@ public class Language {
             case TEAM_HAS_WON -> {
                 String text = languageMessage.getString("TEAM_HAS_WON");
                 if (text == null) return null;
+                return defaultColor + text;
+            }
+            case TEAM_HAS_WON_SUBTITLE -> {
+                String text = languageMessage.getString("TEAM_HAS_WON_SUBTITLE");
+                if (text == null) return null;
+                if (text.contains("<team>")) text = text.replace("<team>", highlightColor + args[0] + defaultColor);
+                return defaultColor + text;
+            }
+            case TEAM_HAS_LOST -> {
+                String text = languageMessage.getString("TEAM_HAS_LOST");
+                if (text == null) return null;
+                return defaultColor + text;
+            }
+            case TEAM_HAS_LOST_SUBTITLE -> {
+                String text = languageMessage.getString("TEAM_HAS_LOST_SUBTITLE");
+                if (text == null) return null;
                 if (text.contains("<team>")) text = text.replace("<team>", highlightColor + args[0] + defaultColor);
                 return defaultColor + text;
             }
