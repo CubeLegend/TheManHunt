@@ -169,6 +169,12 @@ public class Language {
                 if (text.contains("<distance>")) text = text.replace("<distance>", highlightColor + args[0] + defaultColor);
                 return defaultColor + text;
             }
+            case BROADCAST_WINNER -> {
+                String text = languageMessage.getString("BROADCAST_WINNER");
+                if (text == null) return null;
+                if (text.contains("<team>")) text = text.replace("<team>", highlightColor + args[0] + defaultColor);
+                return defaultColor + text;
+            }
             case TEAM_HAS_WON -> {
                 String text = languageMessage.getString("TEAM_HAS_WON");
                 if (text == null) return null;

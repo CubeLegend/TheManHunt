@@ -119,6 +119,7 @@ public class Team {
         for (Player player : this.getMembers()) {
             LanguageManager.getInstance().sendTitle(player, Message.TEAM_HAS_WON, Message.TEAM_HAS_WON_SUBTITLE, new String[] {teamName});
         }
+        LanguageManager.getInstance().broadcastMessage(Message.BROADCAST_WINNER, new String[] {teamName});
         GameHandler.getInstance().setGameState(GameState.END);
     }
 
