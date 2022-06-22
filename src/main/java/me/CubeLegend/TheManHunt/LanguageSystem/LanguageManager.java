@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 public class LanguageManager implements Listener {
@@ -90,6 +91,14 @@ public class LanguageManager implements Listener {
 
     public void removeLanguage(Language l) {
         languages.remove(l);
+    }
+
+    public List<Language> getLanguages() {
+        return languages.values().stream().toList();
+    }
+
+    public String getPlayerLanguage(Player player) {
+        return playerLanguages.get(player.getUniqueId());
     }
 
     public void setDefaultLanguage(String language) {
