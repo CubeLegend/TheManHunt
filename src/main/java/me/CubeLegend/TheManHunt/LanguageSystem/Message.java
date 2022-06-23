@@ -24,7 +24,6 @@ public enum Message {
     TEAM_HAS_WON_SUBTITLE,
     TEAM_HAS_LOST,
     TEAM_HAS_LOST_SUBTITLE,
-    Broadcast_Ending,
     HUNTERS_RELEASED,
     TIME_UNTIL_HUNTERS_RELEASED
 }
