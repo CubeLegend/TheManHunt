@@ -208,6 +208,32 @@ public class Language {
                 if (text.contains("<time>")) text = text.replace("<time>", highlightColor + args[0] + defaultColor);
                 return defaultColor + text;
             }
+            case RUNNERS_DISPLAY_NAME -> {
+                String text = languageMessage.getString("RUNNERS_DISPLAY_NAME");
+                if (text == null) return null;
+                return defaultColor + text;
+            }
+            case HUNTERS_DISPLAY_NAME -> {
+                String text = languageMessage.getString("HUNTERS_DISPLAY_NAME");
+                if (text == null) return null;
+                return defaultColor + text;
+            }
+            case SPECTATORS_DISPLAY_NAME -> {
+                String text = languageMessage.getString("SPECTATORS_DISPLAY_NAME");
+                if (text == null) return null;
+                return defaultColor + text;
+            }
+            case JOIN_TEAM_BUTTON -> {
+                String text = languageMessage.getString("JOIN_TEAM_BUTTON");
+                if (text == null) return null;
+                if (text.contains("<team>")) text = text.replace("<team>", highlightColor + args[0] + defaultColor);
+                return defaultColor + text;
+            }
+            case TEAM_SELECTION_TITLE -> {
+                String text = languageMessage.getString("TEAM_SELECTION_TITLE");
+                if (text == null) return null;
+                return defaultColor + text;
+            }
         }
         return null;
     }

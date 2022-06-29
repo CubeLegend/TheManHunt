@@ -4,6 +4,7 @@ import me.CubeLegend.TheManHunt.GameHandler;
 import me.CubeLegend.TheManHunt.GameState;
 import me.CubeLegend.TheManHunt.LanguageSystem.Language;
 import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
+import me.CubeLegend.TheManHunt.LanguageSystem.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -39,10 +40,33 @@ public class SelectionInventories implements Listener {
         for (Language language : LanguageManager.getInstance().getLanguages()) {
 
             //insert the Strings from the language file
-            Inventory inventory = Bukkit.createInventory(null,9, "teamName");
-            inventory.setItem(2, createGuiItem(Material.BLUE_WOOL, "&6Team &1Runners", "&6Click if you want to join Team &1Runners&6."));
-            inventory.setItem(4, createGuiItem(Material.GRAY_WOOL, "&6Team &7Spectators", "&6Click if you want to join Team &7Spectators&6."));
-            inventory.setItem(6, createGuiItem(Material.RED_WOOL , "&6Team &4Hunters", "&6Click if you want to join Team &4Hunters&6."));
+            Inventory inventory = Bukkit.createInventory(
+                    null,
+                    9,
+                    language.getMessage(Message.TEAM_SELECTION_TITLE, new String[0])
+            );
+
+            String runnersName = language.getMessage(Message.RUNNERS_DISPLAY_NAME, new String[0]);
+            inventory.setItem(2, createGuiItem(
+                    Material.BLUE_WOOL,
+                    runnersName,
+                    language.getMessage(Message.JOIN_TEAM_BUTTON, new String[] {runnersName})
+            ));
+
+            String spectatorsName = language.getMessage(Message.SPECTATORS_DISPLAY_NAME, new String[0]);
+            inventory.setItem(4, createGuiItem(
+                    Material.GRAY_WOOL,
+                    spectatorsName,
+                    language.getMessage(Message.JOIN_TEAM_BUTTON, new String[] {spectatorsName})
+            ));
+
+            String huntersName = language.getMessage(Message.HUNTERS_DISPLAY_NAME, new String[0]);
+            inventory.setItem(6, createGuiItem(
+                    Material.RED_WOOL ,
+                    huntersName,
+                    language.getMessage(Message.JOIN_TEAM_BUTTON, new String[] {huntersName})
+            ));
+
             selectionInventories.put(language.name, inventory);
         }
     }
@@ -95,24 +119,27 @@ public class SelectionInventories implements Listener {
         if (clickedItem.getType() == Material.BLUE_WOOL) {
 
             //trying to add a runner
-            TeamHandler.getInstance().getTeam("Runners").addMember(p);
-            p.sendMessage("&6Du wurdest zum Team &1Runners &6hinzugefügt.");
+            Team runners = TeamHandler.getInstance().getTeam("Runners");
+            runners.addMember(p);
+            LanguageManager.getInstance().sendMessage(p, Message.YOU_JOINED_TEAM, new String[] {runners.getTeamName()});
             e.setCancelled(true);
             return;
         }
         if (clickedItem.getType() == Material.RED_WOOL) {
 
             //trying to add a hunter
-            TeamHandler.getInstance().getTeam("Hunters").addMember(p);
-            p.sendMessage("&6Du wurdest zum Team &4Hunters &6hinzugefügt.");
+            Team hunters = TeamHandler.getInstance().getTeam("Hunters");
+            hunters.addMember(p);
+            LanguageManager.getInstance().sendMessage(p, Message.YOU_JOINED_TEAM, new String[] {hunters.getTeamName()});
             e.setCancelled(true);
             return;
         }
         if (clickedItem.getType() == Material.GRAY_WOOL) {
 
             //trying to add a spectator
-            TeamHandler.getInstance().getTeam("Spectators").addMember(p);
-            p.sendMessage("&6Du wurdest zum Team &7Spectators &6hinzugefügt.");
+            Team spectators = TeamHandler.getInstance().getTeam("Spectators");
+            spectators.addMember(p);
+            LanguageManager.getInstance().sendMessage(p, Message.YOU_JOINED_TEAM, new String[] {spectators.getTeamName()});
             e.setCancelled(true);
         }
     }
