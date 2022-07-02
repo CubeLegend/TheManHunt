@@ -8,9 +8,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class Language {
 
@@ -29,7 +26,7 @@ public class Language {
         if (!languageMessage.getBoolean("LanguageFile")) {
             LanguageManager.getInstance().removeLanguage(this);
         }
-        name = languageMessage.getString("Name");
+        name = languageMessage.getString("Name").toLowerCase();
         updateColors();
     }
 

@@ -1,6 +1,7 @@
 package me.CubeLegend.TheManHunt;
 
 import me.CubeLegend.TheManHunt.Commands.CommandGame;
+import me.CubeLegend.TheManHunt.Commands.CommandLanguage;
 import me.CubeLegend.TheManHunt.Commands.CommandTeam;
 import me.CubeLegend.TheManHunt.Compass.RunnerTracker;
 import me.CubeLegend.TheManHunt.Compass.VillageTracker;
@@ -118,6 +119,7 @@ public class TheManHunt extends JavaPlugin {
     private void registerCommands() {
         this.getCommand("game").setExecutor(new CommandGame());
         this.getCommand("team").setExecutor(new CommandTeam());
+        this.getCommand("language").setExecutor(new CommandLanguage());
     }
 
     private void registerListeners() {

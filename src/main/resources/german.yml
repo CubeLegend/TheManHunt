@@ -1,0 +1,36 @@
+
+
+LanguageFile: true
+Name: "Deutsch"
+DisplayItem: "stick" #placeholder
+
+ERROR_ONLY_FOR_PLAYERS: "Du musst ein Spieler sein um einem Team beizutreten!"
+ERROR_INVALID_TEAM: "<team> ist kein valides Team!"
+ERROR_GAME_IS_RUNNING: "Das Spiel läuft schon"
+ERROR_GAME_IS_NOT_RUNNING: ""
+ERROR_PLAYER_IS_NOT_ONLINE: "<player> ist nicht online!"
+ERROR_NOT_ENOUGH_TEAM_MEMBERS: "Es muss mindestens einen Runner und einen Hunter geben!"
+ERROR_USE_ONLY_IN_OVERWORLD: "Du kannst den Village Tracker nur in der Oberwelt benutzen!"
+
+YOU_JOINED_TEAM: "Du bist Team <team> beigetreten"
+YOU_LEFT_TEAM: "Du hast Team <team> verlassen"
+OTHER_PLAYER_ADDED_TO_TEAM: "<player> wurde zu Team <team> hinzugefügt."
+OTHER_PLAYER_REMOVED_FROM_TEAM: "<player> wurde von Team <team> entfernt."
+MEMBERS_OF_TEAM_LISTED: "Mitglieder von Team <team>:"
+GAME_STOPPED: "Das Spiel wurde angehalten!"
+HUNTER_NEAR: "Ein Hunter ist in der Nähe"
+COMPASS_POINTS_TO: "Dein Runner Tracker zeigt jetzt auf <player>"
+NEXT_VILLAGE_X_BLOCKS_AWAY: "Das nächste Dorf is <distance> Blöcke entfernt"
+BROADCAST_WINNER: "Das Team <team> hat das Spiel gewonnen"
+TEAM_HAS_WON: "Gewonnen!"
+TEAM_HAS_WON_SUBTITLE: "Das Team <team> hat das Spiel gewonnen"
+TEAM_HAS_LOST: "Verloren!"
+TEAM_HAS_LOST_SUBTITLE: "Das Team <team> hat das Spiel verloren"
+HUNTERS_RELEASED: "Die Hunter wurden frei gelassen!"
+TIME_UNTIL_HUNTERS_RELEASED: "Die Hunter werden in <time> Sekunden frei gelassen"
+
+RUNNERS_DISPLAY_NAME: "Runners"
+HUNTERS_DISPLAY_NAME: "Hunters"
+SPECTATORS_DISPLAY_NAME: "Spectators"
+JOIN_TEAM_BUTTON: "Klicke hier um team <team> beizutreten"
+TEAM_SELECTION_TITLE: "Wähle ein Team"

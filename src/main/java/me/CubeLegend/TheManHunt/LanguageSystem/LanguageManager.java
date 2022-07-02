@@ -43,6 +43,7 @@ public class LanguageManager implements Listener {
         assert files != null;
         if (files.length == 0) {
             createLanguageFromSource("english.yml");
+            createLanguageFromSource("german.yml");
             return;
         }
         for (File file : files) {
@@ -102,11 +103,12 @@ public class LanguageManager implements Listener {
     }
 
     public void setDefaultLanguage(String language) {
-        if (!languages.containsKey(language)) {
+        String input = language.toLowerCase();
+        if (!languages.containsKey(input)) {
             Bukkit.getConsoleSender().sendMessage("§4Default language doesn't exist");
             return;
         }
-        defaultLanguage = language;
+        defaultLanguage = input;
     }
 
     public void setPlayerLanguage(Player player, String language) {

@@ -15,3 +15,7 @@ commands:
     description: To join a team, list members of a team, add or remove a player from a team
     usage: /team <join|list|add|remove> [<Player Name>] <Team Name>
     permission: TheManHunt.GameManagement
+
+  language:
+    description: To select your language
+    usage: /language <language>
