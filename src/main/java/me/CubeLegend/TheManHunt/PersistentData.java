@@ -1,5 +1,6 @@
 package me.CubeLegend.TheManHunt;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
@@ -56,7 +57,7 @@ public class PersistentData implements Serializable {
             out.close();
             return true;
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            Bukkit.getLogger().warning("Could not save data to file");
             e.printStackTrace();
             return false;
         }
@@ -68,7 +69,7 @@ public class PersistentData implements Serializable {
             in.close();
             return persistentData;
         } catch (ClassNotFoundException | IOException e) {
-            // TODO Auto-generated catch block
+            Bukkit.getLogger().warning("Could not load data to file");
             e.printStackTrace();
             return null;
         }
