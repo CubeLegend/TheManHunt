@@ -18,6 +18,8 @@ public class RunnerWin implements Listener {
         if (event.getFrom().getEnvironment().equals(Environment.THE_END)) {
             TeamHandler.getInstance().getTeam("Runners").win();
             TeamHandler.getInstance().getTeam("Hunters").lose();
+            PersistentDataHandler.getInstance().allRunnerWins += 1;
+            PersistentDataHandler.getInstance().saveData();
         }
     }
 }
