@@ -12,7 +12,9 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GameHandler {
@@ -34,12 +36,20 @@ public class GameHandler {
 
 	public void setGameState(GameState gameState) {
 		state = gameState;
+		Bukkit.getLogger().info("Game State: " + state.name());
 
 		if (state == GameState.IDLE) {
 			return;
 		}
 
 		if (state == GameState.RUNAWAYTIME) {
+			PersistentDataHandler data = PersistentDataHandler.getInstance();
+			data.deleteWorldOnStartUp = "";
+			data.runners = TeamHandler.getInstance().getTeam("Runners").getMembersRaw();
+			data.hunters = TeamHandler.getInstance().getTeam("Hunters").getMembersRaw();
+			data.saveData();
+			data.logContent();
+
 			Freeze.getInstance().addFrozenPlayers(TeamHandler.getInstance().getTeam("Hunters").getMembers());
 			HunterWaitTimer.getInstance().startTimer();
 			if (Settings.getInstance().FreezeVision) {
@@ -67,15 +77,19 @@ public class GameHandler {
 		}
 
 		if (state == GameState.END) {
-			DataConfig.getInstance().removeTeamsFromYaml();
 			if (Settings.getInstance().FreezeVision) {
 				for (Player runner : TeamHandler.getInstance().getTeam("Runners").getMembers()) {
 					FreezeVision.getInstance().takePlayerFreezeVision(runner);
 				}
 			}
-			DataConfig.getInstance().setWorldToDelete(Bukkit.getWorlds().get(0).getName());
 			connectPlayersToLobby();
 			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(TheManHunt.getInstance(), Bukkit::shutdown, 10*20);
+			PersistentDataHandler data = PersistentDataHandler.getInstance();
+			data.deleteWorldOnStartUp = "";
+			data.runners = Collections.emptyList();
+			data.hunters = Collections.emptyList();
+			data.saveData();
+			data.logContent();
 		}
 	}
 

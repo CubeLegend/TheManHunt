@@ -13,6 +13,7 @@ import me.CubeLegend.TheManHunt.SpecialAbilities.OneHitKill;
 import me.CubeLegend.TheManHunt.TeamSystem.SelectionInventories;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -36,13 +37,13 @@ public class TheManHunt extends JavaPlugin {
         Settings.getInstance().loadSettingsFromConfig();
 
         if (Settings.getInstance().DeleteWorldOnStartUp) {
-            if (!DataConfig.getInstance().getWorldToDelete().equals("")) {
-                String worldName = DataConfig.getInstance().getWorldToDelete();
+            if (!PersistentDataHandler.getInstance().deleteWorldOnStartUp.equals("")) {
+                String worldName = PersistentDataHandler.getInstance().deleteWorldOnStartUp;
                 List<File> worlds = new ArrayList<>();
                 worlds.add(new File(Bukkit.getWorldContainer(), worldName));
                 worlds.add(new File(Bukkit.getWorldContainer(), worldName + "_nether"));
                 worlds.add(new File(Bukkit.getWorldContainer(), worldName + "_the_end"));
-                Bukkit.getConsoleSender().sendMessage("The world: " + worldName + " and all of its dimensions gets deleted");
+                Bukkit.getConsoleSender().sendMessage("The world: " + worldName + " and all of its dimensions get deleted");
                 for (File world : worlds) {
                     try {
                         Files.walk(world.toPath())
@@ -64,7 +65,8 @@ public class TheManHunt extends JavaPlugin {
                     (new File(world, "poi")).mkdirs();
                     (new File(world, "region")).mkdirs();
                 }
-                DataConfig.getInstance().setWorldToDelete("");
+                PersistentDataHandler.getInstance().deleteWorldOnStartUp = "";
+                PersistentDataHandler.getInstance().saveData();
             }
         }
     }

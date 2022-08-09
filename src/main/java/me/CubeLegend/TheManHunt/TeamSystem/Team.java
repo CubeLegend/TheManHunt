@@ -1,21 +1,17 @@
 package me.CubeLegend.TheManHunt.TeamSystem;
 
-import me.CubeLegend.TheManHunt.DataConfig;
 import me.CubeLegend.TheManHunt.GameHandler;
 import me.CubeLegend.TheManHunt.GameState;
 import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
 import me.CubeLegend.TheManHunt.LanguageSystem.Message;
-import me.CubeLegend.TheManHunt.TheManHunt;
+import me.CubeLegend.TheManHunt.PersistentDataHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -41,9 +37,14 @@ public class Team {
         this.teamColorAsCode = ChatColor.valueOf(teamColor).toString();
         Scoreboard board = TeamHandler.getInstance().getScoreBoard();
         board.registerNewTeam(teamName);
-        //Objects.requireNonNull(board.getTeam(teamName)).setPrefix(teamColorAsCode + "Nice"); //doesn't work but should?
         board.getTeam(teamName).setColor(ChatColor.valueOf(teamColor));
-        TeamHandler.getInstance().addToTeamOnJoin(teamName, DataConfig.getInstance().loadMembersFromYaml(teamName));
+
+        if (teamName.equalsIgnoreCase("Runners")) {
+            TeamHandler.getInstance().addToTeamOnJoin(teamName, PersistentDataHandler.getInstance().runners);
+        }
+        if (teamName.equalsIgnoreCase("Hunters")) {
+            TeamHandler.getInstance().addToTeamOnJoin(teamName, PersistentDataHandler.getInstance().hunters);
+        }
     }
 
     public void addMember(Player player) {
@@ -54,7 +55,6 @@ public class Team {
 
         player.setDisplayName(teamColorAsCode + player.getDisplayName() + "§r");
         player.setPlayerListName(teamColorAsCode + player.getDisplayName() + "§r");
-        DataConfig.getInstance().saveMembersToYaml(teamName, members);
     }
 
     public void removeMember(Player player) {
@@ -68,7 +68,6 @@ public class Team {
         }
         members.remove(player.getUniqueId());
         Objects.requireNonNull(TeamHandler.getInstance().getScoreBoard().getTeam(teamName)).removeEntry(player.getName());
-        DataConfig.getInstance().saveMembersToYaml(teamName, members);
     }
 
     public Player getMember(int index) {
@@ -85,6 +84,10 @@ public class Team {
             membersAsPlayers.add(Bukkit.getPlayer(uuid));
         }
         return membersAsPlayers;
+    }
+
+    public List<UUID> getMembersRaw() {
+        return members;
     }
 
     public String getTeamName() {
