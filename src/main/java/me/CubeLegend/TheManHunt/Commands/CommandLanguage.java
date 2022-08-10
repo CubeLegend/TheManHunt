@@ -20,11 +20,12 @@ public class CommandLanguage implements TabExecutor {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
+        if (!(commandSender.hasPermission("TheManHunt.Players") || commandSender.hasPermission("TheManHunt.GameManagement") || commandSender.isOp())) return true;
         if (args.length != 1) return false;
         String language = args[0].toLowerCase();
-        if (languages.contains(language) && sender instanceof Player player) {
+        if (languages.contains(language) && commandSender instanceof Player player) {
             LanguageManager.getInstance().setPlayerLanguage(player, language);
             return true;
         }

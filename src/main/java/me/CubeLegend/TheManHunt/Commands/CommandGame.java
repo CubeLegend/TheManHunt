@@ -7,6 +7,7 @@ import me.CubeLegend.TheManHunt.HunterWaitTimer;
 import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
 import me.CubeLegend.TheManHunt.LanguageSystem.Message;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -22,6 +23,7 @@ public class CommandGame implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
+        if (!(commandSender.hasPermission("TheManHunt.GameManagement") || commandSender.isOp())) return true;
         if (args.length != 1) return false;
         if (args[0].equals("start")) {
 
@@ -57,6 +59,7 @@ public class CommandGame implements TabExecutor {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
+        if (!(commandSender.hasPermission("TheManHunt.GameManagement") || commandSender.isOp())) return null;
         if (args.length == 1) {
             return arguments;
         }

@@ -18,11 +18,12 @@ import java.util.List;
 
 public class CommandTeam implements TabExecutor {
 
-    private LanguageManager lManager = LanguageManager.getInstance();
+    private final LanguageManager lManager = LanguageManager.getInstance();
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
+        if (!(commandSender.hasPermission("TheManHunt.Players") || commandSender.hasPermission("TheManHunt.GameManagement") || commandSender.isOp())) return true;
         if (args.length < 1) return false;
         switch (args[0]) {
             case "join" -> {
@@ -105,6 +106,7 @@ public class CommandTeam implements TabExecutor {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
+        if (!(commandSender.hasPermission("TheManHunt.Players") || commandSender.hasPermission("TheManHunt.GameManagement") || commandSender.isOp())) return null;
         if (args.length == 1) {
             List<String> operations = new ArrayList<>();
             operations.add("join");
