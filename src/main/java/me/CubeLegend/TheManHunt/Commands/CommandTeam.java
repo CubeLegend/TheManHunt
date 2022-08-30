@@ -23,10 +23,9 @@ public class CommandTeam implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (!(commandSender.hasPermission("TheManHunt.Players") || commandSender.hasPermission("TheManHunt.GameManagement") || commandSender.isOp())) return true;
-        if (args.length < 1) return false;
         switch (args[0]) {
             case "join" -> {
+                if (!commandSender.hasPermission("TheManHunt.Players.CmdTeamJoin")) return true;
                 if (args.length != 2) return false;
                 if (!(commandSender instanceof Player player)) {
                     lManager.sendMessage(commandSender, Message.ERROR_ONLY_FOR_PLAYERS, new String[0]);
@@ -45,6 +44,7 @@ public class CommandTeam implements TabExecutor {
                 return true;
             }
             case "list" -> {
+                if (!commandSender.hasPermission("TheManHunt.Players.CmdTeamList")) return true;
                 if (args.length != 2) return false;
                 if (!TeamHandler.getInstance().getTeams().contains(args[1])) {
                     lManager.sendMessage(commandSender, Message.ERROR_INVALID_TEAM, new String[] {args[1]});
@@ -59,6 +59,7 @@ public class CommandTeam implements TabExecutor {
                 return true;
             }
             case "add" -> {
+                if (!commandSender.hasPermission("TheManHunt.GameManagement.CmdTeamAdd")) return true;
                 if (args.length != 3) return false;
                 Player player1 = Bukkit.getPlayer(args[1]);
                 if (player1 == null) {
@@ -79,6 +80,7 @@ public class CommandTeam implements TabExecutor {
                 return true;
             }
             case "remove" -> {
+                if (!commandSender.hasPermission("TheManHunt.GameManagement.CmdTeamRemove")) return true;
                 if (args.length != 3) return false;
                 Player player2 = Bukkit.getPlayer(args[1]);
                 if (player2 == null) {
@@ -106,16 +108,16 @@ public class CommandTeam implements TabExecutor {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (!(commandSender.hasPermission("TheManHunt.Players") || commandSender.hasPermission("TheManHunt.GameManagement") || commandSender.isOp())) return null;
         if (args.length == 1) {
             List<String> operations = new ArrayList<>();
-            operations.add("join");
-            operations.add("list");
-            operations.add("add");
-            operations.add("remove");
+            if (commandSender.hasPermission("TheManHunt.Players.CmdTeamJoin")) operations.add("join");
+            if (commandSender.hasPermission("TheManHunt.Players.CmdTeamList")) operations.add("list");
+            if (commandSender.hasPermission("TheManHunt.GameManagement.CmdTeamAdd")) operations.add("add");
+            if (commandSender.hasPermission("TheManHunt.GameManagement.CmdTeamRemove")) operations.add("remove");
             return operations;
         }
         if (args.length == 2) {
+            if (!(commandSender.hasPermission("TheManHunt.GameManagement.CmdTeamAdd") || commandSender.hasPermission("TheManHunt.GameManagement.CmdTeamRemove"))) return null;
             if (args[0].equals("add") || args[0].equals("remove")) {
                 List<String> playerNames = new ArrayList<>();
                 for (Player player : Bukkit.getOnlinePlayers()) {
@@ -127,6 +129,7 @@ public class CommandTeam implements TabExecutor {
             }
         }
         if (args.length == 3) {
+            if (!(commandSender.hasPermission("TheManHunt.GameManagement.CmdTeamAdd") || commandSender.hasPermission("TheManHunt.GameManagement.CmdTeamRemove"))) return null;
             if (args[0].equals("add") || args[0].equals("remove")) {
                 return TeamHandler.getInstance().getTeams();
             }

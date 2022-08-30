@@ -23,7 +23,7 @@ public class CommandGame implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (!(commandSender.hasPermission("TheManHunt.GameManagement") || commandSender.isOp())) return true;
+        if (!commandSender.hasPermission("TheManHunt.GameManagement.CmdGame")) return true;
         if (args.length != 1) return false;
         if (args[0].equals("start")) {
 
@@ -59,7 +59,7 @@ public class CommandGame implements TabExecutor {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (!(commandSender.hasPermission("TheManHunt.GameManagement") || commandSender.isOp())) return null;
+        if (!commandSender.hasPermission("TheManHunt.GameManagement.CmdGame")) return null;
         if (args.length == 1) {
             return arguments;
         }
