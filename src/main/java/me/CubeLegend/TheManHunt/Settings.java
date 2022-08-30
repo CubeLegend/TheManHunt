@@ -2,6 +2,9 @@ package me.CubeLegend.TheManHunt;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Settings {
@@ -55,6 +58,9 @@ public class Settings {
 
     public boolean VillageTrackerUseLodestone = false;
 
+
+    public List<String> GiveEveryonePermissions = Collections.emptyList();
+
     public void loadSettingsFromConfig() {
         PluginMessagingChannel = config.getString("PluginMessagingChannelOfMiniGame");
         DeleteWorldOnStartUp = config.getBoolean("DeleteWorldOnStartUp");
@@ -93,6 +99,8 @@ public class Settings {
         AlwaysSetLodestone = config.getBoolean("AlwaysSetLodestone");
 
         VillageTrackerUseLodestone = config.getBoolean("VillageTrackerUseLodestone");
+
+        GiveEveryonePermissions = config.getStringList("GiveEveryonePermissions");
     }
 
     public void safeSettingsToConfig() {

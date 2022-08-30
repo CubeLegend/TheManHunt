@@ -1,6 +1,7 @@
 package me.CubeLegend.TheManHunt;
 
 import me.CubeLegend.TheManHunt.TeamSystem.TeamSelectionItem;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -12,11 +13,16 @@ public class PlayerJoinHandler implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
         if (GameHandler.getInstance().getGameState() == GameState.IDLE) {
-            Inventory playerInventory = event.getPlayer().getInventory();
+            Inventory playerInventory = player.getInventory();
             if (!playerInventory.contains(tsi.getTeamSelectionItem())) {
                 playerInventory.addItem(tsi.getTeamSelectionItem());
             }
+        }
+
+        for (String permission : Settings.getInstance().GiveEveryonePermissions) {
+            player.addAttachment(TheManHunt.getInstance(), "TheManHunt." + permission, true);
         }
     }
 }

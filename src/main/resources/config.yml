@@ -31,3 +31,8 @@ AlwaysUpdateRunnerTracker: true
 AlwaysSetLodestone: false
 
 VillageTrackerUseLodestone: false
+
+# Set true to give everyone the selected permissions.
+# OPs can always use everything.
+# This should probably only be used if you don't hava a permission management plugin.
+GiveEveryonePermissions: ["Players.CmdTeamJoin", "Players.CmdTeamList", "Players.CmdLanguage", "GameManagement.CmdGame"]
