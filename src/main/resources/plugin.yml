@@ -9,12 +9,10 @@ commands:
   game:
     description: Starts the game if it isn't already running and if it there are enough players in the Teams
     usage: /game <start|stop>
-    permission: TheManHunt.GameManagement
 
   team:
     description: To join a team, list members of a team, add or remove a player from a team
     usage: /team <join|list|add|remove> [<Player Name>] <Team Name>
-    permission: TheManHunt.GameManagement
 
   language:
     description: To select your language
