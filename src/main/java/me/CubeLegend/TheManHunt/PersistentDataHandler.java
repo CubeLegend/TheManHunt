@@ -34,24 +34,26 @@ public class PersistentDataHandler {
     }
 
     private void loadData() {
-        if (PersistentData.loadData(filePath) != null) {
-            PersistentData data = new PersistentData(Objects.requireNonNull(PersistentData.loadData(filePath)));
-            this.deleteWorldOnStartUp = data.deleteWorldOnStartUp;
+        if (new File(filePath).exists()) {
+            if (PersistentData.loadData(filePath) != null) {
+                PersistentData data = new PersistentData(Objects.requireNonNull(PersistentData.loadData(filePath)));
+                this.deleteWorldOnStartUp = data.deleteWorldOnStartUp;
 
-            this.runners = data.runners;
-            this.hunters = data.hunters;
+                this.runners = data.runners;
+                this.hunters = data.hunters;
 
-            this.allRunnerWins = data.allRunnerWins;
-            this.allHunterWins = data.allHunterWins;
-        } else {
-            this.deleteWorldOnStartUp = "";
-
-            this.runners = Collections.emptyList();
-            this.hunters = Collections.emptyList();
-
-            this.allRunnerWins = 0;
-            this.allHunterWins = 0;
+                this.allRunnerWins = data.allRunnerWins;
+                this.allHunterWins = data.allHunterWins;
+                return;
+            }
         }
+        this.deleteWorldOnStartUp = "";
+
+        this.runners = Collections.emptyList();
+        this.hunters = Collections.emptyList();
+
+        this.allRunnerWins = 0;
+        this.allHunterWins = 0;
     }
 
     public void saveData() {
