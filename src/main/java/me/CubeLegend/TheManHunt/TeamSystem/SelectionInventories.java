@@ -1,5 +1,6 @@
 package me.CubeLegend.TheManHunt.TeamSystem;
 
+import me.CubeLegend.TheManHunt.Compass.RunnerTracker;
 import me.CubeLegend.TheManHunt.GameHandler;
 import me.CubeLegend.TheManHunt.GameState;
 import me.CubeLegend.TheManHunt.LanguageSystem.Language;
@@ -11,7 +12,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -74,27 +78,24 @@ public class SelectionInventories implements Listener {
     protected ItemStack createGuiItem(final Material material, final String name, final String... lore) {
         final ItemStack item = new ItemStack(material, 1);
         final ItemMeta meta = item.getItemMeta();
+        assert meta != null;
 
         // Set the name of the item
         meta.setDisplayName(name);
-
         // Set the lore of the item
         meta.setLore(Arrays.asList(lore));
-
         item.setItemMeta(meta);
-
         return item;
     }
 
-    public void openInventory(Player player)
-    {
+    public void openInventory(Player player) {
         String language = LanguageManager.getInstance().getPlayerLanguage(player);
         player.openInventory(selectionInventories.get(language));
     }
 
     //open inventory on interaction with TeamSelector
     @EventHandler
-    public void onPlayerInteractEvent(final PlayerInteractEvent event) {
+    public void onPlayerInteractEvent(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
         if (event.hasItem() && Objects.equals(event.getItem(), tsi.getTeamSelectionItem()) && (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR)) {
@@ -104,43 +105,50 @@ public class SelectionInventories implements Listener {
 
     // Check for clicks on items
     @EventHandler
-    public void onInventoryClick(final InventoryClickEvent e)
-    {
-        if (GameHandler.getInstance().getGameState() != GameState.IDLE) {
-            return;
-        }
+    public void onInventoryClick(InventoryClickEvent event) {
+        Player player = (Player) event.getWhoClicked();
 
-        final ItemStack clickedItem = e.getCurrentItem();
+        Inventory selection = selectionInventories.get(LanguageManager.getInstance().getPlayerLanguage(player));
+        if (event.getInventory().equals(selection)) event.setCancelled(true);
+
+        if (GameHandler.getInstance().getGameState() != GameState.IDLE) return;
+
+        ItemStack clickedItem = event.getCurrentItem();
 
         // verify current item is not null
         if (clickedItem == null || clickedItem.getType() == Material.AIR) return;
 
-        final Player p = (Player) e.getWhoClicked();
-        if (clickedItem.getType() == Material.BLUE_WOOL) {
-
-            //trying to add a runner
-            Team runners = TeamHandler.getInstance().getTeam("Runners");
-            runners.addMember(p);
-            LanguageManager.getInstance().sendMessage(p, Message.YOU_JOINED_TEAM, new String[] {runners.getTeamName()});
-            e.setCancelled(true);
-            return;
+        switch (clickedItem.getType()) {
+            case BLUE_WOOL -> {
+                //trying to add a runner
+                Team runners = TeamHandler.getInstance().getTeam("Runners");
+                runners.addMember(player);
+                LanguageManager.getInstance().sendMessage(player, Message.YOU_JOINED_TEAM, new String[] {runners.getTeamName()});
+            }
+            case RED_WOOL -> {
+                //trying to add a hunter
+                Team hunters = TeamHandler.getInstance().getTeam("Hunters");
+                hunters.addMember(player);
+                LanguageManager.getInstance().sendMessage(player, Message.YOU_JOINED_TEAM, new String[] {hunters.getTeamName()});
+            }
+            case  GRAY_WOOL -> {
+                //trying to add a spectator
+                Team spectators = TeamHandler.getInstance().getTeam("Spectators");
+                spectators.addMember(player);
+                LanguageManager.getInstance().sendMessage(player, Message.YOU_JOINED_TEAM, new String[] {spectators.getTeamName()});
+            }
         }
-        if (clickedItem.getType() == Material.RED_WOOL) {
+    }
 
-            //trying to add a hunter
-            Team hunters = TeamHandler.getInstance().getTeam("Hunters");
-            hunters.addMember(p);
-            LanguageManager.getInstance().sendMessage(p, Message.YOU_JOINED_TEAM, new String[] {hunters.getTeamName()});
-            e.setCancelled(true);
-            return;
+    @EventHandler
+    public void onPlayerDropItemEvent(final PlayerDropItemEvent event) {
+        if (event.getItemDrop().getItemStack().equals(tsi.getTeamSelectionItem())) {
+            event.setCancelled(true);
         }
-        if (clickedItem.getType() == Material.GRAY_WOOL) {
+    }
 
-            //trying to add a spectator
-            Team spectators = TeamHandler.getInstance().getTeam("Spectators");
-            spectators.addMember(p);
-            LanguageManager.getInstance().sendMessage(p, Message.YOU_JOINED_TEAM, new String[] {spectators.getTeamName()});
-            e.setCancelled(true);
-        }
+    @EventHandler
+    public void onPlayerDeathEvent(final PlayerDeathEvent event) {
+        event.getDrops().remove(tsi.getTeamSelectionItem());
     }
 }
