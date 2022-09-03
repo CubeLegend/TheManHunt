@@ -45,6 +45,7 @@ public class Settings {
     public boolean RunnerTracker = false;
 
     public int HunterWaitTimer = 10;
+
     public int HunterNearWarningRadius = 50;
 
     public int FreezeVisionUpdatePeriod = 1;
@@ -58,8 +59,7 @@ public class Settings {
 
     public boolean VillageTrackerUseLodestone = false;
 
-
-    public List<String> GiveEveryonePermissions = Collections.emptyList();
+    public List<String> GiveEveryonePermissions = List.of("Players.CmdTeamJoin", "Players.CmdTeamList", "Players.CmdLanguage", "GameManagement.CmdGame");
 
     public void loadSettingsFromConfig() {
         PluginMessagingChannel = config.getString("PluginMessagingChannelOfMiniGame");
