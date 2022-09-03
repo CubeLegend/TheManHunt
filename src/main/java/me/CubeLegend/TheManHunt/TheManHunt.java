@@ -13,7 +13,6 @@ import me.CubeLegend.TheManHunt.SpecialAbilities.OneHitKill;
 import me.CubeLegend.TheManHunt.TeamSystem.SelectionInventories;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -78,6 +77,14 @@ public class TheManHunt extends JavaPlugin {
         this.saveDefaultConfig();
         //Settings.getInstance().loadSettingsFromConfig();
         new BstatsHandler(this, 16041).loadMetrics();
+
+        new UpdateChecker(this, 105044).getVersion(version -> {
+            if (this.getDescription().getVersion().equals(version)) {
+                getLogger().info("TheManHunt is up to date");
+            } else {
+                getLogger().info("There is a new update for TheManHunt available");
+            }
+        });
 
         registerCommands();
         registerListeners();
