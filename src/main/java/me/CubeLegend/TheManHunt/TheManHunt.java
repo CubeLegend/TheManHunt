@@ -12,6 +12,7 @@ import me.CubeLegend.TheManHunt.SpecialAbilities.HunterNearWarning;
 import me.CubeLegend.TheManHunt.SpecialAbilities.OneHitKill;
 import me.CubeLegend.TheManHunt.TeamSystem.SelectionInventories;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
+import me.CubeLegend.TheManHunt.TeamSystem.TeamSelectionItem;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -129,6 +130,7 @@ public class TheManHunt extends JavaPlugin {
 
     private void registerListeners() {
         PluginManager pm = Bukkit.getPluginManager();
+        pm.registerEvents(TeamSelectionItem.getInstance(), this);
         pm.registerEvents(VillageTracker.getInstance(), this);
         pm.registerEvents(RunnerTracker.getInstance(), this);
         pm.registerEvents(Freeze.getInstance(), this);

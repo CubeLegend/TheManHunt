@@ -25,13 +25,14 @@ public class TeamSelectionItem extends CustomItem {
 	}
 
 	//open inventory on interaction with TeamSelector
+	@Override
 	@EventHandler
 	public void onPlayerInteractEvent(PlayerInteractEvent event) {
-		Player player = event.getPlayer();
+		if (!event.hasItem()) return;
+		if (!(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR)) return;
+		if (!Objects.equals(event.getItem(), this.getItem())) return;
 
-		if (event.hasItem() && Objects.equals(event.getItem(), this.getItem()) &&
-				(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR)) {
-			SelectionInventories.getInstance().openInventory(player);
-		}
+		Player player = event.getPlayer();
+		SelectionInventories.getInstance().openInventory(player);
 	}
 }
