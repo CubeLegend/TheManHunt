@@ -74,8 +74,8 @@ public class Team {
         return Bukkit.getPlayer(members.get(index));
     }
 
-    public int getIndexOfMember(Player player) {
-        return members.indexOf(player.getUniqueId());
+    public int getIndexOfMember(UUID uuid) {
+        return members.indexOf(uuid);
     }
 
     public List<Player> getMembers() {
