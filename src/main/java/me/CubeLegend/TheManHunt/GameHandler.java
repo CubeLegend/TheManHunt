@@ -7,13 +7,10 @@ import me.CubeLegend.TheManHunt.Compass.VillageTracker;
 import me.CubeLegend.TheManHunt.SpecialAbilities.FreezeVision;
 import me.CubeLegend.TheManHunt.SpecialAbilities.HunterNearWarning;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
+import me.CubeLegend.TheManHunt.TeamSystem.TeamSelectionItem;
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import java.io.File;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -50,6 +47,10 @@ public class GameHandler {
 			data.saveData();
 			data.logContent();
 
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				TeamSelectionItem.getInstance().removeFromPlayer(player);
+			}
+
 			Freeze.getInstance().addFrozenPlayers(TeamHandler.getInstance().getTeam("Hunters").getMembers());
 			HunterWaitTimer.getInstance().startTimer();
 			if (Settings.getInstance().FreezeVision) {
@@ -60,7 +61,7 @@ public class GameHandler {
 			if (Settings.getInstance().RunnerTracker) {
 				List<Player> hunters = TeamHandler.getInstance().getTeam("Hunters").getMembers();
 				for (Player hunter : hunters) {
-					RunnerTracker.getInstance().givePlayerRunnerTracker(hunter);
+					RunnerTracker.getInstance().giveToPlayer(hunter);
 				}
 			}
 			if (Settings.getInstance().VillageTracker) {
@@ -85,7 +86,7 @@ public class GameHandler {
 			connectPlayersToLobby();
 			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(TheManHunt.getInstance(), Bukkit::shutdown, 10*20);
 			PersistentDataHandler data = PersistentDataHandler.getInstance();
-			data.deleteWorldOnStartUp = "";
+			data.deleteWorldOnStartUp = Bukkit.getWorlds().get(0).getName();
 			data.runners = Collections.emptyList();
 			data.hunters = Collections.emptyList();
 			data.saveData();
