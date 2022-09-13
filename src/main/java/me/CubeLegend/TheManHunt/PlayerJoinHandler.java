@@ -16,8 +16,8 @@ public class PlayerJoinHandler implements Listener {
         Player player = event.getPlayer();
         if (GameHandler.getInstance().getGameState() == GameState.IDLE) {
             Inventory playerInventory = player.getInventory();
-            if (!playerInventory.contains(tsi.getTeamSelectionItem())) {
-                playerInventory.addItem(tsi.getTeamSelectionItem());
+            if (!playerInventory.contains(tsi.getItem())) {
+                playerInventory.addItem(tsi.getItem());
             }
         }
 

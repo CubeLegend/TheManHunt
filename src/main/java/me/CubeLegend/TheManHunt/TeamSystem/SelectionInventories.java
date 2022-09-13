@@ -1,6 +1,5 @@
 package me.CubeLegend.TheManHunt.TeamSystem;
 
-import me.CubeLegend.TheManHunt.Compass.RunnerTracker;
 import me.CubeLegend.TheManHunt.GameHandler;
 import me.CubeLegend.TheManHunt.GameState;
 import me.CubeLegend.TheManHunt.LanguageSystem.Language;
@@ -11,19 +10,13 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class SelectionInventories implements Listener {
 
@@ -93,16 +86,6 @@ public class SelectionInventories implements Listener {
         player.openInventory(selectionInventories.get(language));
     }
 
-    //open inventory on interaction with TeamSelector
-    @EventHandler
-    public void onPlayerInteractEvent(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-
-        if (event.hasItem() && Objects.equals(event.getItem(), tsi.getTeamSelectionItem()) && (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR)) {
-            openInventory(player);
-        }
-    }
-
     // Check for clicks on items
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
@@ -138,17 +121,5 @@ public class SelectionInventories implements Listener {
                 LanguageManager.getInstance().sendMessage(player, Message.YOU_JOINED_TEAM, new String[] {spectators.getTeamName()});
             }
         }
-    }
-
-    @EventHandler
-    public void onPlayerDropItemEvent(final PlayerDropItemEvent event) {
-        if (event.getItemDrop().getItemStack().equals(tsi.getTeamSelectionItem())) {
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void onPlayerDeathEvent(final PlayerDeathEvent event) {
-        event.getDrops().remove(tsi.getTeamSelectionItem());
     }
 }
