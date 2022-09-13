@@ -1,5 +1,6 @@
 package me.CubeLegend.TheManHunt.Compass;
 
+import me.CubeLegend.TheManHunt.CustomItem;
 import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
 import me.CubeLegend.TheManHunt.LanguageSystem.Message;
 import me.CubeLegend.TheManHunt.Settings;
@@ -20,7 +21,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Objects;
 
-public class VillageTracker implements Listener {
+public class VillageTracker extends CustomItem {
 
     private static VillageTracker instance;
 
@@ -31,35 +32,8 @@ public class VillageTracker implements Listener {
         return instance;
     }
 
-    public ItemStack getVillageTrackerItem() {
-        ItemStack compass = new ItemStack(Material.COMPASS, 1);
-
-        ItemMeta meta = compass.getItemMeta();
-        assert meta != null;
-        meta.setDisplayName("Village Tracker");
-        meta.addEnchant(Enchantment.DURABILITY, 1, true);
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        meta.setUnbreakable(true);
-        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-        compass.setItemMeta(meta);
-
-        return compass;
-    }
-
-    public void givePlayerVillageTracker(Player player) {
-        ItemStack compass = getVillageTrackerItem();
-
-        player.getInventory().addItem(compass);
-    }
-
-    public boolean isVillageTracker(ItemStack is) {
-        if (is == null) return false;
-        if (is.getType() != Material.COMPASS) return false;
-        if (is.getItemMeta() == null) return false;
-        if (!is.getItemMeta().getDisplayName().equals(Objects.requireNonNull(this.getVillageTrackerItem().getItemMeta()).getDisplayName())) return false;
-        if (!(is.getItemMeta().isUnbreakable() == Objects.requireNonNull(this.getVillageTrackerItem().getItemMeta()).isUnbreakable())) return false;
-
-        return true;
+    public VillageTracker() {
+        super("Village Tracker", Material.COMPASS);
     }
 
     private int TaskId = 0;
@@ -68,7 +42,7 @@ public class VillageTracker implements Listener {
         TaskId = Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(TheManHunt.getInstance(), () -> {
 
             for (Player player : Bukkit.getOnlinePlayers()) {
-                if (player.getInventory().contains(this.getVillageTrackerItem())) {
+                if (player.getInventory().contains(this.getItem())) {
                     if (player.getWorld().getEnvironment() == World.Environment.NORMAL) {
                         Location VillageLocation = player.getWorld().locateNearestStructure(
                                 player.getLocation(),
@@ -95,26 +69,12 @@ public class VillageTracker implements Listener {
     }
 
     @EventHandler
-    public void onPlayerDropItemEvent(final PlayerDropItemEvent event) {
-        if (event.getItemDrop().getItemStack().getType() == Material.COMPASS
-                && Objects.requireNonNull(event.getItemDrop().getItemStack().getItemMeta()).getDisplayName().equals(Objects.requireNonNull(this.getVillageTrackerItem().getItemMeta()).getDisplayName())
-                && event.getItemDrop().getItemStack().getItemMeta().isUnbreakable() == this.getVillageTrackerItem().getItemMeta().isUnbreakable()) {
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void onPlayerDeathEvent(final PlayerDeathEvent event) {
-        event.getDrops().remove(VillageTracker.getInstance().getVillageTrackerItem());
-    }
-
-    @EventHandler
     public void onPlayerInteractEvent(final PlayerInteractEvent event) {
         Player player = event.getPlayer();
         if (event.hasItem()
                 && Objects.requireNonNull(event.getItem()).getType() == Material.COMPASS
-                && Objects.requireNonNull(event.getItem().getItemMeta()).getDisplayName().equals(Objects.requireNonNull(this.getVillageTrackerItem().getItemMeta()).getDisplayName())
-                && event.getItem().getItemMeta().isUnbreakable() == this.getVillageTrackerItem().getItemMeta().isUnbreakable()
+                && Objects.requireNonNull(event.getItem().getItemMeta()).getDisplayName().equals(Objects.requireNonNull(this.getItem().getItemMeta()).getDisplayName())
+                && event.getItem().getItemMeta().isUnbreakable() == this.getItem().getItemMeta().isUnbreakable()
                 && (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR)) {
 
             if (event.getClickedBlock() != null) {
@@ -144,7 +104,7 @@ public class VillageTracker implements Listener {
     void setLodestone(Player player, Location target) {
         ItemStack villageTracker = null;
         for (ItemStack is : player.getInventory()) {
-            if (this.isVillageTracker(is)) {
+            if (this.getItem().equals(is)) {
                 villageTracker =  is;
                 break;
             }

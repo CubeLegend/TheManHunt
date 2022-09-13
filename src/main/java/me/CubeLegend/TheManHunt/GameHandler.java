@@ -67,7 +67,7 @@ public class GameHandler {
 			if (Settings.getInstance().VillageTracker) {
 				List<Player> runners = TeamHandler.getInstance().getTeam("Runners").getMembers();
 				for (Player runner : runners) {
-					VillageTracker.getInstance().givePlayerVillageTracker(runner);
+					VillageTracker.getInstance().giveToPlayer(runner);
 				}
 			}
 			return;
