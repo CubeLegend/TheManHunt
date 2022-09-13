@@ -115,30 +115,28 @@ public class RunnerTracker extends CustomItem {
 
 	@Override
 	@EventHandler
-	public void onPlayerInteractEvent(final PlayerInteractEvent event) {
-		Player player = event.getPlayer();
-		if (event.hasItem() &&
-				(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR)) {
-			assert event.getItem() != null;
-			if (!event.getItem().equals(this.getItem())) return;
+	public void onPlayerInteractEvent(PlayerInteractEvent event) {
+		if (!event.hasItem()) return;
+		if (!(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR)) return;
+		if (!Objects.equals(event.getItem(), this.getItem())) return;
 
-			if (event.getClickedBlock() != null) {
-				if (Objects.requireNonNull(event.getClickedBlock()).getType() == Material.LODESTONE) {
-					event.setCancelled(true);
-					return;
-				}
+		if (event.getClickedBlock() != null) {
+			if (Objects.requireNonNull(event.getClickedBlock()).getType() == Material.LODESTONE) {
+				event.setCancelled(true);
+				return;
 			}
-
-			if (!playerTracking.containsKey(player.getUniqueId())) {
-				RunnerTracker.getInstance().updatePlayerTracking(player, TeamHandler.getInstance().getTeam("Runners").getMember(0));
-			}
-
-			UUID currentRunner = playerTracking.get(player.getUniqueId());
-			int nextIndex = TeamHandler.getInstance().getTeam("Runners").getIndexOfMember(currentRunner) + 1;
-			if (nextIndex >= TeamHandler.getInstance().getTeam("Runners").getMemberCount()) nextIndex = 0;
-			Player runner = TeamHandler.getInstance().getTeam("Runners").getMember(nextIndex);
-			RunnerTracker.getInstance().updatePlayerTracking(player, runner);
-			LanguageManager.getInstance().sendMessage(player, Message.COMPASS_POINTS_TO, new String[] {runner.getDisplayName()});
 		}
+
+		Player player = event.getPlayer();
+		if (!playerTracking.containsKey(player.getUniqueId())) {
+			RunnerTracker.getInstance().updatePlayerTracking(player, TeamHandler.getInstance().getTeam("Runners").getMember(0));
+		}
+
+		UUID currentRunner = playerTracking.get(player.getUniqueId());
+		int nextIndex = TeamHandler.getInstance().getTeam("Runners").getIndexOfMember(currentRunner) + 1;
+		if (nextIndex >= TeamHandler.getInstance().getTeam("Runners").getMemberCount()) nextIndex = 0;
+		Player runner = TeamHandler.getInstance().getTeam("Runners").getMember(nextIndex);
+		RunnerTracker.getInstance().updatePlayerTracking(player, runner);
+		LanguageManager.getInstance().sendMessage(player, Message.COMPASS_POINTS_TO, new String[] {runner.getDisplayName()});
 	}
 }
