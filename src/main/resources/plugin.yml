@@ -3,7 +3,7 @@ version: ${project.version}
 author: CubeLegend
 main: me.CubeLegend.TheManHunt.TheManHunt
 api-version: 1.16
-load: STARTUP
+load: POSTWORLD
 
 commands:
   game:

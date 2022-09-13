@@ -88,8 +88,7 @@ public class TeamHandler implements Listener {
 
     private int worldCount = 0;
 
-    @EventHandler
-    public void onWorldLoad(WorldLoadEvent event) {
+    public void registerScoreBoard() {
         if (++worldCount >= 3) {
             manager = Bukkit.getScoreboardManager();
             assert manager != null;

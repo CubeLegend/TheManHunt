@@ -11,6 +11,7 @@ import me.CubeLegend.TheManHunt.SpecialAbilities.FreezeVision;
 import me.CubeLegend.TheManHunt.SpecialAbilities.HunterNearWarning;
 import me.CubeLegend.TheManHunt.SpecialAbilities.OneHitKill;
 import me.CubeLegend.TheManHunt.TeamSystem.SelectionInventories;
+import me.CubeLegend.TheManHunt.TeamSystem.Team;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamSelectionItem;
 import org.bukkit.Bukkit;
@@ -86,6 +87,8 @@ public class TheManHunt extends JavaPlugin {
                 getLogger().info("There is a new update for TheManHunt available");
             }
         });
+
+        TeamHandler.getInstance().registerScoreBoard();
 
         registerCommands();
         registerListeners();
