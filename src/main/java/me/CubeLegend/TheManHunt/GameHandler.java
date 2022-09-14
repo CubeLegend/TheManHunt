@@ -51,6 +51,8 @@ public class GameHandler {
 				TeamSelectionItem.getInstance().removeFromPlayer(player);
 			}
 
+			HunterCatchUp hp = new HunterCatchUp();
+			hp.startHunterCatchUpRoutine(10);
 			Freeze.getInstance().addFrozenPlayers(TeamHandler.getInstance().getTeam("Hunters").getMembers());
 			HunterWaitTimer.getInstance().startTimer();
 			if (Settings.getInstance().FreezeVision) {
