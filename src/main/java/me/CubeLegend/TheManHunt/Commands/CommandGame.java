@@ -46,7 +46,7 @@ public class CommandGame implements TabExecutor {
             }
             LanguageManager.getInstance().broadcastMessage(Message.GAME_STOPPED, new String[0]);
             HunterWaitTimer.getInstance().stopTimer();
-            Freeze.getInstance().removeFrozenPlayers(TeamHandler.getInstance().getTeam("Hunters").getMembers());
+            Freeze.getInstance().removeFrozenPlayers(TeamHandler.getInstance().getTeam("Hunters").getMembersRaw());
             GameHandler.getInstance().setGameState(GameState.END);
             return true;
         }

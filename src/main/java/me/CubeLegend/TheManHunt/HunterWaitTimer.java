@@ -33,7 +33,7 @@ public class HunterWaitTimer {
 			if (time <= 0) {
 
 				LanguageManager.getInstance().broadcastMessage(Message.HUNTERS_RELEASED, new String[0]);
-				Freeze.getInstance().removeFrozenPlayers(TeamHandler.getInstance().getTeam("Hunters").getMembers());
+				Freeze.getInstance().removeFrozenPlayers(TeamHandler.getInstance().getTeam("Hunters").getMembersRaw());
 				GameHandler.getInstance().setGameState(GameState.PLAYING);
 				Bukkit.getScheduler().cancelTask(TaskID);
 			}

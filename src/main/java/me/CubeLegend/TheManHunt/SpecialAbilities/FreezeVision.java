@@ -32,17 +32,17 @@ public class FreezeVision {
 
     private final ArrayList<UUID> freezeVision = new ArrayList<>();
 
-    private final List<Player> playersILOS = new ArrayList<>(); // ILOS = in line of sight
-    private final List<Player> recentPlayersILOS = new ArrayList<>(); // ILOS = in line of sight
-    private final List<LivingEntity> livingEntitiesILOS = new ArrayList<>();
-    private final List<LivingEntity> recentLivingEntitiesILOS = new ArrayList<>();
+    private final List<UUID> playersILOS = new ArrayList<>(); // ILOS = in line of sight
+    private final List<UUID> recentPlayersILOS = new ArrayList<>(); // ILOS = in line of sight
+    private final List<UUID> livingEntitiesILOS = new ArrayList<>();
+    private final List<UUID> recentLivingEntitiesILOS = new ArrayList<>();
 
     private int freezeVisionRoutine;
 
     public void givePlayerFreezeVision(@NotNull Player player) {
-        UUID uuid = player.getUniqueId();
-        if (!freezeVision.contains(uuid)) {
-            freezeVision.add(uuid);
+        UUID uuidP = player.getUniqueId();
+        if (!freezeVision.contains(uuidP)) {
+            freezeVision.add(uuidP);
         }
     }
 
@@ -56,12 +56,12 @@ public class FreezeVision {
             for (UUID uuid : freezeVision) {
                 for (LivingEntity livingEntity : entitiesInLineOfSight(Bukkit.getPlayer(uuid))) {
                     if (livingEntity instanceof Player player) {
-                        if (!playersILOS.contains(player)) {
-                            playersILOS.add(player);
+                        if (!playersILOS.contains(player.getUniqueId())) {
+                            playersILOS.add(player.getUniqueId());
                         }
                     } else {
-                        if (!livingEntitiesILOS.contains(livingEntity)) {
-                            livingEntitiesILOS.add(livingEntity);
+                        if (!livingEntitiesILOS.contains(livingEntity.getUniqueId())) {
+                            livingEntitiesILOS.add(livingEntity.getUniqueId());
                         }
                     }
                 }
@@ -80,10 +80,10 @@ public class FreezeVision {
     }
 
     private void removeRecentPlayersFromFreeze() {
-        ArrayList<Player> toRemove = new ArrayList<>();
-        for (Player player : recentPlayersILOS) {
-            if (playersILOS.contains(player)) continue;
-            toRemove.add(player);
+        ArrayList<UUID> toRemove = new ArrayList<>();
+        for (UUID uuidP : recentPlayersILOS) {
+            if (playersILOS.contains(uuidP)) continue;
+            toRemove.add(uuidP);
         }
         Freeze.getInstance().removeFrozenPlayers(toRemove);
         recentPlayersILOS.addAll(playersILOS);
@@ -91,10 +91,10 @@ public class FreezeVision {
     }
 
     private void removeRecentEntitiesFromFreeze() {
-        ArrayList<LivingEntity> toRemove = new ArrayList<>();
-        for (LivingEntity livingEntity : recentLivingEntitiesILOS) {
-            if (livingEntitiesILOS.contains(livingEntity)) continue;
-            toRemove.add(livingEntity);
+        ArrayList<UUID> toRemove = new ArrayList<>();
+        for (UUID uuidE : recentLivingEntitiesILOS) {
+            if (livingEntitiesILOS.contains(uuidE)) continue;
+            toRemove.add(uuidE);
         }
         Freeze.getInstance().removeFrozenEntities(toRemove);
         recentLivingEntitiesILOS.addAll(livingEntitiesILOS);

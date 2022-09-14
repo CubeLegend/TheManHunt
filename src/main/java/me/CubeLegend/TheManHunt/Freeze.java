@@ -1,6 +1,5 @@
 package me.CubeLegend.TheManHunt;
 
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -28,19 +27,17 @@ public class Freeze implements Listener {
 
     private final ArrayList<UUID> frozenPlayers = new ArrayList<>();
 
-    public void addFrozenPlayers(List<Player> players) {
-        for (Player player : players) {
-            UUID uuid = player.getUniqueId();
-            if (!frozenPlayers.contains(uuid)) {
-                frozenPlayers.add(uuid);
+    public void addFrozenPlayers(List<UUID> players) {
+        for (UUID uuidP : players) {
+            if (!frozenPlayers.contains(uuidP)) {
+                frozenPlayers.add(uuidP);
             }
         }
     }
 
-    public void removeFrozenPlayers(List<Player> players) {
-        for (Player player : players) {
-            UUID uuid = player.getUniqueId();
-            frozenPlayers.remove(uuid);
+    public void removeFrozenPlayers(List<UUID> players) {
+        for (UUID uuidP : players) {
+            frozenPlayers.remove(uuidP);
         }
     }
 
@@ -50,19 +47,17 @@ public class Freeze implements Listener {
 
     private final ArrayList<UUID> frozenLivingEntities = new ArrayList<>();
 
-    public void addFrozenEntities(List<LivingEntity> entities) {
-        for (LivingEntity entity : entities) {
-            UUID uuid = entity.getUniqueId();
-            if (!frozenLivingEntities.contains(uuid)) {
-                frozenLivingEntities.add(uuid);
+    public void addFrozenEntities(List<UUID> entities) {
+        for (UUID uuidE : entities) {
+            if (!frozenLivingEntities.contains(uuidE)) {
+                frozenLivingEntities.add(uuidE);
             }
         }
     }
 
-    public void removeFrozenEntities(List<LivingEntity> entities) {
-        for (LivingEntity entity : entities) {
-            UUID uuid = entity.getUniqueId();
-            frozenLivingEntities.remove(uuid);
+    public void removeFrozenEntities(List<UUID> entities) {
+        for (UUID uuidE : entities) {
+            frozenLivingEntities.remove(uuidE);
         }
     }
 
