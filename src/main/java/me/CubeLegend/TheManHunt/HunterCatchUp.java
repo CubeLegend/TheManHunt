@@ -8,6 +8,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class HunterCatchUp implements Listener {
 
@@ -16,11 +17,15 @@ public class HunterCatchUp implements Listener {
     public void startHunterCatchUpRoutine(int period) {
         TaskId = Bukkit.getServer().getScheduler().runTaskTimer(TheManHunt.getInstance(), () -> {
 
-            List<Player> hunters = TeamHandler.getInstance().getTeam("Hunters").getMembers();
-            List<Player> runners = TeamHandler.getInstance().getTeam("Runners").getMembers();
-            for (Player hunter : hunters) {
+            List<UUID> hunters = TeamHandler.getInstance().getTeam("Hunters").getMembersRaw();
+            List<UUID> runners = TeamHandler.getInstance().getTeam("Runners").getMembersRaw();
+            for (UUID hunterUUID : hunters) {
+                Player hunter = Bukkit.getPlayer(hunterUUID);
+                if (hunter == null) continue;
                 boolean distanceLarger = true;
-                for (Player runner : runners) {
+                for (UUID runnerUUID : runners) {
+                    Player runner = Bukkit.getPlayer(runnerUUID);
+                    if (runner == null) continue;
                     if (!Objects.equals(hunter.getLocation().getWorld(), runner.getWorld())) return;
                     if (hunter.getLocation().distance(runner.getLocation()) <= 500) distanceLarger = false;
                 }
