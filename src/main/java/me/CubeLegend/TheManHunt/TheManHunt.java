@@ -11,7 +11,6 @@ import me.CubeLegend.TheManHunt.SpecialAbilities.FreezeVision;
 import me.CubeLegend.TheManHunt.SpecialAbilities.HunterNearWarning;
 import me.CubeLegend.TheManHunt.SpecialAbilities.OneHitKill;
 import me.CubeLegend.TheManHunt.TeamSystem.SelectionInventories;
-import me.CubeLegend.TheManHunt.TeamSystem.Team;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamSelectionItem;
 import org.bukkit.Bukkit;
@@ -143,7 +142,7 @@ public class TheManHunt extends JavaPlugin {
         pm.registerEvents(OneHitKill.getInstance(), this);
         pm.registerEvents(LanguageManager.getInstance(), this);
         pm.registerEvents(SelectionInventories.getInstance(), this);
-        pm.registerEvents(new PlayerJoinHandler(), this);
+        pm.registerEvents(new LobbyHandler(), this);
     }
 
     private void registerPluginMessagingChannels() {

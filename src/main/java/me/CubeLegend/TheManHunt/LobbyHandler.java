@@ -3,11 +3,13 @@ package me.CubeLegend.TheManHunt;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamSelectionItem;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 
-public class PlayerJoinHandler implements Listener {
+public class LobbyHandler implements Listener {
 
     private final TeamSelectionItem tsi = new TeamSelectionItem();
 
@@ -23,6 +25,14 @@ public class PlayerJoinHandler implements Listener {
 
         for (String permission : Settings.getInstance().GiveEveryonePermissions) {
             player.addAttachment(TheManHunt.getInstance(), "TheManHunt." + permission, true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onEntityDamageEvent(EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof Player)) return;
+        if (GameHandler.getInstance().getGameState() == GameState.IDLE) {
+            event.setCancelled(true);
         }
     }
 }
