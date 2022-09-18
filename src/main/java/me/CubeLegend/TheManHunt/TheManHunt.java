@@ -10,6 +10,8 @@ import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
 import me.CubeLegend.TheManHunt.SpecialAbilities.FreezeVision;
 import me.CubeLegend.TheManHunt.SpecialAbilities.HunterNearWarning;
 import me.CubeLegend.TheManHunt.SpecialAbilities.OneHitKill;
+import me.CubeLegend.TheManHunt.StateSystem.GameHandler;
+import me.CubeLegend.TheManHunt.StateSystem.GameState;
 import me.CubeLegend.TheManHunt.TeamSystem.SelectionInventories;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamSelectionItem;

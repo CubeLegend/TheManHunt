@@ -1,7 +1,7 @@
 package me.CubeLegend.TheManHunt.TeamSystem;
 
-import me.CubeLegend.TheManHunt.GameHandler;
-import me.CubeLegend.TheManHunt.GameState;
+import me.CubeLegend.TheManHunt.StateSystem.GameHandler;
+import me.CubeLegend.TheManHunt.StateSystem.GameState;
 import me.CubeLegend.TheManHunt.LanguageSystem.Language;
 import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
 import me.CubeLegend.TheManHunt.LanguageSystem.Message;

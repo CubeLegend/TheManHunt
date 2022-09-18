@@ -1,13 +1,12 @@
 package me.CubeLegend.TheManHunt.Commands;
 
 import me.CubeLegend.TheManHunt.Freeze;
-import me.CubeLegend.TheManHunt.GameHandler;
-import me.CubeLegend.TheManHunt.GameState;
+import me.CubeLegend.TheManHunt.StateSystem.GameHandler;
+import me.CubeLegend.TheManHunt.StateSystem.GameState;
 import me.CubeLegend.TheManHunt.HunterWaitTimer;
 import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
 import me.CubeLegend.TheManHunt.LanguageSystem.Message;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;

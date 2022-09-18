@@ -1,7 +1,8 @@
-package me.CubeLegend.TheManHunt;
+package me.CubeLegend.TheManHunt.StateSystem;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import me.CubeLegend.TheManHunt.*;
 import me.CubeLegend.TheManHunt.Compass.RunnerTracker;
 import me.CubeLegend.TheManHunt.Compass.VillageTracker;
 import me.CubeLegend.TheManHunt.SpecialAbilities.FreezeVision;

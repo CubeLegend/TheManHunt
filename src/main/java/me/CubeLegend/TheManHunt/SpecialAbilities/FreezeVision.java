@@ -1,8 +1,8 @@
 package me.CubeLegend.TheManHunt.SpecialAbilities;
 
 import me.CubeLegend.TheManHunt.Freeze;
-import me.CubeLegend.TheManHunt.GameHandler;
-import me.CubeLegend.TheManHunt.GameState;
+import me.CubeLegend.TheManHunt.StateSystem.GameHandler;
+import me.CubeLegend.TheManHunt.StateSystem.GameState;
 import me.CubeLegend.TheManHunt.TheManHunt;
 import org.apache.commons.lang.Validate;
 import org.bukkit.*;

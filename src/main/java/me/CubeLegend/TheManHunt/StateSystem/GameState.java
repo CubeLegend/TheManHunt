@@ -1,4 +1,4 @@
-package me.CubeLegend.TheManHunt;
+package me.CubeLegend.TheManHunt.StateSystem;
 
 public enum GameState {
 

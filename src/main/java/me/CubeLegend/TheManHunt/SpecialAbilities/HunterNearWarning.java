@@ -1,13 +1,11 @@
 package me.CubeLegend.TheManHunt.SpecialAbilities;
 
-import me.CubeLegend.TheManHunt.GameHandler;
-import me.CubeLegend.TheManHunt.GameState;
+import me.CubeLegend.TheManHunt.StateSystem.GameHandler;
+import me.CubeLegend.TheManHunt.StateSystem.GameState;
 import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
 import me.CubeLegend.TheManHunt.LanguageSystem.Message;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import me.CubeLegend.TheManHunt.TheManHunt;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
