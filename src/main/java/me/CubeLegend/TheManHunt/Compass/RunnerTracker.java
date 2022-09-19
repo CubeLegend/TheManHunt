@@ -3,6 +3,8 @@ package me.CubeLegend.TheManHunt.Compass;
 import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
 import me.CubeLegend.TheManHunt.LanguageSystem.Message;
 import me.CubeLegend.TheManHunt.Settings;
+import me.CubeLegend.TheManHunt.StateSystem.GameState;
+import me.CubeLegend.TheManHunt.StateSystem.GameStateChangeEvent;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import me.CubeLegend.TheManHunt.TheManHunt;
 import me.CubeLegend.TheManHunt.CustomItem;
@@ -13,17 +15,11 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class RunnerTracker extends CustomItem {
 	
@@ -138,5 +134,18 @@ public class RunnerTracker extends CustomItem {
 		Player runner = TeamHandler.getInstance().getTeam("Runners").getMember(nextIndex);
 		RunnerTracker.getInstance().updatePlayerTracking(player, runner);
 		LanguageManager.getInstance().sendMessage(player, Message.COMPASS_POINTS_TO, new String[] {runner.getDisplayName()});
+	}
+
+	@EventHandler
+	public void onGameStateChange(GameStateChangeEvent event) {
+		if (event.getChangeFrom() != GameState.IDLE) return;
+		if (event.getChangeTo() == GameState.RUNAWAYTIME || event.getChangeTo() == GameState.PLAYING) {
+			if (Settings.getInstance().RunnerTracker) {
+				List<Player> hunters = TeamHandler.getInstance().getTeam("Hunters").getMembers();
+				for (Player hunter : hunters) {
+					RunnerTracker.getInstance().giveToPlayer(hunter);
+				}
+			}
+		}
 	}
 }

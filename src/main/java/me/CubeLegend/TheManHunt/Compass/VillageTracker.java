@@ -4,21 +4,19 @@ import me.CubeLegend.TheManHunt.CustomItem;
 import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
 import me.CubeLegend.TheManHunt.LanguageSystem.Message;
 import me.CubeLegend.TheManHunt.Settings;
+import me.CubeLegend.TheManHunt.StateSystem.GameState;
+import me.CubeLegend.TheManHunt.StateSystem.GameStateChangeEvent;
+import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import me.CubeLegend.TheManHunt.TheManHunt;
 import org.bukkit.*;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
-import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.List;
 import java.util.Objects;
 
 public class VillageTracker extends CustomItem {
@@ -114,6 +112,19 @@ public class VillageTracker extends CustomItem {
             assert cm != null;
             cm.setLodestone(target);
             villageTracker.setItemMeta(cm);
+        }
+    }
+
+    @EventHandler
+    public void onGameStateChange(GameStateChangeEvent event) {
+        if (event.getChangeFrom() != GameState.IDLE) return;
+        if (event.getChangeTo() == GameState.RUNAWAYTIME || event.getChangeTo() == GameState.PLAYING) {
+            if (Settings.getInstance().VillageTracker) {
+                List<Player> runners = TeamHandler.getInstance().getTeam("Runners").getMembers();
+                for (Player runner : runners) {
+                    VillageTracker.getInstance().giveToPlayer(runner);
+                }
+            }
         }
     }
 }

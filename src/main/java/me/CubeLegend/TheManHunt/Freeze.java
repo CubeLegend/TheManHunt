@@ -1,5 +1,9 @@
 package me.CubeLegend.TheManHunt;
 
+import me.CubeLegend.TheManHunt.SpecialAbilities.FreezeVision;
+import me.CubeLegend.TheManHunt.StateSystem.GameState;
+import me.CubeLegend.TheManHunt.StateSystem.GameStateChangeEvent;
+import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -58,6 +62,30 @@ public class Freeze implements Listener {
     public void removeFrozenEntities(List<UUID> entities) {
         for (UUID uuidE : entities) {
             frozenLivingEntities.remove(uuidE);
+        }
+    }
+
+    @EventHandler
+    public void onGameStateChange(GameStateChangeEvent event) {
+        if (event.getChangeFrom() == GameState.IDLE) {
+            if (event.getChangeTo() == GameState.RUNAWAYTIME || event.getChangeTo() == GameState.PLAYING) {
+                this.addFrozenPlayers(TeamHandler.getInstance().getTeam("Hunters").getMembersRaw());
+
+                if (Settings.getInstance().FreezeVision) {
+                    for (Player runner : TeamHandler.getInstance().getTeam("Runners").getMembers()) {
+                        FreezeVision.getInstance().givePlayerFreezeVision(runner);
+                    }
+                }
+            }
+        }
+        else if (event.getChangeFrom() == GameState.PLAYING) {
+            if (event.getChangeTo() == GameState.END) {
+                if (Settings.getInstance().FreezeVision) {
+                    for (Player runner : TeamHandler.getInstance().getTeam("Runners").getMembers()) {
+                        FreezeVision.getInstance().takePlayerFreezeVision(runner);
+                    }
+                }
+            }
         }
     }
 

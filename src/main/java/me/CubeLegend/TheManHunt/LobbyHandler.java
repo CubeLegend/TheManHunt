@@ -2,7 +2,9 @@ package me.CubeLegend.TheManHunt;
 
 import me.CubeLegend.TheManHunt.StateSystem.GameHandler;
 import me.CubeLegend.TheManHunt.StateSystem.GameState;
+import me.CubeLegend.TheManHunt.StateSystem.GameStateChangeEvent;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamSelectionItem;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -35,6 +37,16 @@ public class LobbyHandler implements Listener {
         if (!(event.getEntity() instanceof Player)) return;
         if (GameHandler.getInstance().getGameState() == GameState.IDLE) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onGameStateChange(GameStateChangeEvent event) {
+        if (event.getChangeFrom() != GameState.IDLE) return;
+        if (event.getChangeTo() == GameState.RUNAWAYTIME || event.getChangeTo() == GameState.PLAYING) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                tsi.removeFromPlayer(player);
+            }
         }
     }
 }

@@ -145,6 +145,9 @@ public class TheManHunt extends JavaPlugin {
         pm.registerEvents(LanguageManager.getInstance(), this);
         pm.registerEvents(SelectionInventories.getInstance(), this);
         pm.registerEvents(new LobbyHandler(), this);
+        pm.registerEvents(HunterWaitTimer.getInstance(), this);
+        pm.registerEvents(PersistentDataHandler.getInstance(), this);
+        pm.registerEvents(new HunterCatchUp(), this);
     }
 
     private void registerPluginMessagingChannels() {

@@ -4,10 +4,13 @@ import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
 import me.CubeLegend.TheManHunt.LanguageSystem.Message;
 import me.CubeLegend.TheManHunt.StateSystem.GameHandler;
 import me.CubeLegend.TheManHunt.StateSystem.GameState;
+import me.CubeLegend.TheManHunt.StateSystem.GameStateChangeEvent;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
-public class HunterWaitTimer {
+public class HunterWaitTimer implements Listener {
 
 	private static HunterWaitTimer hunterWaitTimer;
 
@@ -41,7 +44,7 @@ public class HunterWaitTimer {
 
 			if (time % 10 == 0 && time >= 10 || time <= 5 && time != 0) {
 
-				LanguageManager.getInstance().broadcastMessage(Message.TIME_UNTIL_HUNTERS_RELEASED, new String[] {String.valueOf(time)});;
+				LanguageManager.getInstance().broadcastMessage(Message.TIME_UNTIL_HUNTERS_RELEASED, new String[] {String.valueOf(time)});
 			}
 
 			time--;
@@ -51,6 +54,14 @@ public class HunterWaitTimer {
 	public void stopTimer() {
 		if (Bukkit.getScheduler().isCurrentlyRunning(TaskID)) {
 			Bukkit.getScheduler().cancelTask(TaskID);
+		}
+	}
+
+	@EventHandler
+	public void onGameStateChange(GameStateChangeEvent event) {
+		if (event.getChangeFrom() != GameState.IDLE) return;
+		if (event.getChangeTo() == GameState.RUNAWAYTIME || event.getChangeTo() == GameState.PLAYING) {
+			this.startTimer();
 		}
 	}
 }

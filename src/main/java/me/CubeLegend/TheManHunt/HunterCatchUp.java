@@ -1,8 +1,10 @@
 package me.CubeLegend.TheManHunt;
 
+import me.CubeLegend.TheManHunt.StateSystem.GameStateChangeEvent;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.potion.PotionEffectType;
 
@@ -43,5 +45,10 @@ public class HunterCatchUp implements Listener {
         if (Bukkit.getScheduler().isCurrentlyRunning(TaskId)) {
             Bukkit.getScheduler().cancelTask(TaskId);
         }
+    }
+
+    @EventHandler
+    public void onGameStateChange(GameStateChangeEvent event) {
+        this.startHunterCatchUpRoutine(10);
     }
 }

@@ -1,6 +1,11 @@
 package me.CubeLegend.TheManHunt;
 
+import me.CubeLegend.TheManHunt.StateSystem.GameState;
+import me.CubeLegend.TheManHunt.StateSystem.GameStateChangeEvent;
+import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
 import java.io.File;
 import java.util.Collections;
@@ -8,7 +13,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class PersistentDataHandler {
+public class PersistentDataHandler implements Listener {
 
     private static PersistentDataHandler persistentDataHandler;
 
@@ -73,5 +78,27 @@ public class PersistentDataHandler {
         Bukkit.getLogger().info("   hunters: " + hunters);
         Bukkit.getLogger().info("   allRunnerWins: " + allRunnerWins);
         Bukkit.getLogger().info("   allHunterWins: " + allHunterWins);
+    }
+
+    @EventHandler
+    public void onGameStateChange(GameStateChangeEvent event) {
+        if (event.getChangeFrom() == GameState.IDLE) {
+            if (event.getChangeTo() == GameState.RUNAWAYTIME || event.getChangeTo() == GameState.PLAYING) {
+                this.deleteWorldOnStartUp = "";
+                this.runners = TeamHandler.getInstance().getTeam("Runners").getMembersRaw();
+                this.hunters = TeamHandler.getInstance().getTeam("Hunters").getMembersRaw();
+                this.saveData();
+                this.logContent();
+            }
+        }
+        else if (event.getChangeFrom() == GameState.PLAYING) {
+            if (event.getChangeTo() == GameState.END) {
+                this.deleteWorldOnStartUp = Bukkit.getWorlds().get(0).getName();
+                this.runners = Collections.emptyList();
+                this.hunters = Collections.emptyList();
+                this.saveData();
+                this.logContent();
+            }
+        }
     }
 }
