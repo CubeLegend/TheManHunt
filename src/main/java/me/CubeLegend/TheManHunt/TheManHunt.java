@@ -19,7 +19,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,33 +42,34 @@ public class TheManHunt extends JavaPlugin {
         if (Settings.getInstance().DeleteWorldOnStartUp) {
             if (!PersistentDataHandler.getInstance().deleteWorldOnStartUp.equals("")) {
                 String worldName = PersistentDataHandler.getInstance().deleteWorldOnStartUp;
-                List<File> worlds = new ArrayList<>();
-                worlds.add(new File(Bukkit.getWorldContainer(), worldName));
-                worlds.add(new File(Bukkit.getWorldContainer(), worldName + "_nether"));
-                worlds.add(new File(Bukkit.getWorldContainer(), worldName + "_the_end"));
+                List<Path> worlds = new ArrayList<>();
+                Path wc = Bukkit.getWorldContainer().toPath();
+                worlds.add(Path.of(wc.toString(), worldName));
+                worlds.add(Path.of(wc.toString(), worldName + "_nether"));
+                worlds.add(Path.of(wc.toString(), worldName + "_the_end"));
                 Bukkit.getConsoleSender().sendMessage("The world: " + worldName + " and all of its dimensions get deleted");
                 Path datapacksDir = Path.of(Bukkit.getWorldContainer().toPath().toString(), worldName, "datapacks");
-                for (File world : worlds) {
-                    try {
-                        Files.walk(world.toPath())
+                for (Path world : worlds) {
+                    try (Stream<Path> worldPaths = Files.walk(world)) {
+                        worldPaths
                                 .sorted(Comparator.reverseOrder())
                                 .filter(Predicate.not(path -> path.startsWith(datapacksDir)))
-                                .map(Path::toFile)
-                                .filter(File::isFile)
-                                .forEach(File::delete);
+                                .filter(Files::isRegularFile)
+                                .forEach(path -> {
+                                    try {
+                                        Files.delete(path);
+                                    } catch (IOException e) {
+                                        Bukkit.getLogger().warning("Couldn't delete file " + path + " Cause: " + e.getCause());
+                                    }
+                                });
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Bukkit.getLogger().warning("Couldn't walk world folder " + world + " Cause: " + e.getCause());
                     }
-                    world.mkdirs();
                 }
                 PersistentDataHandler.getInstance().deleteWorldOnStartUp = "";
                 PersistentDataHandler.getInstance().saveData();
             }
         }
-    }
-
-    private void printStream(Stream<Path> stream) {
-        stream.forEach(path -> System.out.println(path.toString()));
     }
 
     @Override
