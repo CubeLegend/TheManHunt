@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class TheManHunt extends JavaPlugin {
 
@@ -46,31 +48,28 @@ public class TheManHunt extends JavaPlugin {
                 worlds.add(new File(Bukkit.getWorldContainer(), worldName + "_nether"));
                 worlds.add(new File(Bukkit.getWorldContainer(), worldName + "_the_end"));
                 Bukkit.getConsoleSender().sendMessage("The world: " + worldName + " and all of its dimensions get deleted");
+                Path datapacksDir = Path.of(Bukkit.getWorldContainer().toPath().toString(), worldName, "datapacks");
                 for (File world : worlds) {
                     try {
                         Files.walk(world.toPath())
                                 .sorted(Comparator.reverseOrder())
+                                .filter(Predicate.not(path -> path.startsWith(datapacksDir)))
                                 .map(Path::toFile)
+                                .filter(File::isFile)
                                 .forEach(File::delete);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                     world.mkdirs();
                 }
-                (new File(worlds.get(0), "advancements")).mkdirs();
-                (new File(worlds.get(0), "datapacks")).mkdirs();
-                (new File(worlds.get(0), "playerdata")).mkdirs();
-                (new File(worlds.get(0), "stats")).mkdirs();
-                for (File world : worlds) {
-                    (new File(world, "data")).mkdirs();
-                    (new File(world, "entities")).mkdirs();
-                    (new File(world, "poi")).mkdirs();
-                    (new File(world, "region")).mkdirs();
-                }
                 PersistentDataHandler.getInstance().deleteWorldOnStartUp = "";
                 PersistentDataHandler.getInstance().saveData();
             }
         }
+    }
+
+    private void printStream(Stream<Path> stream) {
+        stream.forEach(path -> System.out.println(path.toString()));
     }
 
     @Override
