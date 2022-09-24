@@ -2,6 +2,7 @@ PluginMessagingChannelOfMiniGame: "themanhunt:minigame"
 
 # Delete the world on startup to generate a new one if a run was finished on that world.
 DeleteWorldOnStartUp: true
+DeleteDatapacksOnStartUp: false
 
 # Set how text should look like
 DefaultMessageColor: ["GOLD"]

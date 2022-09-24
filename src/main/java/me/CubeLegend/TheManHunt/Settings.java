@@ -26,6 +26,7 @@ public class Settings {
 
     public String PluginMessagingChannel = "themanhunt:minigame";
     public boolean DeleteWorldOnStartUp = false;
+    public boolean DeleteDatapacksOnStartUp = false;
 
     public List<String> DefaultMessageColor = List.of("GOLD");
     public List<String> HighlightedMessageColor = List.of("GOLD", "UNDERLINE", "BOLD");
@@ -64,6 +65,7 @@ public class Settings {
     public void loadSettingsFromConfig() {
         PluginMessagingChannel = config.getString("PluginMessagingChannelOfMiniGame");
         DeleteWorldOnStartUp = config.getBoolean("DeleteWorldOnStartUp");
+        DeleteDatapacksOnStartUp = config.getBoolean("DeleteDatapacksOnStartUp");
 
         if (config.isList("DefaultMessageColor"))
             DefaultMessageColor = config.getStringList("DefaultMessageColor");

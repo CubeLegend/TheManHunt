@@ -42,30 +42,7 @@ public class TheManHunt extends JavaPlugin {
         if (Settings.getInstance().DeleteWorldOnStartUp) {
             if (!PersistentDataHandler.getInstance().deleteWorldOnStartUp.equals("")) {
                 String worldName = PersistentDataHandler.getInstance().deleteWorldOnStartUp;
-                List<Path> worlds = new ArrayList<>();
-                Path wc = Bukkit.getWorldContainer().toPath();
-                worlds.add(Path.of(wc.toString(), worldName));
-                worlds.add(Path.of(wc.toString(), worldName + "_nether"));
-                worlds.add(Path.of(wc.toString(), worldName + "_the_end"));
-                Bukkit.getConsoleSender().sendMessage("The world: " + worldName + " and all of its dimensions get deleted");
-                Path datapacksDir = Path.of(Bukkit.getWorldContainer().toPath().toString(), worldName, "datapacks");
-                for (Path world : worlds) {
-                    try (Stream<Path> worldPaths = Files.walk(world)) {
-                        worldPaths
-                                .sorted(Comparator.reverseOrder())
-                                .filter(Predicate.not(path -> path.startsWith(datapacksDir)))
-                                .filter(Files::isRegularFile)
-                                .forEach(path -> {
-                                    try {
-                                        Files.delete(path);
-                                    } catch (IOException e) {
-                                        Bukkit.getLogger().warning("Couldn't delete file " + path + " Cause: " + e.getCause());
-                                    }
-                                });
-                    } catch (IOException e) {
-                        Bukkit.getLogger().warning("Couldn't walk world folder " + world + " Cause: " + e.getCause());
-                    }
-                }
+                deleteWorld(worldName);
                 PersistentDataHandler.getInstance().deleteWorldOnStartUp = "";
                 PersistentDataHandler.getInstance().saveData();
             }
@@ -161,4 +138,46 @@ public class TheManHunt extends JavaPlugin {
         this.getServer().getMessenger().unregisterIncomingPluginChannel(this, Objects.requireNonNull(this.getConfig().getString("PluginMessagingChannelOfMiniGame")));
     }
 
+    private void deleteWorld(String worldName) {
+        List<Path> worlds = new ArrayList<>();
+        Path wc = Bukkit.getWorldContainer().toPath();
+        worlds.add(Path.of(wc.toString(), worldName));
+        worlds.add(Path.of(wc.toString(), worldName + "_nether"));
+        worlds.add(Path.of(wc.toString(), worldName + "_the_end"));
+        Bukkit.getLogger().info("The world: " + worldName + " and all of its dimensions get deleted");
+        Path datapacksDir = Path.of(wc.toString(), worldName, "datapacks");
+        for (Path world : worlds) {
+            try (Stream<Path> worldPaths = Files.walk(world)) {
+                worldPaths
+                        .sorted(Comparator.reverseOrder())
+                        .filter(Predicate.not(path -> path.startsWith(datapacksDir)))
+                        .filter(Files::isRegularFile)
+                        .forEach(path -> {
+                            try {
+                                Files.delete(path);
+                            } catch (IOException e) {
+                                Bukkit.getLogger().warning("Couldn't delete file " + path + " Cause: " + e.getCause());
+                            }
+                        });
+            } catch (IOException e) {
+                Bukkit.getLogger().warning("Couldn't walk world folder " + world + " Cause: " + e.getCause());
+            }
+        }
+        if (Settings.getInstance().DeleteDatapacksOnStartUp) {
+            try (Stream<Path> datapackPaths = Files.walk(datapacksDir)) {
+                datapackPaths
+                        .skip(1)
+                        .sorted(Comparator.reverseOrder())
+                        .forEach(path -> {
+                            try {
+                                Files.delete(path);
+                            } catch (IOException e) {
+                                Bukkit.getLogger().warning("Couldn't delete file " + path + " Cause: " + e.getCause());
+                            }
+                        });
+            } catch (IOException e) {
+                Bukkit.getLogger().warning("Couldn't walk datapacks folder " + datapacksDir + " Cause: " + e.getCause());
+            }
+        }
+    }
 }
