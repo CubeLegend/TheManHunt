@@ -20,40 +20,36 @@ import org.bukkit.inventory.meta.CompassMeta;
 import java.util.List;
 import java.util.Objects;
 
-public class VillageTracker extends CustomItem {
+public class FortressTracker extends CustomItem {
 
-    private static VillageTracker instance;
+    private static FortressTracker instance;
 
-    public static VillageTracker getInstance() {
+    public static FortressTracker getInstance() {
         if (instance == null) {
-            instance = new VillageTracker();
+            instance = new FortressTracker();
         }
         return instance;
     }
 
-    public VillageTracker() {
-        super("Village Tracker", Material.COMPASS);
+    public FortressTracker() {
+        super("Fortress Tracker", Material.COMPASS);
     }
 
     private int TaskId = 0;
 
-    public void startVillageTrackingRoutine(int period) {
+    public void startFortressTrackingRoutine(int period) {
         TaskId = Bukkit.getServer().getScheduler().runTaskTimer(TheManHunt.getInstance(), () -> {
 
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (player.getInventory().contains(this.getItem())) {
-                    if (player.getWorld().getEnvironment() == World.Environment.NORMAL) {
-                        Location VillageLocation = player.getWorld().locateNearestStructure(
+                    if (player.getWorld().getEnvironment() == World.Environment.NETHER) {
+                        Location fortressLocation = player.getWorld().locateNearestStructure(
                                 player.getLocation(),
-                                StructureType.VILLAGE,
+                                StructureType.NETHER_FORTRESS,
                                 100,
                                 false);
-                        if (VillageLocation != null) {
-                            if (Settings.getInstance().VillageTrackerUseLodestone) {
-                                setLodestone(player, VillageLocation);
-                            } else {
-                                player.setCompassTarget(VillageLocation);
-                            }
+                        if (fortressLocation != null) {
+                            setLodestone(player, fortressLocation);
                         }
                     }
                 }
@@ -61,7 +57,7 @@ public class VillageTracker extends CustomItem {
         }, 0, period).getTaskId();
     }
 
-    public void stopVillageTrackingRoutine() {
+    public void stopFortressTrackingRoutine() {
         if (Bukkit.getScheduler().isCurrentlyRunning(TaskId)) {
             Bukkit.getScheduler().cancelTask(TaskId);
         }
@@ -82,46 +78,46 @@ public class VillageTracker extends CustomItem {
                     return;
                 }
             }
-            if (player.getWorld().getEnvironment() != World.Environment.NORMAL) {
-                LanguageManager.getInstance().sendMessage(player, Message.ERROR_USE_ONLY_IN_OVERWORLD, new String[0]);
+            if (player.getWorld().getEnvironment() != World.Environment.NETHER) {
+                LanguageManager.getInstance().sendMessage(player, Message.ERROR_USE_ONLY_IN_NETHER, new String[0]);
             } else {
-                Location villageLocation = player.getWorld().locateNearestStructure(
+                Location fortressLocation = player.getWorld().locateNearestStructure(
                         player.getLocation(),
-                        StructureType.VILLAGE,
+                        StructureType.NETHER_FORTRESS,
                         100,
                         false);
-                assert villageLocation != null;
-                villageLocation.setY(player.getLocation().getY());
-                villageLocation.add(0.5, 0, 0.5);
-                double villageDistance = player.getLocation().distance(villageLocation);
-                int intVillageDistance = (int) Math.round(villageDistance);
-                LanguageManager.getInstance().sendMessage(player, Message.NEXT_VILLAGE_X_BLOCKS_AWAY, new String[] {String.valueOf(intVillageDistance)});
+                assert fortressLocation != null;
+                fortressLocation.setY(player.getLocation().getY());
+                fortressLocation.add(0.5, 0, 0.5);
+                double fortressDistance = player.getLocation().distance(fortressLocation);
+                int intFortressDistance = (int) Math.round(fortressDistance);
+                LanguageManager.getInstance().sendMessage(player, Message.NEXT_Fortress_X_BLOCKS_AWAY, new String[] {String.valueOf(intFortressDistance)});
             }
         }
     }
 
     void setLodestone(Player player, Location target) {
-        ItemStack villageTracker = null;
+        ItemStack fortressTracker = null;
         for (ItemStack is : player.getInventory()) {
             if (this.getItem().equals(is)) {
-                villageTracker =  is;
+                fortressTracker =  is;
                 break;
             }
         }
-        if (villageTracker != null) {
-            CompassMeta cm = (CompassMeta) villageTracker.getItemMeta();
+        if (fortressTracker != null) {
+            CompassMeta cm = (CompassMeta) fortressTracker.getItemMeta();
             assert cm != null;
             cm.setLodestone(target);
-            villageTracker.setItemMeta(cm);
+            fortressTracker.setItemMeta(cm);
         }
     }
 
     @EventHandler
     public void onPlayerChangeWorld(PlayerChangedWorldEvent event) {
         Player player = event.getPlayer();
-        if (!player.getWorld().getEnvironment().equals(World.Environment.NORMAL)) return;
-        if (!player.getInventory().contains(FortressTracker.getInstance().getItem())) return;
-        int trackerSlot = player.getInventory().first(FortressTracker.getInstance().getItem());
+        if (!player.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
+        if (!player.getInventory().contains(VillageTracker.getInstance().getItem())) return;
+        int trackerSlot = player.getInventory().first(VillageTracker.getInstance().getItem());
         player.getInventory().setItem(trackerSlot, this.getItem());
     }
 
@@ -129,7 +125,7 @@ public class VillageTracker extends CustomItem {
     public void onGameStateChange(GameStateChangeEvent event) {
         if (event.getChangeFrom() != GameState.IDLE) return;
         if (event.getChangeTo() == GameState.RUNAWAYTIME || event.getChangeTo() == GameState.PLAYING) {
-            if (Settings.getInstance().VillageTracker) {
+            if (Settings.getInstance().FortressTracker && !Settings.getInstance().VillageTracker) {
                 List<Player> runners = TeamHandler.getInstance().getTeam("Runners").getMembers();
                 for (Player runner : runners) {
                     VillageTracker.getInstance().giveToPlayer(runner);

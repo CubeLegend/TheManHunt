@@ -21,6 +21,7 @@ DefaultLanguage: "english"
 FreezeVision: false
 OneHitKill: false
 HunterNearWarning: false
+FortressTracker: false
 VillageTracker: false
 RunnerTracker: false
 
@@ -33,6 +34,7 @@ HunterNearWarningRadius: 50
 # 1 means every tick, 2 means every other tick and so on.
 FreezeVisionUpdatePeriod: 1
 HunterNearWarningUpdatePeriod: 1
+FortressTrackerUpdatePeriod: 1
 VillageTrackerUpdatePeriod: 1
 RunnerTrackerUpdatePeriod: 1
 CompassSpinningUpdatePeriod: 1

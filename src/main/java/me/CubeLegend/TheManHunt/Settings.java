@@ -2,9 +2,6 @@ package me.CubeLegend.TheManHunt;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class Settings {
@@ -42,6 +39,7 @@ public class Settings {
     public boolean FreezeVision = false;
     public boolean OneHitKill = false;
     public boolean HunterNearWarning = false;
+    public boolean FortressTracker = false;
     public boolean VillageTracker = false;
     public boolean RunnerTracker = false;
 
@@ -51,6 +49,7 @@ public class Settings {
 
     public int FreezeVisionUpdatePeriod = 1;
     public int HunterNearWarningUpdatePeriod = 1;
+    public int FortressTrackerUpdatePeriod = 1;
     public int VillageTrackerUpdatePeriod = 1;
     public int RunnerTrackerUpdatePeriod = 1;
     public int CompassSpinningUpdatePeriod = 1;
@@ -85,6 +84,7 @@ public class Settings {
         FreezeVision = config.getBoolean("FreezeVision");
         OneHitKill = config.getBoolean("OneHitKill");
         HunterNearWarning = config.getBoolean("HunterNearWarning");
+        FortressTracker = config.getBoolean("FortressTracker");
         VillageTracker = config.getBoolean("VillageTracker");
         RunnerTracker = config.getBoolean("RunnerTracker");
 
@@ -93,6 +93,7 @@ public class Settings {
 
         FreezeVisionUpdatePeriod = config.getInt("FreezeVisionUpdatePeriod");
         HunterNearWarningUpdatePeriod = config.getInt("HunterNearWarningUpdatePeriod");
+        FortressTrackerUpdatePeriod = config.getInt("FortressTrackerUpdatePeriod");
         VillageTrackerUpdatePeriod = config.getInt("VillageTrackerUpdatePeriod");
         RunnerTrackerUpdatePeriod = config.getInt("RunnerTrackerUpdatePeriod");
         CompassSpinningUpdatePeriod = config.getInt("CompassSpinningUpdatePeriod");

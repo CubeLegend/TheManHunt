@@ -50,7 +50,7 @@ public class RunnerTracker extends CustomItem {
 	int TaskId;
 
 	public void startRunnerTrackerRoutine(int period) {
-		TaskId = Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(TheManHunt.getInstance(), () -> {
+		TaskId = Bukkit.getServer().getScheduler().runTaskTimer(TheManHunt.getInstance(), () -> {
 
 			for (UUID uuid : playerTracking.keySet()) {
 				Player hunter = Bukkit.getPlayer(uuid);

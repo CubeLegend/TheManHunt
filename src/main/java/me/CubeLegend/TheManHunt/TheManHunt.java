@@ -4,6 +4,7 @@ import me.CubeLegend.TheManHunt.Bstats.BstatsHandler;
 import me.CubeLegend.TheManHunt.Commands.CommandGame;
 import me.CubeLegend.TheManHunt.Commands.CommandLanguage;
 import me.CubeLegend.TheManHunt.Commands.CommandTeam;
+import me.CubeLegend.TheManHunt.Compass.FortressTracker;
 import me.CubeLegend.TheManHunt.Compass.RunnerTracker;
 import me.CubeLegend.TheManHunt.Compass.VillageTracker;
 import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
@@ -82,6 +83,7 @@ public class TheManHunt extends JavaPlugin {
     public void onDisable() {
         unregisterPluginMessagingChannels();
         FreezeVision.getInstance().stopFreezeVisionRoutine();
+        FortressTracker.getInstance().stopFortressTrackingRoutine();
         VillageTracker.getInstance().stopVillageTrackingRoutine();
         RunnerTracker.getInstance().stopRunnerTrackerRoutine();
         HunterNearWarning.getInstance().stopRoutine();
@@ -90,6 +92,9 @@ public class TheManHunt extends JavaPlugin {
     private void startRoutines() {
         if (Settings.getInstance().FreezeVision) {
             FreezeVision.getInstance().startFreezeVisionRoutine(Settings.getInstance().FreezeVisionUpdatePeriod);
+        }
+        if (Settings.getInstance().FortressTracker) {
+            FortressTracker.getInstance().startFortressTrackingRoutine(Settings.getInstance().FortressTrackerUpdatePeriod);
         }
         if (Settings.getInstance().VillageTracker) {
             VillageTracker.getInstance().startVillageTrackingRoutine(Settings.getInstance().VillageTrackerUpdatePeriod);
@@ -111,6 +116,7 @@ public class TheManHunt extends JavaPlugin {
     private void registerListeners() {
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(TeamSelectionItem.getInstance(), this);
+        pm.registerEvents(FortressTracker.getInstance(), this);
         pm.registerEvents(VillageTracker.getInstance(), this);
         pm.registerEvents(RunnerTracker.getInstance(), this);
         pm.registerEvents(Freeze.getInstance(), this);

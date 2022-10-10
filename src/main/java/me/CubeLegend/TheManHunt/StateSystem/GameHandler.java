@@ -3,6 +3,7 @@ package me.CubeLegend.TheManHunt.StateSystem;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import me.CubeLegend.TheManHunt.*;
+import me.CubeLegend.TheManHunt.Compass.FortressTracker;
 import me.CubeLegend.TheManHunt.Compass.RunnerTracker;
 import me.CubeLegend.TheManHunt.Compass.VillageTracker;
 import me.CubeLegend.TheManHunt.SpecialAbilities.HunterNearWarning;
@@ -45,6 +46,7 @@ public class GameHandler {
 			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(TheManHunt.getInstance(), () -> {
 
 				HunterNearWarning.getInstance().stopRoutine();
+				FortressTracker.getInstance().stopFortressTrackingRoutine();
 				RunnerTracker.getInstance().stopRunnerTrackerRoutine();
 				VillageTracker.getInstance().stopVillageTrackingRoutine();
 

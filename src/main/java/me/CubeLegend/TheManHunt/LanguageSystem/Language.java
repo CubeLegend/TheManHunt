@@ -112,6 +112,10 @@ public class Language {
                 String text = languageMessage.getString("ERROR_USE_ONLY_IN_OVERWORLD");
                 return errorColor + text;
             }
+            case ERROR_USE_ONLY_IN_NETHER -> {
+                String text = languageMessage.getString("ERROR_USE_ONLY_IN_NETHER");
+                return errorColor + text;
+            }
             case YOU_JOINED_TEAM -> {
                 String text = languageMessage.getString("YOU_JOINED_TEAM");
                 if (text == null) return null;
@@ -162,6 +166,12 @@ public class Language {
             }
             case NEXT_VILLAGE_X_BLOCKS_AWAY -> {
                 String text = languageMessage.getString("NEXT_VILLAGE_X_BLOCKS_AWAY");
+                if (text == null) return null;
+                if (text.contains("<distance>")) text = text.replace("<distance>", highlightColor + args[0] + defaultColor);
+                return defaultColor + text;
+            }
+            case NEXT_Fortress_X_BLOCKS_AWAY -> {
+                String text = languageMessage.getString("NEXT_Fortress_X_BLOCKS_AWAY");
                 if (text == null) return null;
                 if (text.contains("<distance>")) text = text.replace("<distance>", highlightColor + args[0] + defaultColor);
                 return defaultColor + text;
