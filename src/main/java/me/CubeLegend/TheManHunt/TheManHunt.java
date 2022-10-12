@@ -11,6 +11,7 @@ import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
 import me.CubeLegend.TheManHunt.SpecialAbilities.FreezeVision;
 import me.CubeLegend.TheManHunt.SpecialAbilities.HunterNearWarning;
 import me.CubeLegend.TheManHunt.SpecialAbilities.OneHitKill;
+import me.CubeLegend.TheManHunt.SpecialAbilities.RespawnNearRunner;
 import me.CubeLegend.TheManHunt.StateSystem.GameHandler;
 import me.CubeLegend.TheManHunt.StateSystem.GameState;
 import me.CubeLegend.TheManHunt.TeamSystem.SelectionInventories;
@@ -130,6 +131,7 @@ public class TheManHunt extends JavaPlugin {
         pm.registerEvents(HunterWaitTimer.getInstance(), this);
         pm.registerEvents(PersistentDataHandler.getInstance(), this);
         pm.registerEvents(new HunterCatchUp(), this);
+        pm.registerEvents(new RespawnNearRunner(), this);
     }
 
     private void registerPluginMessagingChannels() {
