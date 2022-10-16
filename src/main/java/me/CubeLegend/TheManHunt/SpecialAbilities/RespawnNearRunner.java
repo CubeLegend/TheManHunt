@@ -109,8 +109,8 @@ public class RespawnNearRunner implements Listener {
             List<Vector> overlappingPPoints = new ArrayList<>();
             for (Vector pPoint : playerPoints) {
                 for (Vector oPoint : currentOPPoints) {
-                    if (playerOrigin.distance(pPoint) < playerOrigin.distance(oPoint) &&
-                            otherOrigin.distance(pPoint) < otherOrigin.distance(oPoint)) {
+                    if (playerOrigin.distanceSquared(pPoint) < playerOrigin.distanceSquared(oPoint) &&
+                            otherOrigin.distanceSquared(pPoint) < otherOrigin.distanceSquared(oPoint)) {
                         overlappingPPoints.add(pPoint);
                     }
                 }
