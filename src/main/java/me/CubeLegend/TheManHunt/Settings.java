@@ -43,6 +43,9 @@ public class Settings {
     public boolean VillageTracker = false;
     public boolean RunnerTracker = false;
 
+    public int RespawnDistanceNearRunner = 500;
+    public int RespawnNearRunnerResolution = 32;
+
     public int HunterWaitTimer = 10;
 
     public int HunterNearWarningRadius = 50;
@@ -87,6 +90,9 @@ public class Settings {
         FortressTracker = config.getBoolean("FortressTracker");
         VillageTracker = config.getBoolean("VillageTracker");
         RunnerTracker = config.getBoolean("RunnerTracker");
+
+        RespawnDistanceNearRunner = config.getInt("RespawnDistanceNearRunner");
+        RespawnNearRunnerResolution = config.getInt("RespawnNearRunnerResolution");
 
         HunterWaitTimer = config.getInt("HunterWaitTimer");
         HunterNearWarningRadius = config.getInt("HunterNearWarningRadius");

@@ -25,6 +25,9 @@ FortressTracker: false
 VillageTracker: false
 RunnerTracker: false
 
+RespawnDistanceNearRunner: 500
+RespawnNearRunnerResolution: 32
+
 # How long hunters need to wait at the beginning of the game (in seconds).
 HunterWaitTimer: 10
 
