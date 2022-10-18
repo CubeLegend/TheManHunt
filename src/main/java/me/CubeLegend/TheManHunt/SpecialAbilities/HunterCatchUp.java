@@ -1,7 +1,10 @@
-package me.CubeLegend.TheManHunt;
+package me.CubeLegend.TheManHunt.SpecialAbilities;
 
+import me.CubeLegend.TheManHunt.StateSystem.GameHandler;
+import me.CubeLegend.TheManHunt.StateSystem.GameState;
 import me.CubeLegend.TheManHunt.StateSystem.GameStateChangeEvent;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
+import me.CubeLegend.TheManHunt.TheManHunt;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,6 +22,7 @@ public class HunterCatchUp implements Listener {
     public void startHunterCatchUpRoutine(int period) {
         TaskId = Bukkit.getServer().getScheduler().runTaskTimer(TheManHunt.getInstance(), () -> {
 
+            if (GameHandler.getInstance().getGameState() == GameState.IDLE) return;
             List<UUID> hunters = TeamHandler.getInstance().getTeam("Hunters").getMembersRaw();
             List<UUID> runners = TeamHandler.getInstance().getTeam("Runners").getMembersRaw();
             for (UUID hunterUUID : hunters) {
