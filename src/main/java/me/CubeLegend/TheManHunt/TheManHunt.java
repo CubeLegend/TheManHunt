@@ -56,13 +56,7 @@ public class TheManHunt extends JavaPlugin {
         //Settings.getInstance().loadSettingsFromConfig();
         new BstatsHandler(this, 16041).loadMetrics();
 
-        new UpdateChecker(this, 105044).getVersion(version -> {
-            if (this.getDescription().getVersion().equals(version)) {
-                getLogger().info("TheManHunt is up to date");
-            } else {
-                getLogger().info("There is a new update for TheManHunt available");
-            }
-        });
+        checkForNewUpdate(105044);
 
         TeamHandler.getInstance().registerScoreBoard();
 
@@ -184,5 +178,40 @@ public class TheManHunt extends JavaPlugin {
                 Bukkit.getLogger().warning("Couldn't walk datapacks folder " + datapacksDir + " Cause: " + e.getCause());
             }
         }
+    }
+
+    private void checkForNewUpdate(int resourceId) {
+        new UpdateChecker(this, resourceId).getVersion(version -> {
+            int[] onlineVersion = getVersionAsIntArray(version);
+            int[] thisVersion = getVersionAsIntArray(this.getDescription().getVersion());
+
+            for (int i = 0; i < onlineVersion.length; i++) {
+                if (i >= thisVersion.length) {
+                    if (0 < onlineVersion[i]) {
+                        logUpdateInfo(version, this.getDescription().getVersion());
+                        break;
+                    }
+                    continue;
+                }
+                if (onlineVersion[i] > thisVersion[i]) {
+                    logUpdateInfo(version, this.getDescription().getVersion());
+                    break;
+                }
+            }
+        });
+    }
+
+    private void logUpdateInfo(String onlineVersion, String thisVersion) {
+        getLogger().info("There is a new update for TheManHunt available");
+        getLogger().info("Available version: " + onlineVersion);
+        getLogger().info("Installed version: " + thisVersion);
+    }
+
+    private int[] getVersionAsIntArray(String version) {
+        String[] versionStr = version.split("\\.");
+        for (int i = 0; i < versionStr.length; i++) {
+            versionStr[i] = versionStr[i].replaceAll("[^0-9]","");
+        }
+        return Arrays.stream(versionStr).mapToInt(Integer::parseInt).toArray();
     }
 }
