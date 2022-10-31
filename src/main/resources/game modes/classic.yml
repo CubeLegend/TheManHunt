@@ -1,0 +1,20 @@
+
+GameModeFile: true
+Name: "Classic"
+DisplayItem: "stick"
+
+Abilities:
+
+  Runner:
+    FreezeVision: false
+    HunterNearWarning: 0
+    VillageTracker: false
+    FortressTracker: false
+
+  Hunter:
+    OneHitKill: false
+    RunnerTracker: true
+
+HunterRespawn:
+  DistanceFromRunner: 0
+  Resolution: 0

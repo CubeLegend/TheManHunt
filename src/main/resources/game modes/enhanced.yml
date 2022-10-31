@@ -1,0 +1,20 @@
+
+GameModeFile: true
+Name: "Enhanced"
+DisplayItem: "stick"
+
+Abilities:
+
+  Runner:
+    FreezeVision: false
+    HunterNearWarning: 0
+    VillageTracker: true
+    FortressTracker: true
+
+  Hunter:
+    OneHitKill: false
+    RunnerTracker: true
+
+HunterRespawn:
+  DistanceFromRunner: 500
+  Resolution: 32

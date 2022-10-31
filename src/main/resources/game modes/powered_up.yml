@@ -1,0 +1,20 @@
+
+GameModeFile: true
+Name: "Powered Up"
+DisplayItem: "stick"
+
+Abilities:
+
+  Runner:
+    FreezeVision: true
+    HunterNearWarning: 50
+    VillageTracker: true
+    FortressTracker: true
+
+  Hunter:
+    OneHitKill: true
+    RunnerTracker: true
+
+HunterRespawn:
+  DistanceFromRunner: 500
+  Resolution: 32

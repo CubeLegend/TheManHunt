@@ -1,32 +1,23 @@
-PluginMessagingChannelOfMiniGame: "themanhunt:minigame"
-
 # Delete the world on startup to generate a new one if a run was finished on that world.
 DeleteWorldOnStartUp: true
 DeleteDatapacksOnStartUp: false
 
+Default:
+  Language: "english"
+  GameMode: "powered_up"
+
 # Set how text should look like
-DefaultMessageColor: ["GOLD"]
-HighlightedMessageColor: ["GOLD", "UNDERLINE", "BOLD"]
-ErrorMessageColor: ["RED"]
-ErrorHighlightedMessageColor: ["RED", "UNDERLINE", "BOLD"]
+Message:
+  DefaultColor: ["GOLD"]
+  HighlightedColor: ["GOLD", "UNDERLINE", "BOLD"]
+  ErrorColor: ["RED"]
+  ErrorHighlightedColor: ["RED", "UNDERLINE", "BOLD"]
 
 # How long the
-TitleFadeIn: 50
-TitleStay: 50
-TitleFadeOut: 50
-
-DefaultLanguage: "english"
-
-# Turn special abilities on or off.
-FreezeVision: false
-OneHitKill: false
-HunterNearWarning: false
-FortressTracker: false
-VillageTracker: false
-RunnerTracker: false
-
-RespawnDistanceNearRunner: 500
-RespawnNearRunnerResolution: 32
+Title:
+  FadeIn: 50
+  Stay: 50
+  FadeOut: 50
 
 # How long hunters need to wait at the beginning of the game (in seconds).
 HunterWaitTimer: 10
@@ -35,12 +26,13 @@ HunterNearWarningRadius: 50
 
 # Set how often features should be updated, setting this slower can feel laggy.
 # 1 means every tick, 2 means every other tick and so on.
-FreezeVisionUpdatePeriod: 1
-HunterNearWarningUpdatePeriod: 1
-FortressTrackerUpdatePeriod: 1
-VillageTrackerUpdatePeriod: 1
-RunnerTrackerUpdatePeriod: 1
-CompassSpinningUpdatePeriod: 1
+UpdatePeriod:
+  FreezeVision: 1
+  HunterNearWarning: 1
+  FortressTracker: 1
+  VillageTracker: 1
+  RunnerTracker: 1
+  CompassSpinning: 1
 
 # Always give the player a compass with an updated lodestone position, even if the runner hasn't moved.
 AlwaysUpdateRunnerTracker: true
