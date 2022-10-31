@@ -42,8 +42,8 @@ public class LanguageManager implements Listener {
 
         assert files != null;
         if (files.length == 0) {
-            createLanguageFromSource("english.yml");
-            createLanguageFromSource("german.yml");
+            createLanguageFromSource("languages/english.yml");
+            createLanguageFromSource("languages/german.yml");
             return;
         }
         for (File file : files) {
