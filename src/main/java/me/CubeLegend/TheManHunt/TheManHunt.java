@@ -7,6 +7,8 @@ import me.CubeLegend.TheManHunt.Commands.CommandTeam;
 import me.CubeLegend.TheManHunt.Compass.FortressTracker;
 import me.CubeLegend.TheManHunt.Compass.RunnerTracker;
 import me.CubeLegend.TheManHunt.Compass.VillageTracker;
+import me.CubeLegend.TheManHunt.GameModeSystem.GameMode;
+import me.CubeLegend.TheManHunt.GameModeSystem.GameModeManager;
 import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
 import me.CubeLegend.TheManHunt.SpecialAbilities.*;
 import me.CubeLegend.TheManHunt.StateSystem.GameHandler;
@@ -33,12 +35,14 @@ public class TheManHunt extends JavaPlugin {
         return instance;
     }
 
+    private final Configuration config = Configuration.getInstance();
+    private final GameModeManager gmm = GameModeManager.getInstance();
+
     @Override
     public void onLoad() {
         instance = this;
-        Settings.getInstance().loadSettingsFromConfig();
 
-        if (Settings.getInstance().DeleteWorldOnStartUp) {
+        if (config.getBoolean("DeleteWorldOnStartUp")) {
             if (!PersistentDataHandler.getInstance().deleteWorldOnStartUp.equals("")) {
                 String worldName = PersistentDataHandler.getInstance().deleteWorldOnStartUp;
                 deleteWorld(worldName);
@@ -65,7 +69,7 @@ public class TheManHunt extends JavaPlugin {
         registerPluginMessagingChannels();
         //config.options().copyDefaults(true);
         //this.saveConfig();
-        LanguageManager.getInstance().setDefaultLanguage(Settings.getInstance().DefaultLanguage);
+        LanguageManager.getInstance().setDefaultLanguage(config.getString("Default.Language"));
 
         startRoutines();
         GameHandler.getInstance().setGameState(GameState.IDLE);
@@ -82,20 +86,20 @@ public class TheManHunt extends JavaPlugin {
     }
 
     private void startRoutines() {
-        if (Settings.getInstance().FreezeVision) {
-            FreezeVision.getInstance().startFreezeVisionRoutine(Settings.getInstance().FreezeVisionUpdatePeriod);
+        if (gmm.getBoolean("Abilities.Runner.FreezeVision")) {
+            FreezeVision.getInstance().startFreezeVisionRoutine(config.getInt("UpdatePeriod.FreezeVision"));
         }
-        if (Settings.getInstance().FortressTracker) {
-            FortressTracker.getInstance().startFortressTrackingRoutine(Settings.getInstance().FortressTrackerUpdatePeriod);
+        if (gmm.getBoolean("Abilities.Runner.FortressTracker")) {
+            FortressTracker.getInstance().startFortressTrackingRoutine(config.getInt("UpdatePeriod.FortressTracker"));
         }
-        if (Settings.getInstance().VillageTracker) {
-            VillageTracker.getInstance().startVillageTrackingRoutine(Settings.getInstance().VillageTrackerUpdatePeriod);
+        if (gmm.getBoolean("Abilities.Runner.VillageTracker")) {
+            VillageTracker.getInstance().startVillageTrackingRoutine(config.getInt("UpdatePeriod.VillageTracker"));
         }
-        if (Settings.getInstance().RunnerTracker) {
-            RunnerTracker.getInstance().startRunnerTrackerRoutine(Settings.getInstance().RunnerTrackerUpdatePeriod);
+        if (gmm.getBoolean("Abilities.Hunter.RunnerTracker")) {
+            RunnerTracker.getInstance().startRunnerTrackerRoutine(config.getInt("UpdatePeriod.RunnerTracker"));
         }
-        if (Settings.getInstance().HunterNearWarning) {
-            HunterNearWarning.getInstance().startRoutine(Settings.getInstance().HunterNearWarningUpdatePeriod, Settings.getInstance().HunterNearWarningRadius);
+        if (gmm.getInt("Abilities.Runner.HunterNearWarning") != 0) {
+            HunterNearWarning.getInstance().startRoutine(config.getInt("UpdatePeriod.HunterNearWarning"), gmm.getInt("Abilities.Runner.HunterNearWarning"));
         }
     }
 
@@ -162,7 +166,7 @@ public class TheManHunt extends JavaPlugin {
                 Bukkit.getLogger().warning("Couldn't walk world folder " + world + " Cause: " + e.getCause());
             }
         }
-        if (Settings.getInstance().DeleteDatapacksOnStartUp) {
+        if (config.getBoolean("DeleteDatapacksOnStartUp")) {
             try (Stream<Path> datapackPaths = Files.walk(datapacksDir)) {
                 datapackPaths
                         .skip(1)

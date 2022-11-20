@@ -1,6 +1,6 @@
 package me.CubeLegend.TheManHunt.SpecialAbilities;
 
-import me.CubeLegend.TheManHunt.Settings;
+import me.CubeLegend.TheManHunt.GameModeSystem.GameModeManager;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -20,9 +20,11 @@ public class OneHitKill implements Listener {
         return instance;
     }
 
+    private final GameModeManager gmm = GameModeManager.getInstance();
+
     @EventHandler(priority = EventPriority.LOW)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if (!Settings.getInstance().OneHitKill) return;
+        if (!gmm.getBoolean("Abilities.Hunter.OneHitKill")) return;
         Entity damager = event.getDamager();
         Entity entity = event.getEntity();
         if (!(damager instanceof Player damagerPlayer)) return;

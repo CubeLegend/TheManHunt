@@ -1,6 +1,6 @@
 package me.CubeLegend.TheManHunt.SpecialAbilities;
 
-import me.CubeLegend.TheManHunt.Settings;
+import me.CubeLegend.TheManHunt.GameModeSystem.GameModeManager;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -18,6 +18,8 @@ import java.util.Random;
 
 public class RespawnNearRunner implements Listener {
 
+    private final GameModeManager gmm = GameModeManager.getInstance();
+
     @EventHandler
     public void onPlayerRespawn (PlayerRespawnEvent event) {
         if (!TeamHandler.getInstance().getTeam("Hunters").checkForMember(event.getPlayer())) {
@@ -25,9 +27,9 @@ public class RespawnNearRunner implements Listener {
         }
         List<Player> runners = TeamHandler.getInstance().getTeam("Runners").getMembers();
 
-        int distance = Settings.getInstance().RespawnDistanceNearRunner;
+        int distance = gmm.getInt("HunterRespawn.DistanceFromRunner");
         if (distance <= 0) return;
-        int resolution = Settings.getInstance().RespawnNearRunnerResolution;
+        int resolution = gmm.getInt("HunterRespawn.Resolution");
 
         List<Location> locations = getSpawnLocations(runners, distance, resolution);
         Random random = new Random();

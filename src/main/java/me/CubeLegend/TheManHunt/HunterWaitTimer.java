@@ -31,7 +31,7 @@ public class HunterWaitTimer implements Listener {
 
 		if (isRunning) { return; }
 		isRunning = true;
-		time = Settings.getInstance().HunterWaitTimer;
+		time = Configuration.getInstance().getInt("HunterWaitTimer");
 		TaskID = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(TheManHunt.getInstance(), () -> {
 
 			if (time <= 0) {

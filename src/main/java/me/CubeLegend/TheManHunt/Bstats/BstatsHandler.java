@@ -1,7 +1,7 @@
 package me.CubeLegend.TheManHunt.Bstats;
 
+import me.CubeLegend.TheManHunt.Configuration;
 import me.CubeLegend.TheManHunt.PersistentDataHandler;
-import me.CubeLegend.TheManHunt.Settings;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -20,7 +20,8 @@ public class BstatsHandler {
     public void loadMetrics() {
         Metrics metrics = new Metrics(plugin, pluginId);
 
-        metrics.addCustomChart(new Metrics.SimplePie("default_language", () -> Settings.getInstance().DefaultLanguage));
+        Configuration config = Configuration.getInstance();
+        metrics.addCustomChart(new Metrics.SimplePie("default_language", () -> config.getString("Default.Language").toLowerCase()));
         metrics.addCustomChart(new Metrics.AdvancedPie("team_wins", () -> {
             Map<String, Integer> valueMap = new HashMap<>();
             valueMap.put("Runner wins", PersistentDataHandler.getInstance().allRunnerWins);

@@ -22,8 +22,6 @@ Title:
 # How long hunters need to wait at the beginning of the game (in seconds).
 HunterWaitTimer: 10
 
-HunterNearWarningRadius: 50
-
 # Set how often features should be updated, setting this slower can feel laggy.
 # 1 means every tick, 2 means every other tick and so on.
 UpdatePeriod:

@@ -97,7 +97,7 @@ public class GameModeManager implements Listener {
         return gameModes.values().stream().toList();
     }
 
-    private boolean getBoolean(String path) {
+    public boolean getBoolean(String path) {
         GameMode gm = gameModes.get(currentGameMode);
         Boolean boolFromYaml = gm.getBoolean(path);
         if (boolFromYaml == null) {
@@ -107,7 +107,7 @@ public class GameModeManager implements Listener {
         return boolFromYaml;
     }
 
-    private int getInt(String path) {
+    public int getInt(String path) {
         GameMode gm = gameModes.get(currentGameMode);
         Integer intFromYaml = gm.getInt(path);
         if (intFromYaml == null) {

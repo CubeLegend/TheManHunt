@@ -1,6 +1,7 @@
 package me.CubeLegend.TheManHunt.LanguageSystem;
 
-import me.CubeLegend.TheManHunt.Settings;
+import me.CubeLegend.TheManHunt.Configuration;
+import me.CubeLegend.TheManHunt.GameModeSystem.GameModeManager;
 import me.CubeLegend.TheManHunt.TheManHunt;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -27,6 +28,8 @@ public class LanguageManager implements Listener {
         }
         return instance;
     }
+
+    private final Configuration config = Configuration.getInstance();
 
     private final HashMap<UUID, String> playerLanguages = new HashMap<>();
 
@@ -165,8 +168,14 @@ public class LanguageManager implements Listener {
         String subtitle = playerLanguage.getMessage(subtitleMessage, args);
         if (title == null) return;
         if (subtitle == null) return;
-        Settings settings = Settings.getInstance();
-        player.sendTitle(title, subtitle, settings.TitleFadeIn, settings.TitleStay, settings.TitleFadeOut);
+        config.getBoolean("Title.FadeIn");
+        player.sendTitle(
+                title,
+                subtitle,
+                config.getInt("Title.FadeIn"),
+                config.getInt("Title.Stay"),
+                config.getInt("Title.FadeOut")
+        );
     }
 
     @EventHandler

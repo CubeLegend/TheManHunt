@@ -14,16 +14,15 @@ public class GameMode {
     public String name;
     private FileConfiguration gameModeYaml;
 
-    private final GameModeManager sm = GameModeManager.getInstance();
-
     GameMode(File file) {
         gameModeFile = file;
         createCustomConfig();
+        GameModeManager gmm = GameModeManager.getInstance();
         if (!gameModeYaml.getBoolean("GameModeFile")) {
-            sm.removeGameMode(this);
+            gmm.removeGameMode(this);
         }
         if (gameModeYaml.getString("Name") == null) {
-            sm.removeGameMode(this);
+            gmm.removeGameMode(this);
             return;
         }
         name = gameModeYaml.getString("Name").toLowerCase();

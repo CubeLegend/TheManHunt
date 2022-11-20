@@ -17,6 +17,8 @@ public class LobbyHandler implements Listener {
 
     private final TeamSelectionItem tsi = new TeamSelectionItem();
 
+    private final Configuration config = Configuration.getInstance();
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
@@ -27,7 +29,7 @@ public class LobbyHandler implements Listener {
             }
         }
 
-        for (String permission : Settings.getInstance().GiveEveryonePermissions) {
+        for (String permission : config.getStringList("GiveEveryonePermissions")) {
             player.addAttachment(TheManHunt.getInstance(), "TheManHunt." + permission, true);
         }
     }

@@ -1,9 +1,9 @@
 package me.CubeLegend.TheManHunt.Compass;
 
 import me.CubeLegend.TheManHunt.CustomItem;
+import me.CubeLegend.TheManHunt.GameModeSystem.GameModeManager;
 import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
 import me.CubeLegend.TheManHunt.LanguageSystem.Message;
-import me.CubeLegend.TheManHunt.Settings;
 import me.CubeLegend.TheManHunt.StateSystem.GameState;
 import me.CubeLegend.TheManHunt.StateSystem.GameStateChangeEvent;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
@@ -36,6 +36,8 @@ public class FortressTracker extends CustomItem {
     }
 
     private int TaskId = 0;
+
+    private final GameModeManager gmm = GameModeManager.getInstance();
 
     public void startFortressTrackingRoutine(int period) {
         TaskId = Bukkit.getServer().getScheduler().runTaskTimer(TheManHunt.getInstance(), () -> {
@@ -125,7 +127,7 @@ public class FortressTracker extends CustomItem {
     public void onGameStateChange(GameStateChangeEvent event) {
         if (event.getChangeFrom() != GameState.IDLE) return;
         if (event.getChangeTo() == GameState.RUNAWAYTIME || event.getChangeTo() == GameState.PLAYING) {
-            if (Settings.getInstance().FortressTracker && !Settings.getInstance().VillageTracker) {
+            if (gmm.getBoolean("Runner.FortressTracker") && !gmm.getBoolean("Runner.VillageTracker")) {
                 List<Player> runners = TeamHandler.getInstance().getTeam("Runners").getMembers();
                 for (Player runner : runners) {
                     VillageTracker.getInstance().giveToPlayer(runner);

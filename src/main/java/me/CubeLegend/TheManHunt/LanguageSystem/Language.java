@@ -1,6 +1,6 @@
 package me.CubeLegend.TheManHunt.LanguageSystem;
 
-import me.CubeLegend.TheManHunt.Settings;
+import me.CubeLegend.TheManHunt.Configuration;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -14,6 +14,8 @@ public class Language {
     private final File languageMessageFile;
     public String name;
     private FileConfiguration languageMessage;
+
+    private final Configuration config = Configuration.getInstance();
 
     private String defaultColor = "§r";
     private String highlightColor = "§r";
@@ -46,28 +48,28 @@ public class Language {
     private void updateColors() {
         StringBuilder sb = new StringBuilder();
         sb.append("§r");
-        for (String s : Settings.getInstance().DefaultMessageColor) {
+        for (String s : config.getStringList("Message.DefaultColor")) {
             sb.append(ChatColor.valueOf(s));
         }
         defaultColor = sb.toString();
 
         sb = new StringBuilder();
         sb.append("§r");
-        for (String s : Settings.getInstance().HighlightedMessageColor) {
+        for (String s : config.getStringList("Message.HighlightedColor")) {
             sb.append(ChatColor.valueOf(s));
         }
         highlightColor = sb.toString();
 
         sb = new StringBuilder();
         sb.append("§r");
-        for (String s : Settings.getInstance().ErrorMessageColor) {
+        for (String s : config.getStringList("Message.ErrorColor")) {
             sb.append(ChatColor.valueOf(s));
         }
         errorColor = sb.toString();
 
         sb = new StringBuilder();
         sb.append("§r");
-        for (String s : Settings.getInstance().ErrorHighlightedMessageColor) {
+        for (String s : config.getStringList("Message.ErrorHighlightedColor")) {
             sb.append(ChatColor.valueOf(s));
         }
         errorHighlightColor = sb.toString();

@@ -1,8 +1,9 @@
 package me.CubeLegend.TheManHunt.Compass;
 
+import me.CubeLegend.TheManHunt.Configuration;
+import me.CubeLegend.TheManHunt.GameModeSystem.GameModeManager;
 import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
 import me.CubeLegend.TheManHunt.LanguageSystem.Message;
-import me.CubeLegend.TheManHunt.Settings;
 import me.CubeLegend.TheManHunt.StateSystem.GameState;
 import me.CubeLegend.TheManHunt.StateSystem.GameStateChangeEvent;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
@@ -49,6 +50,9 @@ public class RunnerTracker extends CustomItem {
 
 	int TaskId;
 
+	private final Configuration config = Configuration.getInstance();
+	private final GameModeManager gmm = GameModeManager.getInstance();
+
 	public void startRunnerTrackerRoutine(int period) {
 		TaskId = Bukkit.getServer().getScheduler().runTaskTimer(TheManHunt.getInstance(), () -> {
 
@@ -59,7 +63,7 @@ public class RunnerTracker extends CustomItem {
 				if (runner != null && runner.getWorld().equals(hunter.getWorld())) {
 
 					if (hunter.getWorld().getEnvironment() != World.Environment.NORMAL
-							|| Settings.getInstance().AlwaysSetLodestone) {
+							|| config.getBoolean("AlwaysSetLodestone")) {
 						setLodestone(hunter, runner);
 					} else {
 						setTarget(hunter, runner);
@@ -84,7 +88,7 @@ public class RunnerTracker extends CustomItem {
 			CompassMeta cm = (CompassMeta) runnerTracker.getItemMeta();
 			Location runnerLoc = runner.getLocation().getBlock().getLocation();
 			assert cm != null;
-			if (Settings.getInstance().AlwaysUpdateRunnerTracker) {
+			if (config.getBoolean("AlwaysUpdateRunnerTracker")) {
 				if (runnerLoc.equals(cm.getLodestone())) {
 					runnerLoc = runnerLoc.add(0, 10, 0);
 				}
@@ -140,7 +144,7 @@ public class RunnerTracker extends CustomItem {
 	public void onGameStateChange(GameStateChangeEvent event) {
 		if (event.getChangeFrom() != GameState.IDLE) return;
 		if (event.getChangeTo() == GameState.RUNAWAYTIME || event.getChangeTo() == GameState.PLAYING) {
-			if (Settings.getInstance().RunnerTracker) {
+			if (gmm.getBoolean("Hunter.RunnerTracker")) {
 				List<Player> hunters = TeamHandler.getInstance().getTeam("Hunters").getMembers();
 				for (Player hunter : hunters) {
 					RunnerTracker.getInstance().giveToPlayer(hunter);
