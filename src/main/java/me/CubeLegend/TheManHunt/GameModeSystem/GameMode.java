@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class GameMode {
 
@@ -14,18 +15,19 @@ public class GameMode {
     public String name;
     private FileConfiguration gameModeYaml;
 
-    GameMode(File file) {
+    GameMode(GameModeManager gameModeManager, File file) {
         gameModeFile = file;
         createCustomConfig();
-        GameModeManager gmm = GameModeManager.getInstance();
         if (!gameModeYaml.getBoolean("GameModeFile")) {
-            gmm.removeGameMode(this);
-        }
-        if (gameModeYaml.getString("Name") == null) {
-            gmm.removeGameMode(this);
+            gameModeManager.removeGameMode(this);
             return;
         }
-        name = gameModeYaml.getString("Name").toLowerCase();
+        String nameFromYaml = gameModeYaml.getString("Name");
+        if (nameFromYaml == null) {
+            gameModeManager.removeGameMode(this);
+            return;
+        }
+        name = nameFromYaml.toLowerCase();
     }
 
     private void createCustomConfig() {
@@ -51,5 +53,15 @@ public class GameMode {
     public Integer getInt(String path) {
         if (!gameModeYaml.isInt(path)) return null;
         return gameModeYaml.getInt(path);
+    }
+
+    public String getString(String path) {
+        if (!gameModeYaml.isString(path)) return null;
+        return gameModeYaml.getString(path);
+    }
+
+    public List<String> getStringList(String path) {
+        if (!gameModeYaml.isList(path)) return null;
+        return gameModeYaml.getStringList(path);
     }
 }

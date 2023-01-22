@@ -1,25 +1,16 @@
 package me.CubeLegend.TheManHunt.GameModeSystem;
 
-import me.CubeLegend.TheManHunt.Configuration;
 import me.CubeLegend.TheManHunt.TheManHunt;
+import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 public class GameModeManager implements Listener {
-
-    private static GameModeManager instance;
-
-    public static GameModeManager getInstance() {
-        if (instance == null) {
-            instance = new GameModeManager();
-        }
-        return instance;
-    }
 
     private final HashMap<String, GameMode> gameModes = new HashMap<>();
 
@@ -27,28 +18,40 @@ public class GameModeManager implements Listener {
 
     File GameModesDir = new File(TheManHunt.getInstance().getDataFolder(), "game modes");
 
-    GameModeManager() {
+    public GameModeManager(@Nullable String defaultGameMode) {
         GameModesDir.mkdirs();
         File[] files = GameModesDir.listFiles();
 
         assert files != null;
         if (files.length == 0) {
-            createGameModeFromSource("game modes/classic.yml");
-            createGameModeFromSource("game modes/enhanced.yml");
-            createGameModeFromSource("game modes/powered_up.yml");
-            return;
+            createGameModeFromSource("classic.yml");
+            createGameModeFromSource("enhanced.yml");
+            createGameModeFromSource("powered_up.yml");
         }
-        for (File file : files) {
-            GameMode gameMode = new GameMode(file);
-            gameModes.put(gameMode.name, gameMode);
+        else {
+            for (File file : files) {
+                GameMode gameMode = new GameMode(this, file);
+                gameModes.put(gameMode.name, gameMode);
+            }
         }
 
-        String defaultGameMode = Configuration.getInstance().getString("Default.GameMode");
-        if (defaultGameMode == null) {
+        if (defaultGameMode == null || !gameModes.containsKey(defaultGameMode)) {
+            Bukkit.getLogger().warning("The default game mode doesn't actually exist");
             Optional<String> firstKey = gameModes.keySet().stream().findFirst();
             defaultGameMode = firstKey.orElseThrow();
         }
-        currentGameMode = defaultGameMode;
+
+        for (String name : gameModes.keySet()) {
+            if (name.equalsIgnoreCase(defaultGameMode)) {
+                currentGameMode = name;
+                Bukkit.getScheduler().runTaskLater(
+                        TheManHunt.getInstance(),
+                        () -> Bukkit.getLogger().info("Game Mode: " + name),
+                        1
+                        );
+                break;
+            }
+        }
     }
 
     private void createGameModeFromSource(String filename) {
@@ -56,17 +59,19 @@ public class GameModeManager implements Listener {
         OutputStream outputStream = null;
         File file = new File(GameModesDir, filename);
         try {
-            inputStream = TheManHunt.getInstance().getResource(filename);
+            inputStream = TheManHunt.getInstance().getResource("game modes/" + filename);
             outputStream = new FileOutputStream(file);
 
             int read = 0;
             byte[] bytes = new byte[1024];
 
-            while ((read = inputStream.read(bytes)) != -1) {
+            while (true) {
+                assert inputStream != null;
+                if ((read = inputStream.read(bytes)) == -1) break;
                 outputStream.write(bytes, 0, read);
             }
 
-            GameMode gameMode = new GameMode(file);
+            GameMode gameMode = new GameMode(this, file);
             gameModes.put(gameMode.name, gameMode);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -89,6 +94,16 @@ public class GameModeManager implements Listener {
         }
     }
 
+    public void setGameMode(String gameMode) {
+        for (String name : gameModes.keySet()) {
+            if (name.equalsIgnoreCase(gameMode)) {
+                currentGameMode = name;
+                Bukkit.getLogger().info("Game Mode: " + name);
+                return;
+            }
+        }
+    }
+
     public void removeGameMode(GameMode gm) {
         gameModes.remove(gm.name);
     }
@@ -97,23 +112,23 @@ public class GameModeManager implements Listener {
         return gameModes.values().stream().toList();
     }
 
-    public boolean getBoolean(String path) {
+    public Boolean getBoolean(String path) {
         GameMode gm = gameModes.get(currentGameMode);
-        Boolean boolFromYaml = gm.getBoolean(path);
-        if (boolFromYaml == null) {
-            // TODO check if in the normal config value exists
-            return false;
-        }
-        return boolFromYaml;
+        return gm.getBoolean(path);
     }
 
-    public int getInt(String path) {
+    public Integer getInt(String path) {
         GameMode gm = gameModes.get(currentGameMode);
-        Integer intFromYaml = gm.getInt(path);
-        if (intFromYaml == null) {
-            // TODO check if in the normal config value exists
-            return 0;
-        }
-        return intFromYaml;
+        return gm.getInt(path);
+    }
+
+    public String getString(String path) {
+        GameMode gm = gameModes.get(currentGameMode);
+        return gm.getString(path);
+    }
+
+    public List<String> getStringList(String path) {
+        GameMode gm = gameModes.get(currentGameMode);
+        return gm.getStringList(path);
     }
 }

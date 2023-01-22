@@ -4,7 +4,7 @@ DeleteDatapacksOnStartUp: false
 
 Default:
   Language: "english"
-  GameMode: "powered_up"
+  GameMode: "powered up"
 
 # Set how text should look like
 Message:

@@ -22,7 +22,12 @@ public class GameHandler {
 		return gameHandler;
 	}
 
-	private GameState state = GameState.IDLE;
+	private GameState state;
+
+	private GameHandler() {
+		this.state = GameState.IDLE;
+		Bukkit.getLogger().info("Game State: " + this.state.name());
+	}
 
 	public GameState getGameState() {
 		return state;
@@ -35,9 +40,12 @@ public class GameHandler {
 		Bukkit.getLogger().info("Game State: " + state.name());
 
 		if (state == GameState.END) {
-
 			connectPlayersToLobby();
-			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(TheManHunt.getInstance(), Bukkit::shutdown, 10*20);
+			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+					TheManHunt.getInstance(),
+					Bukkit::shutdown,
+					10*20
+			);
 		}
 	}
 

@@ -1,7 +1,6 @@
 package me.CubeLegend.TheManHunt.Compass;
 
 import me.CubeLegend.TheManHunt.Configuration;
-import me.CubeLegend.TheManHunt.GameModeSystem.GameModeManager;
 import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
 import me.CubeLegend.TheManHunt.LanguageSystem.Message;
 import me.CubeLegend.TheManHunt.StateSystem.GameState;
@@ -51,7 +50,6 @@ public class RunnerTracker extends CustomItem {
 	int TaskId;
 
 	private final Configuration config = Configuration.getInstance();
-	private final GameModeManager gmm = GameModeManager.getInstance();
 
 	public void startRunnerTrackerRoutine(int period) {
 		TaskId = Bukkit.getServer().getScheduler().runTaskTimer(TheManHunt.getInstance(), () -> {
@@ -144,7 +142,7 @@ public class RunnerTracker extends CustomItem {
 	public void onGameStateChange(GameStateChangeEvent event) {
 		if (event.getChangeFrom() != GameState.IDLE) return;
 		if (event.getChangeTo() == GameState.RUNAWAYTIME || event.getChangeTo() == GameState.PLAYING) {
-			if (gmm.getBoolean("Hunter.RunnerTracker")) {
+			if (config.getBoolean("Abilities.Hunter.RunnerTracker")) {
 				List<Player> hunters = TeamHandler.getInstance().getTeam("Hunters").getMembers();
 				for (Player hunter : hunters) {
 					RunnerTracker.getInstance().giveToPlayer(hunter);

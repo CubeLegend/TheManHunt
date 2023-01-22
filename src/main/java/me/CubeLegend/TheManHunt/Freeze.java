@@ -1,6 +1,5 @@
 package me.CubeLegend.TheManHunt;
 
-import me.CubeLegend.TheManHunt.GameModeSystem.GameModeManager;
 import me.CubeLegend.TheManHunt.SpecialAbilities.FreezeVision;
 import me.CubeLegend.TheManHunt.StateSystem.GameState;
 import me.CubeLegend.TheManHunt.StateSystem.GameStateChangeEvent;
@@ -32,7 +31,7 @@ public class Freeze implements Listener {
 
     private final ArrayList<UUID> frozenPlayers = new ArrayList<>();
 
-    private final GameModeManager gmm = GameModeManager.getInstance();
+    private final Configuration config = Configuration.getInstance();
 
     public void addFrozenPlayers(List<UUID> players) {
         for (UUID uuidP : players) {
@@ -74,7 +73,7 @@ public class Freeze implements Listener {
             if (event.getChangeTo() == GameState.RUNAWAYTIME || event.getChangeTo() == GameState.PLAYING) {
                 this.addFrozenPlayers(TeamHandler.getInstance().getTeam("Hunters").getMembersRaw());
 
-                if (gmm.getBoolean("Abilities.Runner.FreezeVision")) {
+                if (config.getBoolean("Abilities.Runner.FreezeVision")) {
                     for (Player runner : TeamHandler.getInstance().getTeam("Runners").getMembers()) {
                         FreezeVision.getInstance().givePlayerFreezeVision(runner);
                     }
@@ -83,7 +82,7 @@ public class Freeze implements Listener {
         }
         else if (event.getChangeFrom() == GameState.PLAYING) {
             if (event.getChangeTo() == GameState.END) {
-                if (gmm.getBoolean("Abilities.Runner.FreezeVision")) {
+                if (config.getBoolean("Abilities.Runner.FreezeVision")) {
                     for (Player runner : TeamHandler.getInstance().getTeam("Runners").getMembers()) {
                         FreezeVision.getInstance().takePlayerFreezeVision(runner);
                     }
