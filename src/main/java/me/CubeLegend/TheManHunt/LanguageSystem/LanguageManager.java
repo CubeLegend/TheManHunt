@@ -1,7 +1,6 @@
 package me.CubeLegend.TheManHunt.LanguageSystem;
 
 import me.CubeLegend.TheManHunt.Configuration;
-import me.CubeLegend.TheManHunt.GameModeSystem.GameModeManager;
 import me.CubeLegend.TheManHunt.TheManHunt;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -45,12 +44,12 @@ public class LanguageManager implements Listener {
 
         assert files != null;
         if (files.length == 0) {
-            createLanguageFromSource("languages/english.yml");
-            createLanguageFromSource("languages/german.yml");
+            createLanguageFromSource("english.yml");
+            createLanguageFromSource("german.yml");
             return;
         }
         for (File file : files) {
-            Language language = new Language(file);
+            Language language = new Language(this, file);
             languages.put(language.name, language);
         }
     }
@@ -60,7 +59,7 @@ public class LanguageManager implements Listener {
         OutputStream outputStream = null;
         File file = new File(languagesDir, filename);
         try {
-            inputStream = TheManHunt.getInstance().getResource(filename);
+            inputStream = TheManHunt.getInstance().getResource("languages/" + filename);
             outputStream = new FileOutputStream(file);
 
             int read = 0;
@@ -70,7 +69,7 @@ public class LanguageManager implements Listener {
                 outputStream.write(bytes, 0, read);
             }
 
-            Language language = new Language(file);
+            Language language = new Language(this, file);
             languages.put(language.name, language);
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -11,6 +11,7 @@ import java.io.IOException;
 
 public class Language {
 
+    private final LanguageManager manager;
     private final File languageMessageFile;
     public String name;
     private FileConfiguration languageMessage;
@@ -22,11 +23,12 @@ public class Language {
     private String errorColor = "§c";
     private String errorHighlightColor = "§c";
 
-    Language(File file) {
+    Language(LanguageManager languageManager, File file) {
+        manager = languageManager;
         languageMessageFile = file;
         createCustomConfig();
         if (!languageMessage.getBoolean("LanguageFile")) {
-            LanguageManager.getInstance().removeLanguage(this);
+            manager.removeLanguage(this);
         }
         name = languageMessage.getString("Name").toLowerCase();
         updateColors();
