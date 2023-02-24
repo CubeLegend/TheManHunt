@@ -14,10 +14,7 @@ import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class FreezeVision {
 
@@ -46,8 +43,18 @@ public class FreezeVision {
         }
     }
 
+    public void givePlayerFreezeVision(@NotNull UUID uuid) {
+        if (!freezeVision.contains(uuid)) {
+            freezeVision.add(uuid);
+        }
+    }
+
     public void takePlayerFreezeVision(@NotNull Player player) {
         freezeVision.remove(player.getUniqueId());
+    }
+
+    public void takePlayerFreezeVision(@NotNull UUID uuid) {
+        freezeVision.remove(uuid);
     }
 
     public void startFreezeVisionRoutine(long period) {
@@ -101,8 +108,9 @@ public class FreezeVision {
         livingEntitiesILOS.clear();
     }
 
+    @NotNull
     public List<LivingEntity> entitiesInLineOfSight(Player player) {
-        if (player == null) return null;
+        if (player == null) return Collections.emptyList();
         Location playerLoc = player.getLocation().add(new Location(player.getWorld(), 0, player.getEyeHeight(), 0));
         List<LivingEntity> entities = new ArrayList<>();
         double furthestEntityDis = 0;

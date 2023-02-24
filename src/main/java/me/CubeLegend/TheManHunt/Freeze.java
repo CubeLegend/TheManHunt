@@ -74,7 +74,7 @@ public class Freeze implements Listener {
                 this.addFrozenPlayers(TeamHandler.getInstance().getTeam("Hunters").getMembersRaw());
 
                 if (config.getBoolean("Abilities.Runner.FreezeVision")) {
-                    for (Player runner : TeamHandler.getInstance().getTeam("Runners").getMembers()) {
+                    for (UUID runner : TeamHandler.getInstance().getTeam("Runners").getMembersRaw()) {
                         FreezeVision.getInstance().givePlayerFreezeVision(runner);
                     }
                 }
@@ -83,7 +83,7 @@ public class Freeze implements Listener {
         else if (event.getChangeFrom() == GameState.PLAYING) {
             if (event.getChangeTo() == GameState.END) {
                 if (config.getBoolean("Abilities.Runner.FreezeVision")) {
-                    for (Player runner : TeamHandler.getInstance().getTeam("Runners").getMembers()) {
+                    for (UUID runner : TeamHandler.getInstance().getTeam("Runners").getMembersRaw()) {
                         FreezeVision.getInstance().takePlayerFreezeVision(runner);
                     }
                 }
