@@ -1,11 +1,8 @@
 package me.CubeLegend.TheManHunt.Compass;
 
 import me.CubeLegend.TheManHunt.Configuration;
-import me.CubeLegend.TheManHunt.CustomItem;
 import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
 import me.CubeLegend.TheManHunt.LanguageSystem.Message;
-import me.CubeLegend.TheManHunt.StateSystem.GameState;
-import me.CubeLegend.TheManHunt.StateSystem.GameStateChangeEvent;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import me.CubeLegend.TheManHunt.TheManHunt;
 import org.bukkit.*;
@@ -20,7 +17,7 @@ import org.bukkit.inventory.meta.CompassMeta;
 import java.util.List;
 import java.util.Objects;
 
-public class FortressTracker extends CustomItem {
+public class FortressTracker extends Tracker {
 
     private static FortressTracker instance;
 
@@ -32,7 +29,12 @@ public class FortressTracker extends CustomItem {
     }
 
     public FortressTracker() {
-        super("Fortress Tracker", Material.COMPASS);
+        super(
+                "Fortress Tracker",
+                Material.COMPASS,
+                TeamHandler.getInstance().getTeam("Runners"),
+                "Abilities.Runner.FortressTracker"
+        );
     }
 
     private int TaskId = 0;
@@ -121,18 +123,5 @@ public class FortressTracker extends CustomItem {
         if (!player.getInventory().contains(VillageTracker.getInstance().getItem())) return;
         int trackerSlot = player.getInventory().first(VillageTracker.getInstance().getItem());
         player.getInventory().setItem(trackerSlot, this.getItem());
-    }
-
-    @EventHandler
-    public void onGameStateChange(GameStateChangeEvent event) {
-        if (event.getChangeFrom() != GameState.IDLE) return;
-        if (event.getChangeTo() == GameState.RUNAWAYTIME || event.getChangeTo() == GameState.PLAYING) {
-            if (config.getBoolean("Abilities.Runner.FortressTracker") && !config.getBoolean("Abilities.Runner.VillageTracker")) {
-                List<Player> runners = TeamHandler.getInstance().getTeam("Runners").getMembers();
-                for (Player runner : runners) {
-                    VillageTracker.getInstance().giveToPlayer(runner);
-                }
-            }
-        }
     }
 }

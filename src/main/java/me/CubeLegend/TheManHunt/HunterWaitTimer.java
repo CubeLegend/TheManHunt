@@ -60,7 +60,7 @@ public class HunterWaitTimer implements Listener {
 	@EventHandler
 	public void onGameStateChange(GameStateChangeEvent event) {
 		if (event.getChangeFrom() != GameState.IDLE) return;
-		if (event.getChangeTo() == GameState.RUNAWAYTIME || event.getChangeTo() == GameState.PLAYING) {
+		if (event.getChangeTo() == GameState.RUNAWAYTIME) {
 			this.startTimer();
 		}
 	}

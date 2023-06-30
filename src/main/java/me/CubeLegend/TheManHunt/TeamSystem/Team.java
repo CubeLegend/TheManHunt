@@ -7,15 +7,13 @@ import me.CubeLegend.TheManHunt.LanguageSystem.Message;
 import me.CubeLegend.TheManHunt.PersistentData.PersistentDataHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class Team {
 
@@ -36,15 +34,8 @@ public class Team {
         this.teamColor = teamColor;
         this.teamColorAsCode = ChatColor.valueOf(teamColor).toString();
         Scoreboard board = TeamHandler.getInstance().getScoreBoard();
-        board.registerNewTeam(teamName);
-        board.getTeam(teamName).setColor(ChatColor.valueOf(teamColor));
-
-        if (teamName.equalsIgnoreCase("Runners")) {
-            TeamHandler.getInstance().addToTeamOnJoin(teamName, PersistentDataHandler.getInstance().getRunners());
-        }
-        if (teamName.equalsIgnoreCase("Hunters")) {
-            TeamHandler.getInstance().addToTeamOnJoin(teamName, PersistentDataHandler.getInstance().getHunters());
-        }
+        org.bukkit.scoreboard.Team team = board.registerNewTeam(teamName);
+        team.setColor(ChatColor.valueOf(teamColor));
     }
 
     public void addMember(Player player) {
@@ -55,6 +46,14 @@ public class Team {
 
         player.setDisplayName(teamColorAsCode + player.getDisplayName() + "§r");
         player.setPlayerListName(teamColorAsCode + player.getDisplayName() + "§r");
+    }
+
+    public void addMember(UUID uuid) {
+        if (members.contains(uuid)) return;
+        TeamHandler.getInstance().removePlayerFromAllTeams(uuid);
+        members.add(uuid);
+        org.bukkit.scoreboard.Team scoreBoardTeam = Objects.requireNonNull(TeamHandler.getInstance().getScoreBoard().getTeam(teamName));
+        Optional.of(Bukkit.getOfflinePlayer(uuid)).map(OfflinePlayer::getName).ifPresent(scoreBoardTeam::addEntry);
     }
 
     public void removeMember(Player player) {
@@ -68,6 +67,13 @@ public class Team {
         }
         members.remove(player.getUniqueId());
         Objects.requireNonNull(TeamHandler.getInstance().getScoreBoard().getTeam(teamName)).removeEntry(player.getName());
+    }
+
+    public void removeMember(UUID uuid) {
+        if (!members.contains(uuid)) return;
+        members.remove(uuid);
+        org.bukkit.scoreboard.Team scoreBoardTeam = Objects.requireNonNull(TeamHandler.getInstance().getScoreBoard().getTeam(teamName));
+        Optional.of(Bukkit.getOfflinePlayer(uuid)).map(OfflinePlayer::getName).ifPresent(scoreBoardTeam::removeEntry);
     }
 
     public Player getMember(int index) {

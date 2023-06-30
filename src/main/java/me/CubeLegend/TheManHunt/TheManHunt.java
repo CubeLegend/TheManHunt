@@ -13,6 +13,7 @@ import me.CubeLegend.TheManHunt.SpecialAbilities.*;
 import me.CubeLegend.TheManHunt.StateSystem.GameHandler;
 import me.CubeLegend.TheManHunt.StateSystem.GameState;
 import me.CubeLegend.TheManHunt.TeamSystem.SelectionInventories;
+import me.CubeLegend.TheManHunt.TeamSystem.Team;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamSelectionItem;
 import org.bukkit.Bukkit;
@@ -113,6 +114,7 @@ public class TheManHunt extends JavaPlugin {
         if (lastGameFinished()) {
             GameHandler.getInstance().setGameState(GameState.IDLE);
         } else {
+            loadUnfinishedGame();
             GameHandler.getInstance().setGameState(GameState.PLAYING);
         }
     }
@@ -132,6 +134,13 @@ public class TheManHunt extends JavaPlugin {
         return oldRunners.isEmpty() || oldHunters.isEmpty();
     }
 
+    private void loadUnfinishedGame() {
+        Team runners = TeamHandler.getInstance().getTeam("Runners");
+        PersistentDataHandler.getInstance().getRunners().forEach(runners::addMember);
+        Team hunters = TeamHandler.getInstance().getTeam("Hunters");
+        PersistentDataHandler.getInstance().getHunters().forEach(hunters::addMember);
+    }
+
     private void startRoutines() {
         if (config.getBoolean("Abilities.Runner.FreezeVision")) {
             FreezeVision.getInstance().startFreezeVisionRoutine(config.getInt("UpdatePeriod.FreezeVision"));
@@ -140,7 +149,6 @@ public class TheManHunt extends JavaPlugin {
             FortressTracker.getInstance().startFortressTrackingRoutine(config.getInt("UpdatePeriod.FortressTracker"));
         }
         if (config.getBoolean("Abilities.Runner.VillageTracker")) {
-            System.out.println("VillageTracker: True");
             VillageTracker.getInstance().startVillageTrackingRoutine(config.getInt("UpdatePeriod.VillageTracker"));
         }
         if (config.getBoolean("Abilities.Hunter.RunnerTracker")) {

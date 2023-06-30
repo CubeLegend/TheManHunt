@@ -70,9 +70,10 @@ public class Freeze implements Listener {
     @EventHandler
     public void onGameStateChange(GameStateChangeEvent event) {
         if (event.getChangeFrom() == GameState.IDLE) {
-            if (event.getChangeTo() == GameState.RUNAWAYTIME || event.getChangeTo() == GameState.PLAYING) {
+            if (event.getChangeTo() == GameState.RUNAWAYTIME) {
                 this.addFrozenPlayers(TeamHandler.getInstance().getTeam("Hunters").getMembersRaw());
-
+            }
+            if (event.getChangeTo() == GameState.RUNAWAYTIME || event.getChangeTo() == GameState.PLAYING) {
                 if (config.getBoolean("Abilities.Runner.FreezeVision")) {
                     for (UUID runner : TeamHandler.getInstance().getTeam("Runners").getMembersRaw()) {
                         FreezeVision.getInstance().givePlayerFreezeVision(runner);

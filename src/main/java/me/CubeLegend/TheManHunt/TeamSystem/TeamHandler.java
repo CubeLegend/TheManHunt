@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
@@ -66,6 +65,12 @@ public class TeamHandler implements Listener {
         TeamHandler.getInstance().getTeam("Spectators").removeMember(player);
     }
 
+    public void removePlayerFromAllTeams(UUID uuid) {
+        TeamHandler.getInstance().getTeam("Hunters").removeMember(uuid);
+        TeamHandler.getInstance().getTeam("Runners").removeMember(uuid);
+        TeamHandler.getInstance().getTeam("Spectators").removeMember(uuid);
+    }
+
     public int getTotalMemberCount() {
         return this.getTeam("Hunters").getMemberCount() + this.getTeam("Runners").getMemberCount();
     }
@@ -76,14 +81,6 @@ public class TeamHandler implements Listener {
 
     public Scoreboard getScoreBoard() {
         return scoreBoard;
-    }
-
-    private HashMap<UUID, String>  playersToAdd = new HashMap<>();
-
-    public void addToTeamOnJoin(String teamName, List<UUID> membersToAdd) {
-        for (UUID uuid : membersToAdd) {
-            playersToAdd.put(uuid, teamName);
-        }
     }
 
     public void registerScoreBoard() {
@@ -97,9 +94,7 @@ public class TeamHandler implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+        //TODO check if name color prefix is correct
         event.getPlayer().setScoreboard(scoreBoard);
-        if (playersToAdd.containsKey(event.getPlayer().getUniqueId())) {
-            getTeam(playersToAdd.get(event.getPlayer().getUniqueId())).addMember(event.getPlayer());
-        }
     }
 }
