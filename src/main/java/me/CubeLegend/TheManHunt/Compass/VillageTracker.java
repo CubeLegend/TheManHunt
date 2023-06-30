@@ -14,7 +14,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
 
-import java.util.List;
 import java.util.Objects;
 
 public class VillageTracker extends Tracker {

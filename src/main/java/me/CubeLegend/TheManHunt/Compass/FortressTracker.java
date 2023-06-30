@@ -1,6 +1,5 @@
 package me.CubeLegend.TheManHunt.Compass;
 
-import me.CubeLegend.TheManHunt.Configuration;
 import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
 import me.CubeLegend.TheManHunt.LanguageSystem.Message;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
@@ -14,7 +13,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
 
-import java.util.List;
 import java.util.Objects;
 
 public class FortressTracker extends Tracker {
@@ -33,13 +31,12 @@ public class FortressTracker extends Tracker {
                 "Fortress Tracker",
                 Material.COMPASS,
                 TeamHandler.getInstance().getTeam("Runners"),
-                "Abilities.Runner.FortressTracker"
+                "Abilities.Runner.FortressTracker",
+                "Abilities.Runner.VillageTracker"
         );
     }
 
     private int TaskId = 0;
-
-    private final Configuration config = Configuration.getInstance();
 
     public void startFortressTrackingRoutine(int period) {
         TaskId = Bukkit.getServer().getScheduler().runTaskTimer(TheManHunt.getInstance(), () -> {
