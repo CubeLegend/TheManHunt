@@ -25,11 +25,12 @@ public class PlayerDeathHandler implements Listener {
         if (TeamHandler.getInstance().getTeam("Runners").checkForMember(player)) {
             deadRunners.add(player.getUniqueId());
             if (deadRunners.size() == TeamHandler.getInstance().getTeam("Runners").getMemberCount()) {
-                TeamHandler.getInstance().getTeam("Hunters").win();
-                TeamHandler.getInstance().getTeam("Runners").lose();
                 PersistentDataHandler pdh = PersistentDataHandler.getInstance();
                 pdh.setAllHunterWins(pdh.getAllHunterWins() + 1);
                 pdh.saveData();
+
+                TeamHandler.getInstance().getTeam("Hunters").win();
+                TeamHandler.getInstance().getTeam("Runners").lose();
             }
             Bukkit.getScheduler().runTaskLater(TheManHunt.getInstance(), () -> player.setGameMode(GameMode.SPECTATOR),1);
         }
