@@ -1,7 +1,6 @@
-package me.CubeLegend.TheManHunt;
+package me.CubeLegend.TheManHunt.PersistentData;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
@@ -20,48 +19,29 @@ public class PersistentData implements Serializable {
     public List<UUID> runners;
     public List<UUID> hunters;
 
-    public int allRunnerWins;
-    public int allHunterWins;
-
     // Can be used for saving
     public PersistentData(
             String deleteWorldOnStartUp,
             List<UUID> runners,
-            List<UUID> hunters,
-            int allRunnerWins,
-            int allHunterWins
+            List<UUID> hunters
     ) {
         this.deleteWorldOnStartUp = deleteWorldOnStartUp;
 
         this.runners = runners;
         this.hunters = hunters;
-
-        this.allRunnerWins = allRunnerWins;
-        this.allHunterWins = allHunterWins;
-    }
-    // Can be used for loading
-    public PersistentData(PersistentData loadedPersistentData) {
-        this.deleteWorldOnStartUp = loadedPersistentData.deleteWorldOnStartUp;
-
-        this.runners = loadedPersistentData.runners;
-        this.hunters = loadedPersistentData.hunters;
-
-        this.allRunnerWins = loadedPersistentData.allRunnerWins;
-        this.allHunterWins = loadedPersistentData.allHunterWins;
     }
 
-    public boolean saveData(String filePath) {
+    public void saveData(String filePath) {
         try {
             BukkitObjectOutputStream out = new BukkitObjectOutputStream(new GZIPOutputStream(new FileOutputStream(filePath)));
             out.writeObject(this);
             out.close();
-            return true;
         } catch (IOException e) {
             Bukkit.getLogger().warning("Could not save data to file");
             e.printStackTrace();
-            return false;
         }
     }
+
     public static PersistentData loadData(String filePath) {
         try {
             BukkitObjectInputStream in = new BukkitObjectInputStream(new GZIPInputStream(new FileInputStream(filePath)));
@@ -69,7 +49,7 @@ public class PersistentData implements Serializable {
             in.close();
             return persistentData;
         } catch (ClassNotFoundException | IOException e) {
-            Bukkit.getLogger().warning("Could not load data to file");
+            Bukkit.getLogger().warning("Could not load data from file");
             e.printStackTrace();
             return null;
         }

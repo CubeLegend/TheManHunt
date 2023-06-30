@@ -25,8 +25,7 @@ public class GameHandler {
 	private GameState state;
 
 	private GameHandler() {
-		this.state = GameState.IDLE;
-		Bukkit.getLogger().info("Game State: " + this.state.name());
+
 	}
 
 	public GameState getGameState() {
@@ -34,7 +33,9 @@ public class GameHandler {
 	}
 
 	public void setGameState(GameState gameState) {
-		GameStateChangeEvent gtce = new GameStateChangeEvent(this.state, gameState);
+		GameState from = this.state;
+		if (from == null) from = GameState.IDLE;
+		GameStateChangeEvent gtce = new GameStateChangeEvent(from, gameState);
 		Bukkit.getPluginManager().callEvent(gtce);
 		state = gtce.getChangeTo();
 		Bukkit.getLogger().info("Game State: " + state.name());

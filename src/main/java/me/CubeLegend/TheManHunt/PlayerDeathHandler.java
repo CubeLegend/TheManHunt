@@ -1,5 +1,6 @@
 package me.CubeLegend.TheManHunt;
 
+import me.CubeLegend.TheManHunt.PersistentData.PersistentDataHandler;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -26,8 +27,9 @@ public class PlayerDeathHandler implements Listener {
             if (deadRunners.size() == TeamHandler.getInstance().getTeam("Runners").getMemberCount()) {
                 TeamHandler.getInstance().getTeam("Hunters").win();
                 TeamHandler.getInstance().getTeam("Runners").lose();
-                PersistentDataHandler.getInstance().allHunterWins += 1;
-                PersistentDataHandler.getInstance().saveData();
+                PersistentDataHandler pdh = PersistentDataHandler.getInstance();
+                pdh.setAllHunterWins(pdh.getAllHunterWins() + 1);
+                pdh.saveData();
             }
             Bukkit.getScheduler().runTaskLater(TheManHunt.getInstance(), () -> player.setGameMode(GameMode.SPECTATOR),1);
         }

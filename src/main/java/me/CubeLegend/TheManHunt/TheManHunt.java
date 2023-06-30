@@ -8,7 +8,10 @@ import me.CubeLegend.TheManHunt.Compass.FortressTracker;
 import me.CubeLegend.TheManHunt.Compass.RunnerTracker;
 import me.CubeLegend.TheManHunt.Compass.VillageTracker;
 import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
+import me.CubeLegend.TheManHunt.PersistentData.PersistentDataHandler;
 import me.CubeLegend.TheManHunt.SpecialAbilities.*;
+import me.CubeLegend.TheManHunt.StateSystem.GameHandler;
+import me.CubeLegend.TheManHunt.StateSystem.GameState;
 import me.CubeLegend.TheManHunt.TeamSystem.SelectionInventories;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamSelectionItem;
@@ -38,10 +41,10 @@ public class TheManHunt extends JavaPlugin {
         instance = this;
 
         if (this.getConfig().getBoolean("DeleteWorldOnStartUp", false)) {
-            if (!PersistentDataHandler.getInstance().deleteWorldOnStartUp.equals("")) {
-                String worldName = PersistentDataHandler.getInstance().deleteWorldOnStartUp;
+            if (!PersistentDataHandler.getInstance().getDeleteWorldOnStartUp().equals("")) {
+                String worldName = PersistentDataHandler.getInstance().getDeleteWorldOnStartUp();
                 deleteWorld(worldName, this.getConfig().getBoolean("DeleteDatapacksOnStartUp", false));
-                PersistentDataHandler.getInstance().deleteWorldOnStartUp = "";
+                PersistentDataHandler.getInstance().setDeleteWorldOnStartUp("");
                 PersistentDataHandler.getInstance().saveData();
             }
         }
@@ -92,11 +95,8 @@ public class TheManHunt extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        //instance = this;
-
         config = Configuration.getInstance();
 
-        //Settings.getInstance().loadSettingsFromConfig();
         new BstatsHandler(this, 16041).loadMetrics();
 
         checkForNewUpdate(105044);
@@ -105,11 +105,16 @@ public class TheManHunt extends JavaPlugin {
 
         registerCommands();
         registerListeners();
-        //config.options().copyDefaults(true);
-        //this.saveConfig();
+
         LanguageManager.getInstance().setDefaultLanguage(config.getString("Default.Language"));
 
         startRoutines();
+
+        if (lastGameFinished()) {
+            GameHandler.getInstance().setGameState(GameState.IDLE);
+        } else {
+            GameHandler.getInstance().setGameState(GameState.PLAYING);
+        }
     }
 
     @Override
@@ -119,6 +124,12 @@ public class TheManHunt extends JavaPlugin {
         VillageTracker.getInstance().stopVillageTrackingRoutine();
         RunnerTracker.getInstance().stopRunnerTrackerRoutine();
         HunterNearWarning.getInstance().stopRoutine();
+    }
+
+    private boolean lastGameFinished() {
+        List<UUID> oldRunners = PersistentDataHandler.getInstance().getRunners();
+        List<UUID> oldHunters = PersistentDataHandler.getInstance().getHunters();
+        return oldRunners.isEmpty() || oldHunters.isEmpty();
     }
 
     private void startRoutines() {

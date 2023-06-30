@@ -4,7 +4,7 @@ import me.CubeLegend.TheManHunt.StateSystem.GameHandler;
 import me.CubeLegend.TheManHunt.StateSystem.GameState;
 import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
 import me.CubeLegend.TheManHunt.LanguageSystem.Message;
-import me.CubeLegend.TheManHunt.PersistentDataHandler;
+import me.CubeLegend.TheManHunt.PersistentData.PersistentDataHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -40,10 +40,10 @@ public class Team {
         board.getTeam(teamName).setColor(ChatColor.valueOf(teamColor));
 
         if (teamName.equalsIgnoreCase("Runners")) {
-            TeamHandler.getInstance().addToTeamOnJoin(teamName, PersistentDataHandler.getInstance().runners);
+            TeamHandler.getInstance().addToTeamOnJoin(teamName, PersistentDataHandler.getInstance().getRunners());
         }
         if (teamName.equalsIgnoreCase("Hunters")) {
-            TeamHandler.getInstance().addToTeamOnJoin(teamName, PersistentDataHandler.getInstance().hunters);
+            TeamHandler.getInstance().addToTeamOnJoin(teamName, PersistentDataHandler.getInstance().getHunters());
         }
     }
 

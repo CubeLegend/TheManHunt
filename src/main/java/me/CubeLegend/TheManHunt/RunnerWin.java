@@ -1,5 +1,6 @@
 package me.CubeLegend.TheManHunt;
 
+import me.CubeLegend.TheManHunt.PersistentData.PersistentDataHandler;
 import me.CubeLegend.TheManHunt.StateSystem.GameHandler;
 import me.CubeLegend.TheManHunt.StateSystem.GameState;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
@@ -18,10 +19,12 @@ public class RunnerWin implements Listener {
         if (!(GameHandler.getInstance().getGameState() == GameState.RUNAWAYTIME || GameHandler.getInstance().getGameState() == GameState.PLAYING)) return;
         if (!TeamHandler.getInstance().getTeam("Runners").checkForMember(player)) return;
         if (event.getFrom().getEnvironment().equals(Environment.THE_END)) {
+            PersistentDataHandler pdh = PersistentDataHandler.getInstance();
+            pdh.setAllRunnerWins(pdh.getAllRunnerWins() + 1);
+            pdh.saveData();
+
             TeamHandler.getInstance().getTeam("Runners").win();
             TeamHandler.getInstance().getTeam("Hunters").lose();
-            PersistentDataHandler.getInstance().allRunnerWins += 1;
-            PersistentDataHandler.getInstance().saveData();
         }
     }
 }
