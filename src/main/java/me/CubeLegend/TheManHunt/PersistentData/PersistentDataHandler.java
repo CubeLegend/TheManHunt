@@ -101,7 +101,6 @@ public class PersistentDataHandler implements Listener {
                 persistentData.runners = TeamHandler.getInstance().getTeam("Runners").getMembersRaw();
                 persistentData.hunters = TeamHandler.getInstance().getTeam("Hunters").getMembersRaw();
                 persistentData.saveData(filePathData);
-                System.out.println(getRunners());
                 this.logContent();
             }
         }
