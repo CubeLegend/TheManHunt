@@ -57,6 +57,10 @@ public class FreezeVision {
         freezeVision.remove(uuid);
     }
 
+    public List<Player> getPlayersWithFreezeVision() {
+        return freezeVision.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).toList();
+    }
+
     public void startFreezeVisionRoutine(long period) {
         freezeVisionRoutine = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(TheManHunt.getInstance(), () -> {
             if (GameHandler.getInstance().getGameState() != GameState.PLAYING) { return; }
@@ -109,7 +113,7 @@ public class FreezeVision {
     }
 
     @NotNull
-    public List<LivingEntity> entitiesInLineOfSight(Player player) {
+    private List<LivingEntity> entitiesInLineOfSight(Player player) {
         if (player == null) return Collections.emptyList();
         Location playerLoc = player.getLocation().add(new Location(player.getWorld(), 0, player.getEyeHeight(), 0));
         List<LivingEntity> entities = new ArrayList<>();
@@ -140,7 +144,7 @@ public class FreezeVision {
         return entities;
     }
 
-    public static boolean isBlockInWay(Player player, double distance) {
+    private static boolean isBlockInWay(Player player, double distance) {
         Vector v1 = player.getEyeLocation().toVector(); //start point
         Vector v2 = player.getLocation().getDirection(); // direction
         int distance1 = (int) distance;
@@ -155,7 +159,7 @@ public class FreezeVision {
         return true;
     }
 
-    public static void drawLine(
+    private static void drawLine(
             Location point1, // Start point
             Location point2, // End pont
             double space, // Space between each particle

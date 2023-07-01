@@ -124,19 +124,18 @@ public class Freeze implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         // if the attacker is frozen the event gets canceled
-        if (!(event.getDamager() instanceof Player)) return;
-        Player damager = (Player) event.getDamager();
+        if (!(event.getDamager() instanceof Player damager)) return;
         if (frozenPlayers.contains(damager.getUniqueId())) {
             event.setCancelled(true);
             return;
         }
 
-        // if the player that gets attacked is attacked by somebody that froze him the event gets canceled
-        if (!(event.getEntity() instanceof Player)) return;
-        Player player = (Player) event.getEntity();
-//        if (frozenPlayers.contains(player.getUniqueId()) && vision.contains(damager.getUniqueId())) {
-//            event.setCancelled(true);
-//        }
+        // if the player that is attacked by somebody that froze him the event gets canceled
+        if (!(event.getEntity() instanceof Player player)) return;
+        if (!frozenPlayers.contains(player.getUniqueId())) return;
+        if (FreezeVision.getInstance().getPlayersWithFreezeVision().contains(damager)) {
+            event.setCancelled(true);
+        }
     }
     //------------------------------------
 }
