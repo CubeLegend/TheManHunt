@@ -19,6 +19,20 @@ Title:
   Stay: 50
   FadeOut: 50
 
+Teams:
+  Runners:
+    SelectionSlot: 2
+    Icon: "diamond_shovel"
+    Color: "blue"
+  Hunters:
+    SelectionSlot: 4
+    Icon: "diamond_sword"
+    Color: "red"
+  Spectators:
+    SelectionSlot: 6
+    Icon: "gray_stained_glass"
+    Color: "gray"
+
 # How long hunters need to wait at the beginning of the game (in seconds).
 HunterWaitTimer: 10
 

@@ -31,6 +31,10 @@ public class SelectionInventories implements Listener {
 
     private final HashMap<String, Inventory> selectionInventories = new HashMap<>();
 
+    private final Material runnersIcon = Material.valueOf(TeamHandler.getInstance().getTeam("Runners").getTeamIcon());
+    private final Material spectatorIcon = Material.valueOf(TeamHandler.getInstance().getTeam("Spectators").getTeamIcon());
+    private final Material huntersIcon = Material.valueOf(TeamHandler.getInstance().getTeam("Hunters").getTeamIcon());
+
     SelectionInventories() {
         for (Language language : LanguageManager.getInstance().getLanguages()) {
 
@@ -41,25 +45,22 @@ public class SelectionInventories implements Listener {
                     language.getMessage(Message.TEAM_SELECTION_TITLE, new String[0])
             );
 
-            Material runnersIcon = Material.valueOf(TeamHandler.getInstance().getTeam("Runners").getTeamIcon());
             String runnersName = language.getMessage(Message.RUNNERS_DISPLAY_NAME, new String[0]);
-            inventory.setItem(2, createGuiItem(
+            inventory.setItem(TeamHandler.getInstance().getTeam("Runners").getTeamSelectionSlot(), createGuiItem(
                     runnersIcon,
                     runnersName,
                     language.getMessage(Message.JOIN_TEAM_BUTTON, new String[] {runnersName})
             ));
 
-            Material spectatorIcon = Material.valueOf(TeamHandler.getInstance().getTeam("Spectators").getTeamIcon());
             String spectatorsName = language.getMessage(Message.SPECTATORS_DISPLAY_NAME, new String[0]);
-            inventory.setItem(4, createGuiItem(
+            inventory.setItem(TeamHandler.getInstance().getTeam("Spectators").getTeamSelectionSlot(), createGuiItem(
                     spectatorIcon,
                     spectatorsName,
                     language.getMessage(Message.JOIN_TEAM_BUTTON, new String[] {spectatorsName})
             ));
 
-            Material huntersIcon = Material.valueOf(TeamHandler.getInstance().getTeam("Hunters").getTeamIcon());
             String huntersName = language.getMessage(Message.HUNTERS_DISPLAY_NAME, new String[0]);
-            inventory.setItem(6, createGuiItem(
+            inventory.setItem(TeamHandler.getInstance().getTeam("Hunters").getTeamSelectionSlot(), createGuiItem(
                     huntersIcon ,
                     huntersName,
                     language.getMessage(Message.JOIN_TEAM_BUTTON, new String[] {huntersName})
@@ -102,25 +103,24 @@ public class SelectionInventories implements Listener {
         // verify current item is not null
         if (clickedItem == null || clickedItem.getType() == Material.AIR) return;
 
-        switch (clickedItem.getType()) {
-            case BLUE_WOOL -> {
-                //trying to add a runner
-                Team runners = TeamHandler.getInstance().getTeam("Runners");
-                runners.addMember(player);
-                LanguageManager.getInstance().sendMessage(player, Message.YOU_JOINED_TEAM, new String[] {runners.getTeamName()});
-            }
-            case RED_WOOL -> {
-                //trying to add a hunter
-                Team hunters = TeamHandler.getInstance().getTeam("Hunters");
-                hunters.addMember(player);
-                LanguageManager.getInstance().sendMessage(player, Message.YOU_JOINED_TEAM, new String[] {hunters.getTeamName()});
-            }
-            case  GRAY_WOOL -> {
-                //trying to add a spectator
-                Team spectators = TeamHandler.getInstance().getTeam("Spectators");
-                spectators.addMember(player);
-                LanguageManager.getInstance().sendMessage(player, Message.YOU_JOINED_TEAM, new String[] {spectators.getTeamName()});
-            }
+        Material clickedType = clickedItem.getType();
+        if (clickedType.equals(runnersIcon)) {
+            //trying to add a runner
+            Team runners = TeamHandler.getInstance().getTeam("Runners");
+            runners.addMember(player);
+            LanguageManager.getInstance().sendMessage(player, Message.YOU_JOINED_TEAM, new String[] {runners.getTeamName()});
+        }
+        else if (clickedType.equals(huntersIcon)) {
+            //trying to add a hunter
+            Team hunters = TeamHandler.getInstance().getTeam("Hunters");
+            hunters.addMember(player);
+            LanguageManager.getInstance().sendMessage(player, Message.YOU_JOINED_TEAM, new String[] {hunters.getTeamName()});
+        }
+        else if (clickedType.equals(spectatorIcon)) {
+            //trying to add a spectator
+            Team spectators = TeamHandler.getInstance().getTeam("Spectators");
+            spectators.addMember(player);
+            LanguageManager.getInstance().sendMessage(player, Message.YOU_JOINED_TEAM, new String[] {spectators.getTeamName()});
         }
     }
 }
