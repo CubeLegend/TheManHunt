@@ -16,7 +16,7 @@ public class GameModeManager implements Listener {
 
     private String currentGameMode;
 
-    File GameModesDir = new File(TheManHunt.getInstance().getDataFolder(), "game modes");
+    File GameModesDir = new File(TheManHunt.getInstance().getDataFolder(), "game_modes");
 
     public GameModeManager(@Nullable String defaultGameMode) {
         GameModesDir.mkdirs();
@@ -59,7 +59,7 @@ public class GameModeManager implements Listener {
         OutputStream outputStream = null;
         File file = new File(GameModesDir, filename);
         try {
-            inputStream = TheManHunt.getInstance().getResource("game modes/" + filename);
+            inputStream = TheManHunt.getInstance().getResource("game_modes/" + filename);
             outputStream = new FileOutputStream(file);
 
             int read = 0;
