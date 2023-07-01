@@ -13,7 +13,7 @@ Message:
   ErrorColor: ["RED"]
   ErrorHighlightedColor: ["RED", "UNDERLINE", "BOLD"]
 
-# How long the
+# How long the win/lose title should stay on the screen
 Title:
   FadeIn: 50
   Stay: 50
