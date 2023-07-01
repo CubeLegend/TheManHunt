@@ -87,9 +87,9 @@ public class TeamHandler implements Listener {
         manager = Bukkit.getScoreboardManager();
         assert manager != null;
         scoreBoard = manager.getNewScoreboard();
-        TeamHandler.getInstance().createTeam("Runners", "diamond_shovel", 3, "BLUE");
-        TeamHandler.getInstance().createTeam("Hunters", "diamond_sword", 6, "RED");
-        TeamHandler.getInstance().createTeam("Spectators", "gray_stained_glass", 5, "GRAY");
+        TeamHandler.getInstance().createTeam("Runners", "diamond_shovel".toUpperCase(), 3, "BLUE");
+        TeamHandler.getInstance().createTeam("Hunters", "diamond_sword".toUpperCase(), 6, "RED");
+        TeamHandler.getInstance().createTeam("Spectators", "gray_stained_glass".toUpperCase(), 5, "GRAY");
     }
 
     @EventHandler

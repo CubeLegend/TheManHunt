@@ -31,8 +31,6 @@ public class SelectionInventories implements Listener {
 
     private final HashMap<String, Inventory> selectionInventories = new HashMap<>();
 
-    private final TeamSelectionItem tsi = new TeamSelectionItem();
-
     SelectionInventories() {
         for (Language language : LanguageManager.getInstance().getLanguages()) {
 
@@ -43,23 +41,26 @@ public class SelectionInventories implements Listener {
                     language.getMessage(Message.TEAM_SELECTION_TITLE, new String[0])
             );
 
+            Material runnersIcon = Material.valueOf(TeamHandler.getInstance().getTeam("Runners").getTeamIcon());
             String runnersName = language.getMessage(Message.RUNNERS_DISPLAY_NAME, new String[0]);
             inventory.setItem(2, createGuiItem(
-                    Material.BLUE_WOOL,
+                    runnersIcon,
                     runnersName,
                     language.getMessage(Message.JOIN_TEAM_BUTTON, new String[] {runnersName})
             ));
 
+            Material spectatorIcon = Material.valueOf(TeamHandler.getInstance().getTeam("Spectators").getTeamIcon());
             String spectatorsName = language.getMessage(Message.SPECTATORS_DISPLAY_NAME, new String[0]);
             inventory.setItem(4, createGuiItem(
-                    Material.GRAY_WOOL,
+                    spectatorIcon,
                     spectatorsName,
                     language.getMessage(Message.JOIN_TEAM_BUTTON, new String[] {spectatorsName})
             ));
 
+            Material huntersIcon = Material.valueOf(TeamHandler.getInstance().getTeam("Hunters").getTeamIcon());
             String huntersName = language.getMessage(Message.HUNTERS_DISPLAY_NAME, new String[0]);
             inventory.setItem(6, createGuiItem(
-                    Material.RED_WOOL ,
+                    huntersIcon ,
                     huntersName,
                     language.getMessage(Message.JOIN_TEAM_BUTTON, new String[] {huntersName})
             ));
