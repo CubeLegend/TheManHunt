@@ -34,19 +34,19 @@ public class PersistentDataHandler implements Listener {
     private final String filePathStats = new File(TheManHunt.getInstance().getDataFolder(), "stats.gz").getPath();
 
     private PersistentDataHandler() {
-        if (new File(filePathData).exists()) {
-            persistentData = PersistentData.loadData(filePathData);
-        } else {
+        PersistentData persistentData = null;
+        if (new File(filePathData).exists()) persistentData = PersistentData.loadData(filePathData);
+        if (persistentData == null) {
             persistentData = new PersistentData("", Collections.emptyList(), Collections.emptyList());
-            persistentData.saveData(filePathData);
         }
+        this.persistentData = persistentData;
 
-        if (new File(filePathStats).exists()) {
-            persistentStats = PersistentStats.loadData(filePathStats);
-        } else {
+        PersistentStats persistentStats = null;
+        if (new File(filePathStats).exists()) persistentStats = PersistentStats.loadData(filePathStats);
+        if (persistentStats == null) {
             persistentStats = new PersistentStats(0, 0);
-            persistentStats.saveData(filePathStats);
         }
+        this.persistentStats = persistentStats;
     }
 
     public void saveData() {
@@ -82,15 +82,6 @@ public class PersistentDataHandler implements Listener {
                 l.warning("Could not get Value of " + field.getName());
             }
         }
-
-        /*
-        Bukkit.getLogger().info("Persistent Data: ");
-        Bukkit.getLogger().info("   deleteWorldOnStartUp: " + deleteWorldOnStartUp);
-        Bukkit.getLogger().info("   runners: " + runners);
-        Bukkit.getLogger().info("   hunters: " + hunters);
-        Bukkit.getLogger().info("   allRunnerWins: " + allRunnerWins);
-        Bukkit.getLogger().info("   allHunterWins: " + allHunterWins);
-         */
     }
 
     @EventHandler(priority = EventPriority.LOW)

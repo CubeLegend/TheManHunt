@@ -1,10 +1,10 @@
 package me.CubeLegend.TheManHunt.PersistentData;
 
 import org.bukkit.Bukkit;
-import org.bukkit.util.io.BukkitObjectInputStream;
-import org.bukkit.util.io.BukkitObjectOutputStream;
 
 import java.io.*;
+import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -27,22 +27,52 @@ public class PersistentStats implements Serializable {
 
     public void saveData(String filePath) {
         try {
-            BukkitObjectOutputStream out = new BukkitObjectOutputStream(new GZIPOutputStream(new FileOutputStream(filePath)));
-            out.writeObject(this);
+            // convert fields and values to csv format
+            StringBuilder stringBuilder = new StringBuilder();
+            for (Field field : this.getClass().getFields()) {
+                stringBuilder.append(field.getName())
+                        .append(",")
+                        .append(field.get(this).toString())
+                        .append("\n");
+            }
+
+            byte[] data = stringBuilder.toString().getBytes();
+            GZIPOutputStream out = new GZIPOutputStream(new FileOutputStream(filePath));
+            out.write(data);
             out.close();
         } catch (IOException e) {
             Bukkit.getLogger().warning("Could not save data to file");
             e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
     }
 
     public static PersistentStats loadData(String filePath) {
         try {
-            BukkitObjectInputStream in = new BukkitObjectInputStream(new GZIPInputStream(new FileInputStream(filePath)));
-            PersistentStats persistentStats = (PersistentStats) in.readObject();
+            GZIPInputStream in = new GZIPInputStream(new FileInputStream(filePath));
+            String[] data = new String(in.readAllBytes()).split("\n");
             in.close();
-            return persistentStats;
-        } catch (ClassNotFoundException | IOException e) {
+
+            HashMap<String, String> mappedData = new HashMap<>();
+            for (String s : data) {
+                String[] keyValuePair = s.split(",");
+                if (keyValuePair.length != 2) throw new IOException("Malformed data for stats");
+                mappedData.put(keyValuePair[0], keyValuePair[1]);
+            }
+
+            // get constructor arguments
+            int allRunnerWins = 0;
+            int allHunterWins = 0;
+            for (String key : mappedData.keySet()) {
+                switch (key) {
+                    case "allRunnerWins" -> allRunnerWins = Integer.parseInt(mappedData.get(key));
+                    case "allHunterWins" -> allHunterWins = Integer.parseInt(mappedData.get(key));
+                }
+            }
+
+            return new PersistentStats(allRunnerWins, allHunterWins);
+        } catch (IOException e) {
             Bukkit.getLogger().warning("Could not load data to file");
             e.printStackTrace();
             return null;
