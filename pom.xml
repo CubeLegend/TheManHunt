@@ -6,7 +6,7 @@
 
     <groupId>me.CubeLegend.TheManHunt</groupId>
     <artifactId>TheManHunt</artifactId>
-    <version>0.2-Snapshot</version>
+    <version>0.2</version>
 
     <properties>
         <maven.compiler.source>16</maven.compiler.source>
