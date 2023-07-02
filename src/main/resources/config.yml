@@ -1,19 +1,22 @@
 # Delete the world on startup to generate a new one if a run was finished on that world.
 DeleteWorldOnStartUp: true
+# Whether the Datapacks directory should also be deleted, when the world gets deleted.
 DeleteDatapacksOnStartUp: false
 
 Default:
+  # Set the default language for new players.
   Language: "english"
+  # Set the default game mode, when starting the server.
   GameMode: "powered up"
 
-# Set how text should look like
+# Set how text should look like.
 Message:
   DefaultColor: ["GOLD"]
   HighlightedColor: ["GOLD", "UNDERLINE", "BOLD"]
   ErrorColor: ["RED"]
   ErrorHighlightedColor: ["RED", "UNDERLINE", "BOLD"]
 
-# How long the win/lose title should stay on the screen
+# How long the win/lose title should stay on the screen.
 Title:
   FadeIn: 50
   Stay: 50
@@ -21,16 +24,25 @@ Title:
 
 Teams:
   Runners:
+    # What Slot the icon should be in the team selection gui. Note that two icons cannot be on the same slot.
     SelectionSlot: 2
+    # What item the team should be displayed as in the team selection gui.
     Icon: "diamond_shovel"
+    # What color the names of the team members have.
     Color: "blue"
   Hunters:
+    # What Slot the icon should be in the team selection gui. Note that two icons cannot be on the same slot.
     SelectionSlot: 4
+    # What item the team should be displayed as in the team selection gui.
     Icon: "diamond_sword"
+    # What color the names of the team members have.
     Color: "red"
   Spectators:
+    # What Slot the icon should be in the team selection gui. Note that two icons cannot be on the same slot.
     SelectionSlot: 6
+    # What item the team should be displayed as in the team selection gui.
     Icon: "gray_stained_glass"
+    # What color the names of the team members have.
     Color: "gray"
 
 # How long hunters need to wait at the beginning of the game (in seconds).
@@ -48,9 +60,11 @@ UpdatePeriod:
 
 # Always give the player a compass with an updated lodestone position, even if the runner hasn't moved.
 AlwaysUpdateRunnerTracker: true
-# Also set a Lodestone in Overworld, for consistency reasons.
+# Also set a Lodestone in Overworld.
+# Useful for consistency reasons or to preserve the default functionality of normal compasses.
 AlwaysSetLodestone: false
-
+# Also set update the VillageTracker with lodestones.
+# Useful for consistency reasons or to preserve the default functionality of normal compasses.
 VillageTrackerUseLodestone: false
 
 # Set true to give everyone the selected permissions.

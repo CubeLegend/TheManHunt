@@ -1,8 +1,11 @@
 
-
+# This just tells the plugin that it is a language file.
+# Setting this to false will cause this language to not get recognized, as if it wouldn't exist.
 LanguageFile: true
+# This is the name of the language.
 Name: "Deutsch"
-DisplayItem: "stick" #placeholder
+# This is the item getting displayed in a gui for language selection, although this is not yet implemented.
+DisplayItem: "stick"
 
 ERROR_ONLY_FOR_PLAYERS: "Du musst ein Spieler sein um einem Team beizutreten!"
 ERROR_INVALID_TEAM: "<team> ist kein valides Team!"

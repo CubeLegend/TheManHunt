@@ -1,20 +1,37 @@
 
+# This just tells the plugin that it is a game mode file.
+# Setting this to false will cause this game mode to not get recognized, as if it wouldn't exist.
 GameModeFile: true
+# This is the name of the game mode.
 Name: "Enhanced"
+# This is the item getting displayed in a gui for game mode selection, although this is not yet implemented.
 DisplayItem: "stick"
 
+# Set certain abilities to be active in this game mode.
 Abilities:
 
   Runner:
+    # When a Runner looks at Hunter, the Hunter can't move.
     FreezeVision: false
+    # When a Hunter is closer than the selected number of blocks, the Runner will get a notification in his actionbar.
+    # Setting this to 0 disables it.
     HunterNearWarning: 0
+    # Give the Runner a compass that points to the closest village.
     VillageTracker: true
+    # Give the Runner a compass that points to the closest fortress.
     FortressTracker: true
 
   Hunter:
+    # The Hunter will one hit Runners.
     OneHitKill: false
+    # Give the Hunter a compass that points to a selected Runner.
     RunnerTracker: true
 
 HunterRespawn:
+  # How far away a Hunter should respawn from a Runner.
+  # Setting this to 0 uses the vanilla respawn behaviour.
   DistanceFromRunner: 500
+  # Hunters respawn in a circle around Runner.
+  # This setting determines how many spawn locations are generated around Runners.
+  # You should probably also turn this up if you increase the distance from Runners.
   Resolution: 32
