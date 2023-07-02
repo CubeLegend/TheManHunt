@@ -6,10 +6,11 @@ The Hunters are supposed to stop / kill them before they finish the game.
 The team sizes don't really matter, but keep in mind that being a Runner is probably harder.
 
 ## Features
+- Works without any dependencies and minimal setup
 - Runner tracking compass
 - Compass works in Nether
 - 2 teams and spectators
-- GUI for team selection
+- Customizable GUI for team selection
 - Players can select their own language independently
 - Special Abilities like freeze vision and one hit killing
 - Game can be returned after the server stopped and starts up again
@@ -17,13 +18,12 @@ The team sizes don't really matter, but keep in mind that being a Runner is prob
 - Administration commands
 - Command alternative to GUIs
 - Very customisable config
+- Multiple game-modes (essentially setting presets)
 - Easily add more languages for players to choose from
 
 ## Roadmap
 The following features are to be added, with the top most entry being the highest priority.
-- Implement a proper permission system
 - GUI for language selection
-- Multiple game-modes (essentially setting presets)
 - Zombie game-mode (dead Runners become Hunters)
 - A separate lobby / waiting world
 
