@@ -17,7 +17,7 @@ The team sizes don't really matter, but keep in mind that being a Runner is prob
 - Automatic world resetting
 - Administration commands
 - Command alternative to GUIs
-- Very customisable config
+- Very customizable config
 - Multiple game-modes (essentially setting presets)
 - Easily add more languages for players to choose from
 
