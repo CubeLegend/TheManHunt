@@ -28,7 +28,7 @@ The following features are to be added, with the top most entry being the highes
 - A separate lobby / waiting world
 
 ## Installation
-Download the compiled binary either from the release tab or from the spigot.com page.
+Download the compiled binary either from the release tab or from the [spigot.com](https://www.spigotmc.org/resources/themanhunt.105044/) page.
 Add the Jar in your plugins folder and start / restart your server.
 
 ## Usage
