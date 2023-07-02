@@ -54,7 +54,9 @@ language:
 
 
 ### Config
-A description will be added soon
+The config options in the default config files should have explaining comments.
+The game mode files are special config files that basically override the normal config.
+Keep in mind that game mode files have to be in plugins/TheManHunt/game_modes to be usable.
 
 ## Credits
 The base idea of this Mini-Game comes from the Youtuber Dream. <br>
