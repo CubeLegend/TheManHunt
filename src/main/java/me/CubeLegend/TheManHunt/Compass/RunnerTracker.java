@@ -3,6 +3,8 @@ package me.CubeLegend.TheManHunt.Compass;
 import me.CubeLegend.TheManHunt.Configuration;
 import me.CubeLegend.TheManHunt.LanguageSystem.LanguageManager;
 import me.CubeLegend.TheManHunt.LanguageSystem.Message;
+import me.CubeLegend.TheManHunt.StateSystem.GameState;
+import me.CubeLegend.TheManHunt.StateSystem.GameStateChangeEvent;
 import me.CubeLegend.TheManHunt.TeamSystem.TeamHandler;
 import me.CubeLegend.TheManHunt.TheManHunt;
 import org.bukkit.Bukkit;
@@ -13,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
 
@@ -139,4 +142,31 @@ public class RunnerTracker extends Tracker {
 		RunnerTracker.getInstance().updatePlayerTracking(player, runner);
 		LanguageManager.getInstance().sendMessage(player, Message.COMPASS_POINTS_TO, new String[] {runner.getDisplayName()});
 	}
+
+    @Override
+    @EventHandler
+    public void onGameStateChange(GameStateChangeEvent event) {
+        super.onGameStateChange(event);
+        if (event.getChangeFrom() != GameState.IDLE) return;
+        if (event.getChangeTo() != GameState.RUNAWAYTIME && event.getChangeTo() != GameState.PLAYING) return;
+
+        for (Player hunter : TeamHandler.getInstance().getTeam("Hunters").getMembers()) {
+            if (hunter == null) continue;
+            if (!playerTracking.containsKey(hunter.getUniqueId())) {
+                Player runner =TeamHandler.getInstance().getTeam("Runners").getMember(0);
+                if (runner == null) return;
+                RunnerTracker.getInstance().updatePlayerTracking(hunter, runner);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player hunter = event.getPlayer();
+        if (!playerTracking.containsKey(hunter.getUniqueId())) {
+            Player runner =TeamHandler.getInstance().getTeam("Runners").getMember(0);
+            if (runner == null) return;
+            RunnerTracker.getInstance().updatePlayerTracking(hunter, runner);
+        }
+    }
 }
